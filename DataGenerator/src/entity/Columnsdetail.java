@@ -2,72 +2,75 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import enums.ColumnType;
+import enums.KeyType;
+
+import java.util.List;
 
 /**
  * The persistent class for the columnsdetails database table.
  * 
  */
 @Entity
-@Table(name="columnsdetails")
-@NamedQuery(name="Columnsdetail.findAll", query="SELECT c FROM Columnsdetail c")
+@Table(name = "columnsdetails")
+@NamedQuery(name = "Columnsdetail.findAll", query = "SELECT c FROM Columnsdetail c")
 public class Columnsdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idcolumnsdetails;
 
-	@Column(length=45)
+	@Column(length = 45)
 	private String columnsdetailscol;
 
-	@Column(length=200)
+	@Column(length = 200)
 	private String enumvalues;
 
 	private byte isnullable;
 
-	@Column(length=45)
-	private String keytype;
+	@Enumerated(EnumType.STRING)
+	private KeyType keytype;
 
 	private int length;
 
-	@Column(length=100)
+	@Column(length = 100)
 	private String name;
 
-	@Column(length=45)
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private ColumnType type;
 
-	//bi-directional many-to-one association to Datasamplemodel
+	// bi-directional many-to-one association to Datasamplemodel
 	@ManyToOne
-	@JoinColumn(name="datasampleid")
+	@JoinColumn(name = "datasampleid")
 	private Datasamplemodel datasamplemodel;
 
-	//bi-directional many-to-one association to Patterndetail
+	// bi-directional many-to-one association to Patterndetail
 	@ManyToOne
-	@JoinColumn(name="patternId")
+	@JoinColumn(name = "patternId")
 	private Patterndetail patterndetail;
 
-	//bi-directional many-to-one association to Tabledetail
+	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name="tableId")
+	@JoinColumn(name = "tableId")
 	private Tabledetail tabledetail;
 
-	//bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy="columnsdetail1", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Constraintsdetail
+	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.LAZY)
 	private List<Constraintsdetail> constraintsdetails1;
 
-	//bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy="columnsdetail2", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Constraintsdetail
+	@OneToMany(mappedBy = "columnsdetail2", fetch = FetchType.LAZY)
 	private List<Constraintsdetail> constraintsdetails2;
 
-	//bi-directional many-to-one association to Datasamplemodel
-	@OneToMany(mappedBy="columnsdetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Datasamplemodel
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
 	private List<Datasamplemodel> datasamplemodels;
 
-	//bi-directional many-to-one association to Relationsdetail
-	@OneToMany(mappedBy="columnsdetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Relationsdetail
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
 	private List<Relationsdetail> relationsdetails;
 
 	public Columnsdetail() {
@@ -105,11 +108,11 @@ public class Columnsdetail implements Serializable {
 		this.isnullable = isnullable;
 	}
 
-	public String getKeytype() {
-		return this.keytype;
+	public KeyType getKeytype() {
+		return keytype;
 	}
 
-	public void setKeytype(String keytype) {
+	public void setKeytype(KeyType keytype) {
 		this.keytype = keytype;
 	}
 
@@ -129,11 +132,11 @@ public class Columnsdetail implements Serializable {
 		this.name = name;
 	}
 
-	public String getType() {
-		return this.type;
+	public ColumnType getType() {
+		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(ColumnType type) {
 		this.type = type;
 	}
 
