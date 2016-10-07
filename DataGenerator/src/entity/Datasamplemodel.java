@@ -2,47 +2,49 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import enums.SampleType;
+
+import java.util.List;
 
 /**
  * The persistent class for the datasamplemodel database table.
  * 
  */
 @Entity
-@Table(name="datasamplemodel")
-@NamedQuery(name="Datasamplemodel.findAll", query="SELECT d FROM Datasamplemodel d")
+@Table(name = "datasamplemodel")
+@NamedQuery(name = "Datasamplemodel.findAll", query = "SELECT d FROM Datasamplemodel d")
 public class Datasamplemodel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int iddatasamplemodel;
 
-	@Column(length=30000)
+	@Column(length = 30000)
 	private String datasamplemodelcol;
 
-	@Column(length=45)
-	private String sampletype;
+	@Enumerated(EnumType.STRING)
+	private SampleType sampletype;
 
-	//bi-directional many-to-one association to Columnsdetail
-	@OneToMany(mappedBy="datasamplemodel", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Columnsdetail
+	@OneToMany(mappedBy = "datasamplemodel", fetch = FetchType.LAZY)
 	private List<Columnsdetail> columnsdetails;
 
-	//bi-directional many-to-one association to Columnsdetail
+	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name="coulmnid")
+	@JoinColumn(name = "coulmnid")
 	private Columnsdetail columnsdetail;
 
-	//bi-directional many-to-one association to Schemadetail
+	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name="schemaid")
+	@JoinColumn(name = "schemaid")
 	private Schemadetail schemadetail;
 
-	//bi-directional many-to-one association to Tabledetail
+	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name="tableid")
+	@JoinColumn(name = "tableid")
 	private Tabledetail tabledetail;
 
 	public Datasamplemodel() {
@@ -64,11 +66,11 @@ public class Datasamplemodel implements Serializable {
 		this.datasamplemodelcol = datasamplemodelcol;
 	}
 
-	public String getSampletype() {
-		return this.sampletype;
+	public SampleType getSampletype() {
+		return sampletype;
 	}
 
-	public void setSampletype(String sampletype) {
+	public void setSampletype(SampleType sampletype) {
 		this.sampletype = sampletype;
 	}
 

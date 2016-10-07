@@ -3,36 +3,37 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import enums.RelationType;
 
 /**
  * The persistent class for the relationsdetails database table.
  * 
  */
 @Entity
-@Table(name="relationsdetails")
-@NamedQuery(name="Relationsdetail.findAll", query="SELECT r FROM Relationsdetail r")
+@Table(name = "relationsdetails")
+@NamedQuery(name = "Relationsdetail.findAll", query = "SELECT r FROM Relationsdetail r")
 public class Relationsdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idrelations;
 
-	@Column(length=200)
+	@Column(length = 200)
 	private String description;
 
-	@Column(length=45)
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private RelationType type;
 
-	//bi-directional many-to-one association to Columnsdetail
+	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name="columnId")
+	@JoinColumn(name = "columnId")
 	private Columnsdetail columnsdetail;
 
-	//bi-directional many-to-one association to Tabledetail
+	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name="tableid")
+	@JoinColumn(name = "tableid")
 	private Tabledetail tabledetail;
 
 	public Relationsdetail() {
@@ -54,11 +55,11 @@ public class Relationsdetail implements Serializable {
 		this.description = description;
 	}
 
-	public String getType() {
-		return this.type;
+	public RelationType getType() {
+		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(RelationType type) {
 		this.type = type;
 	}
 

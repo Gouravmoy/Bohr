@@ -2,6 +2,9 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import enums.DBType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -38,8 +41,8 @@ public class Databasedetail implements Serializable {
 	@Column(length = 45)
 	private String port;
 
-	@Column(length = 45)
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private DBType type;
 
 	@Column(length = 200)
 	private String url;
@@ -56,7 +59,7 @@ public class Databasedetail implements Serializable {
 	private List<Schemadetail> schemadetails;
 
 	public Databasedetail(String connectionName, String description, String name, String password, String port,
-			String type, String url, String username) {
+			DBType type, String url, String username) {
 		super();
 		this.connectionName = connectionName;
 		this.description = description;
@@ -128,11 +131,11 @@ public class Databasedetail implements Serializable {
 		this.port = port;
 	}
 
-	public String getType() {
-		return this.type;
+	public DBType getType() {
+		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(DBType type) {
 		this.type = type;
 	}
 
