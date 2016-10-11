@@ -18,7 +18,7 @@ public class DatabaseDAOImpl extends GenericDAOImpl<Databasedetail, Integer> imp
 	}
 
 	@Override
-	public void saveDatabse(Databasedetail databse) throws PersistException {
+	public Databasedetail saveDatabse(Databasedetail databse) throws PersistException {
 		try {
 			List<String> dbNames = getAllConnectionNames();
 			if (dbNames.contains(databse.getConnectionName())) {
@@ -30,7 +30,7 @@ public class DatabaseDAOImpl extends GenericDAOImpl<Databasedetail, Integer> imp
 			err.printStackTrace();
 			throw new PersistException("Could not persist Database Data - " + err.getMessage() + databse);
 		}
-
+		return databse;
 	}
 
 	@Override

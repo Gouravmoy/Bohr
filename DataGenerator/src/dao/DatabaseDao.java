@@ -8,7 +8,7 @@ import exceptions.PersistException;
 import exceptions.ReadEntityException;
 
 public interface DatabaseDao {
-	public void saveDatabse(Databasedetail databse) throws PersistException;
+	public Databasedetail saveDatabse(Databasedetail databse) throws PersistException;
 
 	public Databasedetail getDatabaseByid(Integer id) throws ReadEntityException;
 

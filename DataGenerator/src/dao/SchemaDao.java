@@ -8,7 +8,7 @@ import exceptions.PersistException;
 import exceptions.ReadEntityException;
 
 public interface SchemaDao {
-	public void saveSchema(Schemadetail schemadetail) throws PersistException;
+	public Schemadetail saveSchema(Schemadetail schemadetail) throws PersistException;
 
 	public Schemadetail getSchemaByid(Integer id) throws ReadEntityException;
 
