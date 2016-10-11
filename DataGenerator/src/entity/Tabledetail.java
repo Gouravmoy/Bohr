@@ -4,48 +4,47 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the tabledetails database table.
  * 
  */
 @Entity
-@Table(name="tabledetails")
-@NamedQuery(name="Tabledetail.findAll", query="SELECT t FROM Tabledetail t")
+@Table(name = "tabledetails")
+@NamedQuery(name = "Tabledetail.findAll", query = "SELECT t FROM Tabledetail t")
 public class Tabledetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idtabledetails;
 
-	@Column(length=100)
+	@Column(length = 100)
 	private String tableName;
 
-	//bi-directional many-to-one association to Changelog
-	@OneToMany(mappedBy="tabledetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Changelog
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
 	private List<Changelog> changelogs;
 
-	//bi-directional many-to-one association to Columnsdetail
-	@OneToMany(mappedBy="tabledetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Columnsdetail
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
 	private List<Columnsdetail> columnsdetails;
 
-	//bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy="tabledetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Constraintsdetail
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
 	private List<Constraintsdetail> constraintsdetails;
 
-	//bi-directional many-to-one association to Datasamplemodel
-	@OneToMany(mappedBy="tabledetail", fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Datasamplemodel
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
 	private List<Datasamplemodel> datasamplemodels;
 
-	//bi-directional many-to-one association to Relationsdetail
+	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
 	private List<Relationsdetail> relationsdetails;
 
-	//bi-directional many-to-one association to Schemadetail
+	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name="schema_id")
+	@JoinColumn(name = "schema_id")
 	private Schemadetail schemadetail;
 
 	public Tabledetail() {
@@ -183,6 +182,14 @@ public class Tabledetail implements Serializable {
 
 	public void setSchemadetail(Schemadetail schemadetail) {
 		this.schemadetail = schemadetail;
+	}
+
+	@Override
+	public String toString() {
+		return "Tabledetail [idtabledetails=" + idtabledetails + ", tableName=" + tableName + ", changelogs="
+				+ changelogs + ", columnsdetails=" + columnsdetails + ", constraintsdetails=" + constraintsdetails
+				+ ", datasamplemodels=" + datasamplemodels + ", relationsdetails=" + relationsdetails
+				+ ", schemadetail=" + schemadetail + "]";
 	}
 
 }

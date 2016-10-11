@@ -48,13 +48,12 @@ public class Columnsdetail implements Serializable {
 	private Datasamplemodel datasamplemodel;
 
 	// bi-directional many-to-one association to Patterndetail
-	@ManyToOne
-	@JoinColumn(name = "patternId")
-	private Patterndetail patterndetail;
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
+	private List<Patterndetail> patterndetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name = "tableId")
+	@JoinColumn(name = "tableId", nullable = false)
 	private Tabledetail tabledetail;
 
 	// bi-directional many-to-one association to Constraintsdetail
@@ -148,11 +147,11 @@ public class Columnsdetail implements Serializable {
 		this.datasamplemodel = datasamplemodel;
 	}
 
-	public Patterndetail getPatterndetail() {
-		return this.patterndetail;
+	public List<Patterndetail> getPatterndetail() {
+		return patterndetail;
 	}
 
-	public void setPatterndetail(Patterndetail patterndetail) {
+	public void setPatterndetail(List<Patterndetail> patterndetail) {
 		this.patterndetail = patterndetail;
 	}
 

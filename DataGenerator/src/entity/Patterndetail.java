@@ -1,8 +1,16 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the patterndetails database table.
@@ -28,9 +36,9 @@ public class Patterndetail implements Serializable {
 	@Column(length = 100)
 	private String regexpString;
 
-	// bi-directional many-to-one association to Columnsdetail
-	@OneToMany(mappedBy = "patterndetail", fetch = FetchType.LAZY)
-	private List<Columnsdetail> columnsdetails;
+	@ManyToOne
+	@JoinColumn(name = "columnId")
+	private Columnsdetail columnsdetail;
 
 	public Patterndetail() {
 	}
@@ -67,26 +75,12 @@ public class Patterndetail implements Serializable {
 		this.regexpString = regexpString;
 	}
 
-	public List<Columnsdetail> getColumnsdetails() {
-		return this.columnsdetails;
-	}
-
-	public void setColumnsdetails(List<Columnsdetail> columnsdetails) {
-		this.columnsdetails = columnsdetails;
-	}
-
-	public Columnsdetail addColumnsdetail(Columnsdetail columnsdetail) {
-		getColumnsdetails().add(columnsdetail);
-		columnsdetail.setPatterndetail(this);
-
+	public Columnsdetail getColumnsdetail() {
 		return columnsdetail;
 	}
 
-	public Columnsdetail removeColumnsdetail(Columnsdetail columnsdetail) {
-		getColumnsdetails().remove(columnsdetail);
-		columnsdetail.setPatterndetail(null);
-
-		return columnsdetail;
+	public void setColumnsdetail(Columnsdetail columnsdetail) {
+		this.columnsdetail = columnsdetail;
 	}
 
 }

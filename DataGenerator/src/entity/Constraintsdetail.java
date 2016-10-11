@@ -3,40 +3,39 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the constraintsdetails database table.
  * 
  */
 @Entity
-@Table(name="constraintsdetails")
-@NamedQuery(name="Constraintsdetail.findAll", query="SELECT c FROM Constraintsdetail c")
+@Table(name = "constraintsdetails")
+@NamedQuery(name = "Constraintsdetail.findAll", query = "SELECT c FROM Constraintsdetail c")
 public class Constraintsdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idconstraintsdetails;
 
-	@Column(length=200)
+	@Column(length = 200)
 	private String constraintname;
 
 	private byte isunique;
 
-	//bi-directional many-to-one association to Columnsdetail
+	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name="columnId")
+	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail1;
 
-	//bi-directional many-to-one association to Tabledetail
+	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name="referencetableid")
+	@JoinColumn(name = "referencetableid")
 	private Tabledetail tabledetail;
 
-	//bi-directional many-to-one association to Columnsdetail
+	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name="referencecolumnid")
+	@JoinColumn(name = "referencecolumnid")
 	private Columnsdetail columnsdetail2;
 
 	public Constraintsdetail() {

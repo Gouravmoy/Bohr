@@ -9,30 +9,20 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
-import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.rolling.RollingFileAppender;
 import dao.GenericDAO;
 import exceptions.DAOException;
 
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
-	LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-	@SuppressWarnings("rawtypes")
-	RollingFileAppender rfAppender = new RollingFileAppender();
-	Logger logbackLogger;
-
 	private Session session;
 
-	@SuppressWarnings("unchecked")
 	public GenericDAOImpl() {
 		super();
-		rfAppender.setContext(loggerContext);
-		rfAppender.setFile(System.getProperty("log_file_loc") + "/log/" + "rapid" + ".log");
-		logbackLogger = loggerContext.getLogger("MainController");
-		logbackLogger.addAppender(rfAppender);
+
+		if (session == null) {
+			startOpereation();
+		}
 	}
 
 	private Transaction tx;
@@ -40,13 +30,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T save(T t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			session.save(t);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return t;
 	}
@@ -54,14 +45,15 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void batchSaveDAO(List<T> t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
 				i++;
 				try {
 					session.save(tSingle);
 				} catch (Exception err) {
-					logbackLogger.error(err.getMessage(), err);
+					throw new DAOException();
 				}
 				if (i % 20 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
@@ -73,7 +65,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 
 	}
@@ -83,14 +75,15 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public List<T> readAll(String namedQueryName, Class clazz) throws DAOException {
 		List<T> listT = null;
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			Query query = session.createQuery("from " + clazz.getName());
 			listT = query.list();
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return listT;
 	}
@@ -100,13 +93,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public T readById(Class clazz, ID id) throws DAOException {
 		T t = null;
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			t = (T) session.get(clazz, id);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return t;
 	}
@@ -115,14 +109,15 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T update(Class clazz, ID id, T t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			T newEntityRef = (T) session.merge(t);
 			session.update(newEntityRef);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return t;
 	}
@@ -138,7 +133,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public T getFirstRecord(Class<?> clazz) throws DAOException {
 		T t = null;
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			Criteria queryCriteria = session.createCriteria(clazz);
 			queryCriteria.setFirstResult(0);
 			queryCriteria.setMaxResults(1);
@@ -147,7 +143,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return t;
 	}
@@ -167,7 +163,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return results;
 	}
@@ -176,13 +172,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T saveOrUpdate(Class clazz, T t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			session.saveOrUpdate(t);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return t;
 	}
@@ -190,18 +187,19 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void saveOrUpdateBatch(List<T> t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
 				i++;
 				try {
 					session.saveOrUpdate(tSingle);
 				} catch (Exception err) {
-					logbackLogger.error(err.getMessage(), err);
+					throw new DAOException();
 				}
 				if (i % 20 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
-					session.flush();
+					// session.flush();
 				}
 			}
 			tx.commit();
@@ -217,13 +215,15 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void delete(Class clazz, T t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
+			tx = session.beginTransaction();
 			session.delete(t);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 
 	}
@@ -231,7 +231,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public boolean deleteById(Class<?> clazz, Serializable id) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			Object persistentInstance = session.load(clazz, id);
 			if (persistentInstance != null) {
 				session.delete(persistentInstance);
@@ -242,7 +243,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 		return false;
 	}
@@ -250,18 +251,19 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void deleteBatch(List<T> t) throws DAOException {
 		try {
-			startOpereation();
+			// startOpereation();
+			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
 				i++;
 				try {
 					session.delete(tSingle);
 				} catch (Exception err) {
-					logbackLogger.error(err.getMessage(), err);
+					throw new DAOException();
 				}
 				if (i % 20 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
-					session.flush();
+					// session.flush();
 				}
 			}
 			tx.commit();
@@ -274,14 +276,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	}
 
 	protected void handleException(HibernateException e) throws DAOException {
-		logbackLogger.error(e.getMessage(), e);
+		e.printStackTrace();
 		tx.rollback();
 		throw new DAOException(e);
 	}
 
 	private void startOpereation() {
 		session = new AnnotationConfiguration().configure().buildSessionFactory().openSession();
-		tx = session.beginTransaction();
+		//tx = session.beginTransaction();
 	}
 
 }
