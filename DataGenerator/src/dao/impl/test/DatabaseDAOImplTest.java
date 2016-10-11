@@ -5,14 +5,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import common.Master;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;
-import enums.DBType;
+import enums.Environment;
+import exceptions.PersistException;
+import exceptions.ReadEntityException;
 
 /**
  * The class <code>DatabaseDAOImplTest</code> contains tests for the class
@@ -49,11 +53,11 @@ public class DatabaseDAOImplTest {
 	@Test
 	public void testGetAllConnectionNames_1() throws Exception {
 		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		fixture.save(new Databasedetail("ABC", "", "", "", "", DBType.IBM_DB2, "", ""));
+		List<Databasedetail> databasedetails = fixture.getAllDatabaseinDB();
 		List<String> result = fixture.getAllConnectionNames();
 
 		// add additional test code here
-		assertEquals("ABC", result.get(0));
+		assertEquals(result.size(), databasedetails.size());
 	}
 
 	/**
@@ -66,12 +70,11 @@ public class DatabaseDAOImplTest {
 	@Test
 	public void testGetAllDatabaseinDB_1() throws Exception {
 		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		fixture.saveDatabse(new Databasedetail("ABC", "", "", "", "", DBType.IBM_DB2, "", ""));
 		List<Databasedetail> result = fixture.getAllDatabaseinDB();
 
 		// add additional test code here
-		
-		assertNotNull(result);
+
+		assertTrue(result.size() >= 0);
 	}
 
 	/**
@@ -84,13 +87,22 @@ public class DatabaseDAOImplTest {
 	@Test
 	public void testGetDatabaseByid_1() throws Exception {
 		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		
-		fixture.saveDatabse(new Databasedetail("", "", "", "", "", DBType.IBM_DB2, "", ""));
 
-		Databasedetail result = fixture.getDatabaseByid(1);
-
-		// add additional test code here
-		assertNotNull(result);
+		List<Databasedetail> listOfTables = null;
+		Integer id = new Integer(1);
+		try {
+			listOfTables = fixture.getAllDatabaseinDB();
+		} catch (ReadEntityException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		if (listOfTables.size() > 0) {
+			Databasedetail result = fixture.getDatabaseByid(id);
+			assertNotNull(result);
+		} else {
+			saveNewDatabase(fixture);
+			assertNotNull(fixture.getDatabaseByid(id));
+		}
 	}
 
 	/**
@@ -103,11 +115,7 @@ public class DatabaseDAOImplTest {
 	@Test
 	public void testSaveDatabse_1() throws Exception {
 		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		Databasedetail databse = new Databasedetail("", "", "", "", "", DBType.IBM_DB2, "", "");
-
-		fixture.saveDatabse(databse);
-		List<Databasedetail> result = fixture.getAllDatabaseinDB();
-		assertTrue(result.size() == 1);
+		assertNotNull(saveNewDatabase(fixture));
 
 		// add additional test code here
 	}
@@ -122,28 +130,18 @@ public class DatabaseDAOImplTest {
 	@Test
 	public void testUpdate_1() throws Exception {
 		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		Databasedetail database = new Databasedetail();
-		database.setIddatabase(1);
-
-		fixture.update(database);
-
-		// add additional test code here
-	}
-
-	/**
-	 * Run the void update(Databasedetail) method test.
-	 *
-	 * @throws Exception
-	 *
-	 * @generatedBy CodePro at 10/10/16 3:08 PM
-	 */
-	@Test
-	public void testUpdate_2() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
-		Databasedetail database = new Databasedetail();
-		database.setIddatabase(1);
-
-		fixture.update(database);
+		Databasedetail databasedetail;
+		List<Databasedetail> databasedetails;
+		databasedetails = fixture.getAllDatabaseinDB();
+		if (databasedetails.size() == 0) {
+			databasedetail = saveNewDatabase(fixture);
+		} else {
+			databasedetail = fixture.getDatabaseByid(1);
+		}
+		Integer id = new Integer(databasedetail.getIddatabase());
+		databasedetail.setConnectionName("UpdatedDatabaseConnectionName");
+		fixture.update(databasedetail);
+		assertTrue(fixture.getDatabaseByid(id).getConnectionName().equals("UpdatedDatabaseConnectionName"));
 
 		// add additional test code here
 	}
@@ -158,7 +156,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		// add additional set up code here
+		Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**
@@ -183,6 +181,14 @@ public class DatabaseDAOImplTest {
 	 * @generatedBy CodePro at 10/10/16 3:08 PM
 	 */
 	public static void main(String[] args) {
+
 		new org.junit.runner.JUnitCore().run(DatabaseDAOImplTest.class);
+	}
+
+	private Databasedetail saveNewDatabase(DatabaseDAOImpl fixture) throws PersistException {
+		Databasedetail databsedetail = new Databasedetail();
+
+		databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
+		return fixture.saveDatabse(databsedetail);
 	}
 }
