@@ -1,5 +1,7 @@
 package dao.impl.test;
 
+import java.util.List;
+
 import dao.ColumnsDao;
 import dao.DatabaseDao;
 import dao.SchemaDao;
@@ -14,6 +16,7 @@ import entity.Schemadetail;
 import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.PersistException;
+import exceptions.ReadEntityException;
 
 public class CreateColumnPreClass {
 
@@ -46,8 +49,13 @@ public class CreateColumnPreClass {
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
 		try {
+			List<Columnsdetail> columnsdetails = columnsDao.getAllColumnsinDB();
+			System.out.println(columnsdetails.size());
 			columnsDao.saveColumn(columnsdetail);
 		} catch (PersistException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ReadEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

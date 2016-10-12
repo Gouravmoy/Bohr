@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "columnsdetails")
-@NamedQuery(name = "Columnsdetail.findAll", query = "SELECT c FROM Columnsdetail c")
+@NamedQuery(name = "Columnsdetail.findAll", query = "select p,c from Columnsdetail p join p.patterndetail c")
 public class Columnsdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 

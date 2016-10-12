@@ -18,13 +18,14 @@ import exceptions.DAOException;
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
 	private Session session;
+	int count = 0;
 
 	public GenericDAOImpl() {
 		super();
 		if (session == null) {
 			startOpereation();
-		}if(!session.isConnected()){
-			startOpereation();
+			count++;
+			System.out.println("I am here " + count);
 		}
 	}
 
@@ -40,7 +41,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return t;
 	}
@@ -68,7 +69,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 
 	}
@@ -80,13 +81,13 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		try {
 			// startOpereation();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("from " + clazz.getName());
+			Query query = session.getNamedQuery(namedQueryName);
 			listT = query.list();
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return listT;
 	}
@@ -103,7 +104,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return t;
 	}
@@ -120,7 +121,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return t;
 	}
@@ -146,7 +147,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return t;
 	}
@@ -166,7 +167,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return results;
 	}
@@ -182,7 +183,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return t;
 	}
@@ -209,7 +210,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 
 	}
@@ -225,7 +226,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 
 	}
@@ -245,7 +246,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 		return false;
 	}
@@ -272,7 +273,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// session.close();
+			session.close();
 		}
 
 	}
