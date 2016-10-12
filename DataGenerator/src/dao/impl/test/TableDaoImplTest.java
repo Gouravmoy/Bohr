@@ -39,9 +39,9 @@ public class TableDaoImplTest {
 	 *
 	 * @generatedBy CodePro at 10/11/16 12:07 PM
 	 */
+	TableDaoImpl fixture = new TableDaoImpl();
 	@Test
 	public void testGetAllTabledetailinDB_1() {
-		TableDaoImpl fixture = new TableDaoImpl();
 		List<Tabledetail> result = null;
 		try {
 			result = fixture.getAllTabledetailinDB();
@@ -61,7 +61,6 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testGetTabledetailByid_1() throws Exception {
-		TableDaoImpl fixture = new TableDaoImpl();
 		Integer id = new Integer(1);
 
 		List<Tabledetail> listOfTables = null;
@@ -89,7 +88,6 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testSaveTabledetail_1() {
-		TableDaoImpl fixture = new TableDaoImpl();
 		try {
 			assertNotNull(saveNewTable(fixture));
 		} catch (PersistException e) {
@@ -107,7 +105,6 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testUpdate_1() throws Exception {
-		TableDaoImpl fixture = new TableDaoImpl();
 		Tabledetail tabledetail;
 		List<Tabledetail> tabledetails;
 		tabledetails = fixture.getAllTabledetailinDB();
