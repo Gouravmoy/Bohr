@@ -3,7 +3,9 @@ package datagenerator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import common.Master;
 import controller.MainController;
+import enums.Environment;
 
 public class Activator implements BundleActivator {
 
@@ -19,6 +21,7 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
+		Master.INSTANCE.setEnvironment(Environment.PROD);
 		MainController.setLogger();
 	}
 

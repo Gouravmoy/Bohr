@@ -199,4 +199,12 @@ public class Databasedetail implements Serializable {
 		return schemadetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Databasedetail [iddatabase=" + iddatabase + ", connectionName=" + connectionName + ", description="
+				+ description + ", lastUpdateTS=" + lastUpdateTS + ", name=" + name + ", password=" + password
+				+ ", port=" + port + ", type=" + type + ", url=" + url + ", username=" + username + ", changelogs="
+				+ changelogs + ", schemadetails=" + schemadetails + "]";
+	}
+
 }
