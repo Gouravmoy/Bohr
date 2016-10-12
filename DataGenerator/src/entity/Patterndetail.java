@@ -37,7 +37,7 @@ public class Patterndetail implements Serializable {
 	private String regexpString;
 
 	@ManyToOne
-	@JoinColumn(name = "columnId")
+	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail;
 
 	public Patterndetail() {

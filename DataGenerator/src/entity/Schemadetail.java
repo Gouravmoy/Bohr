@@ -37,7 +37,7 @@ public class Schemadetail implements Serializable {
 
 	//bi-directional many-to-one association to Databasedetail
 	@ManyToOne
-	@JoinColumn(name="db_id")
+	@JoinColumn(name="db_id",nullable=false)
 	private Databasedetail databasedetail;
 
 	//bi-directional many-to-one association to Tabledetail

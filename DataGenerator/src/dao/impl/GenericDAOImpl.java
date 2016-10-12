@@ -10,7 +10,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
+import common.Master;
 import dao.GenericDAO;
+import enums.Environment;
 import exceptions.DAOException;
 
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
@@ -19,8 +21,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 
 	public GenericDAOImpl() {
 		super();
-
 		if (session == null) {
+			startOpereation();
+		}if(!session.isConnected()){
 			startOpereation();
 		}
 	}
@@ -206,7 +209,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 
 	}
@@ -216,7 +219,6 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public void delete(Class clazz, T t) throws DAOException {
 		try {
 			// startOpereation();
-			tx = session.beginTransaction();
 			tx = session.beginTransaction();
 			session.delete(t);
 			tx.commit();
@@ -270,7 +272,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			session.close();
+			// session.close();
 		}
 
 	}
@@ -282,8 +284,17 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	}
 
 	private void startOpereation() {
-		session = new AnnotationConfiguration().configure().buildSessionFactory().openSession();
-		//tx = session.beginTransaction();
+		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml")
+					.buildSessionFactory().openSession();
+		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml")
+					.buildSessionFactory().openSession();
+		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml")
+					.buildSessionFactory().openSession();
+		}
+		tx = session.beginTransaction();
 	}
 
 }

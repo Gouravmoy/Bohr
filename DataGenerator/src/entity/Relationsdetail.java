@@ -28,7 +28,7 @@ public class Relationsdetail implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name = "columnId")
+	@JoinColumn(name = "columnId",nullable=false)
 	private Columnsdetail columnsdetail;
 
 	// bi-directional many-to-one association to Tabledetail

@@ -23,7 +23,7 @@ public class Databasedetail implements Serializable {
 	@Column(unique = true, nullable = false)
 	private int iddatabase;
 
-	@Column(length = 200)
+	@Column(length = 200, unique = true)
 	private String connectionName;
 
 	@Column(length = 200)
@@ -197,6 +197,14 @@ public class Databasedetail implements Serializable {
 		schemadetail.setDatabasedetail(null);
 
 		return schemadetail;
+	}
+
+	@Override
+	public String toString() {
+		return "Databasedetail [iddatabase=" + iddatabase + ", connectionName=" + connectionName + ", description="
+				+ description + ", lastUpdateTS=" + lastUpdateTS + ", name=" + name + ", password=" + password
+				+ ", port=" + port + ", type=" + type + ", url=" + url + ", username=" + username + ", changelogs="
+				+ changelogs + ", schemadetails=" + schemadetails + "]";
 	}
 
 }
