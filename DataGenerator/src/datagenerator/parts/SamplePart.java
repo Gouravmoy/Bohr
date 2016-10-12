@@ -21,6 +21,11 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import controller.Test;
+import dao.DatabaseDao;
+import dao.impl.DatabaseDAOImpl;
+import entity.Databasedetail;
+import entity.Schemadetail;
+import exceptions.ReadEntityException;
 
 public class SamplePart {
 
@@ -52,9 +57,19 @@ public class SamplePart {
 
 		logbackLogger.info("First Log from Data Generator");
 		logbackLogger.error("First Log from Data Generator");
-		
-		Test test = new Test();
-		test.saveEmployees();
+
+		DatabaseDao databaseDao = new DatabaseDAOImpl();
+		try {
+			for (Databasedetail databasedetail : databaseDao.getAllDatabaseinDB()) {
+				System.out.println(databasedetail.getConnectionName() + " - > ");
+				for (Schemadetail schemadetail : databasedetail.getSchemadetails()) {
+					System.out.println(schemadetail.getName());
+				}
+			}
+		} catch (ReadEntityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		parent.setLayout(new GridLayout(1, false));
 

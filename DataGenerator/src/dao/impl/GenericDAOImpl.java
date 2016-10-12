@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 
 import common.Master;
 import dao.GenericDAO;
@@ -19,13 +20,15 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 
 	private Session session;
 	int count = 0;
+	Configuration configuration;
 
 	public GenericDAOImpl() {
 		super();
-		if (session == null) {
+		if (configuration == null) {
 			startOpereation();
 			count++;
 			System.out.println("I am here " + count);
+			buildSession();
 		}
 	}
 
@@ -34,7 +37,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T save(T t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			session.save(t);
 			tx.commit();
@@ -49,7 +52,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void batchSaveDAO(List<T> t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
@@ -79,7 +82,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public List<T> readAll(String namedQueryName, Class clazz) throws DAOException {
 		List<T> listT = null;
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			Query query = session.getNamedQuery(namedQueryName);
 			listT = query.list();
@@ -97,7 +100,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public T readById(Class clazz, ID id) throws DAOException {
 		T t = null;
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			t = (T) session.get(clazz, id);
 			tx.commit();
@@ -113,7 +116,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T update(Class clazz, ID id, T t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			T newEntityRef = (T) session.merge(t);
 			session.update(newEntityRef);
@@ -137,7 +140,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public T getFirstRecord(Class<?> clazz) throws DAOException {
 		T t = null;
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			Criteria queryCriteria = session.createCriteria(clazz);
 			queryCriteria.setFirstResult(0);
@@ -176,7 +179,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public T saveOrUpdate(Class clazz, T t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(t);
 			tx.commit();
@@ -191,7 +194,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void saveOrUpdateBatch(List<T> t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
@@ -203,7 +206,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 				}
 				if (i % 20 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
-					// session.flush();
+					session.flush();
 				}
 			}
 			tx.commit();
@@ -219,7 +222,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void delete(Class clazz, T t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			session.delete(t);
 			tx.commit();
@@ -234,7 +237,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public boolean deleteById(Class<?> clazz, Serializable id) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			Object persistentInstance = session.load(clazz, id);
 			if (persistentInstance != null) {
@@ -254,7 +257,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	@Override
 	public void deleteBatch(List<T> t) throws DAOException {
 		try {
-			// startOpereation();
+			buildSession();
 			tx = session.beginTransaction();
 			int i = 0;
 			for (T tSingle : t) {
@@ -266,7 +269,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 				}
 				if (i % 20 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
-					// session.flush();
+					session.flush();
 				}
 			}
 			tx.commit();
@@ -286,16 +289,16 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 
 	private void startOpereation() {
 		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
-			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml")
-					.buildSessionFactory().openSession();
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
-			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml")
-					.buildSessionFactory().openSession();
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
-			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml")
-					.buildSessionFactory().openSession();
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		}
-		tx = session.beginTransaction();
+	}
+
+	private void buildSession() {
+		session = configuration.buildSessionFactory().openSession();
 	}
 
 }
