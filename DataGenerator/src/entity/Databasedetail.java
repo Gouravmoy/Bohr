@@ -1,12 +1,24 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import enums.DBType;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * The persistent class for the databasedetails database table.
@@ -51,12 +63,12 @@ public class Databasedetail implements Serializable {
 	private String username;
 
 	// bi-directional many-to-one association to Changelog
-	@OneToMany(mappedBy = "databasedetail", fetch = FetchType.LAZY)
-	private List<Changelog> changelogs;
+	@OneToMany(mappedBy = "databasedetail", fetch = FetchType.EAGER)
+	private Set<Changelog> changelogs;
 
 	// bi-directional many-to-one association to Schemadetail
-	@OneToMany(mappedBy = "databasedetail", fetch = FetchType.LAZY)
-	private List<Schemadetail> schemadetails;
+	@OneToMany(mappedBy = "databasedetail", fetch = FetchType.EAGER)
+	private Set<Schemadetail> schemadetails;
 
 	public Databasedetail(String connectionName, String description, String name, String password, String port,
 			DBType type, String url, String username) {
@@ -155,11 +167,13 @@ public class Databasedetail implements Serializable {
 		this.username = username;
 	}
 
-	public List<Changelog> getChangelogs() {
-		return this.changelogs;
+	
+
+	public Set<Changelog> getChangelogs() {
+		return changelogs;
 	}
 
-	public void setChangelogs(List<Changelog> changelogs) {
+	public void setChangelogs(Set<Changelog> changelogs) {
 		this.changelogs = changelogs;
 	}
 
@@ -177,11 +191,13 @@ public class Databasedetail implements Serializable {
 		return changelog;
 	}
 
-	public List<Schemadetail> getSchemadetails() {
-		return this.schemadetails;
+	
+
+	public Set<Schemadetail> getSchemadetails() {
+		return schemadetails;
 	}
 
-	public void setSchemadetails(List<Schemadetail> schemadetails) {
+	public void setSchemadetails(Set<Schemadetail> schemadetails) {
 		this.schemadetails = schemadetails;
 	}
 
