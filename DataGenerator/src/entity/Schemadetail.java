@@ -1,48 +1,60 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the schemadetails database table.
  * 
  */
 @Entity
-@Table(name="schemadetails")
-@NamedQuery(name="Schemadetail.findAll", query="SELECT s FROM Schemadetail s")
+@Table(name = "schemadetails")
+@NamedQuery(name = "Schemadetail.findAll", query = "SELECT s FROM Schemadetail s")
 public class Schemadetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idschema;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdateTS;
 
-	@Column(length=100)
+	@Column(length = 100)
 	private String name;
 
-	//bi-directional many-to-one association to Changelog
-	@OneToMany(mappedBy="schemadetail", fetch=FetchType.LAZY)
-	private List<Changelog> changelogs;
+	// bi-directional many-to-one association to Changelog
+	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
+	private Set<Changelog> changelogs;
 
-	//bi-directional many-to-one association to Datasamplemodel
-	@OneToMany(mappedBy="schemadetail", fetch=FetchType.LAZY)
-	private List<Datasamplemodel> datasamplemodels;
+	// bi-directional many-to-one association to Datasamplemodel
+	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
+	private Set<Datasamplemodel> datasamplemodels;
 
-	//bi-directional many-to-one association to Databasedetail
+	// bi-directional many-to-one association to Databasedetail
 	@ManyToOne
-	@JoinColumn(name="db_id",nullable=false)
+	@JoinColumn(name = "db_id", nullable = false)
 	private Databasedetail databasedetail;
 
-	//bi-directional many-to-one association to Tabledetail
-	@OneToMany(mappedBy="schemadetail", fetch=FetchType.LAZY)
-	private List<Tabledetail> tabledetails;
+	// bi-directional many-to-one association to Tabledetail
+	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
+	private Set<Tabledetail> tabledetails;
 
 	public Schemadetail() {
 	}
@@ -71,11 +83,11 @@ public class Schemadetail implements Serializable {
 		this.name = name;
 	}
 
-	public List<Changelog> getChangelogs() {
-		return this.changelogs;
+	public Set<Changelog> getChangelogs() {
+		return changelogs;
 	}
 
-	public void setChangelogs(List<Changelog> changelogs) {
+	public void setChangelogs(Set<Changelog> changelogs) {
 		this.changelogs = changelogs;
 	}
 
@@ -93,11 +105,11 @@ public class Schemadetail implements Serializable {
 		return changelog;
 	}
 
-	public List<Datasamplemodel> getDatasamplemodels() {
-		return this.datasamplemodels;
+	public Set<Datasamplemodel> getDatasamplemodels() {
+		return datasamplemodels;
 	}
 
-	public void setDatasamplemodels(List<Datasamplemodel> datasamplemodels) {
+	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
 	}
 
@@ -123,11 +135,11 @@ public class Schemadetail implements Serializable {
 		this.databasedetail = databasedetail;
 	}
 
-	public List<Tabledetail> getTabledetails() {
-		return this.tabledetails;
+	public Set<Tabledetail> getTabledetails() {
+		return tabledetails;
 	}
 
-	public void setTabledetails(List<Tabledetail> tabledetails) {
+	public void setTabledetails(Set<Tabledetail> tabledetails) {
 		this.tabledetails = tabledetails;
 	}
 
@@ -143,6 +155,13 @@ public class Schemadetail implements Serializable {
 		tabledetail.setSchemadetail(null);
 
 		return tabledetail;
+	}
+
+	@Override
+	public String toString() {
+		return "Schemadetail [idschema=" + idschema + ", lastUpdateTS=" + lastUpdateTS + ", name=" + name
+				+ ", changelogs=" + changelogs + ", datasamplemodels=" + datasamplemodels + ", databasedetail="
+				+ databasedetail + ", tabledetails=" + tabledetails + "]";
 	}
 
 }

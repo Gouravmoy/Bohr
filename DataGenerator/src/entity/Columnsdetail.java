@@ -1,12 +1,24 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import enums.ColumnType;
 import enums.KeyType;
-
-import java.util.List;
 
 /**
  * The persistent class for the columnsdetails database table.
@@ -48,8 +60,8 @@ public class Columnsdetail implements Serializable {
 	private Datasamplemodel datasamplemodel;
 
 	// bi-directional many-to-one association to Patterndetail
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
-	private List<Patterndetail> patterndetail;
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
+	private Set<Patterndetail> patterndetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
@@ -57,20 +69,20 @@ public class Columnsdetail implements Serializable {
 	private Tabledetail tabledetail;
 
 	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.LAZY)
-	private List<Constraintsdetail> constraintsdetails1;
+	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
+	private Set<Constraintsdetail> constraintsdetails1;
 
 	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "columnsdetail2", fetch = FetchType.LAZY)
-	private List<Constraintsdetail> constraintsdetails2;
+	@OneToMany(mappedBy = "columnsdetail2", fetch = FetchType.EAGER)
+	private Set<Constraintsdetail> constraintsdetails2;
 
 	// bi-directional many-to-one association to Datasamplemodel
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
-	private List<Datasamplemodel> datasamplemodels;
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
+	private Set<Datasamplemodel> datasamplemodels;
 
 	// bi-directional many-to-one association to Relationsdetail
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.LAZY)
-	private List<Relationsdetail> relationsdetails;
+	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
+	private Set<Relationsdetail> relationsdetails;
 
 	public Columnsdetail() {
 	}
@@ -147,11 +159,11 @@ public class Columnsdetail implements Serializable {
 		this.datasamplemodel = datasamplemodel;
 	}
 
-	public List<Patterndetail> getPatterndetail() {
+	public Set<Patterndetail> getPatterndetail() {
 		return patterndetail;
 	}
 
-	public void setPatterndetail(List<Patterndetail> patterndetail) {
+	public void setPatterndetail(Set<Patterndetail> patterndetail) {
 		this.patterndetail = patterndetail;
 	}
 
@@ -163,11 +175,11 @@ public class Columnsdetail implements Serializable {
 		this.tabledetail = tabledetail;
 	}
 
-	public List<Constraintsdetail> getConstraintsdetails1() {
-		return this.constraintsdetails1;
+	public Set<Constraintsdetail> getConstraintsdetails1() {
+		return constraintsdetails1;
 	}
 
-	public void setConstraintsdetails1(List<Constraintsdetail> constraintsdetails1) {
+	public void setConstraintsdetails1(Set<Constraintsdetail> constraintsdetails1) {
 		this.constraintsdetails1 = constraintsdetails1;
 	}
 
@@ -185,11 +197,11 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-	public List<Constraintsdetail> getConstraintsdetails2() {
-		return this.constraintsdetails2;
+	public Set<Constraintsdetail> getConstraintsdetails2() {
+		return constraintsdetails2;
 	}
 
-	public void setConstraintsdetails2(List<Constraintsdetail> constraintsdetails2) {
+	public void setConstraintsdetails2(Set<Constraintsdetail> constraintsdetails2) {
 		this.constraintsdetails2 = constraintsdetails2;
 	}
 
@@ -207,11 +219,11 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails2;
 	}
 
-	public List<Datasamplemodel> getDatasamplemodels() {
-		return this.datasamplemodels;
+	public Set<Datasamplemodel> getDatasamplemodels() {
+		return datasamplemodels;
 	}
 
-	public void setDatasamplemodels(List<Datasamplemodel> datasamplemodels) {
+	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
 	}
 
@@ -229,11 +241,11 @@ public class Columnsdetail implements Serializable {
 		return datasamplemodel;
 	}
 
-	public List<Relationsdetail> getRelationsdetails() {
+	public Set<Relationsdetail> getRelationsdetails() {
 		return this.relationsdetails;
 	}
 
-	public void setRelationsdetails(List<Relationsdetail> relationsdetails) {
+	public void setRelationsdetails(Set<Relationsdetail> relationsdetails) {
 		this.relationsdetails = relationsdetails;
 	}
 
