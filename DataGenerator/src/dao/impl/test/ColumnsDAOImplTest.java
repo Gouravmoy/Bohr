@@ -16,10 +16,9 @@ import entity.Tabledetail;
 import enums.Environment;
 
 public class ColumnsDAOImplTest {
-
+	ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 	@Test
 	public void testGetAllColumnsNames_2() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
@@ -41,7 +40,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllColumnsNames_3() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 
 		List<String> result = fixture.getAllColumnsNames();
 
@@ -57,7 +55,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllColumnsNames_4() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 
 		List<String> result = fixture.getAllColumnsNames();
 
@@ -73,7 +70,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllColumnsNames_5() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 
 		List<String> result = fixture.getAllColumnsNames();
 
@@ -89,7 +85,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllColumnsinDB_1() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
@@ -111,7 +106,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetColumnsdetailByid_2() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Integer id = new Integer(1);
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
@@ -130,7 +124,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testSaveColumn_2() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
@@ -148,7 +141,6 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testUpdate_1() throws Exception {
-		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setIdcolumnsdetails(1);
 		columnsdetail.setName("Updated Name");

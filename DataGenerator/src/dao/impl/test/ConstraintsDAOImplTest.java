@@ -16,9 +16,9 @@ import entity.Constraintsdetail;
 import enums.Environment;
 
 public class ConstraintsDAOImplTest {
+	ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 	@Test
 	public void testGetAllConstraintNames_1() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Constraintsdetail constraintsdetail = new Constraintsdetail();
 		constraintsdetail.setColumnsdetail1(columnsdetail);
@@ -33,7 +33,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testGetAllConstraintNames_2() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 
 		List<String> result = fixture.getAllConstraintNames();
 		assertNotNull(result);
@@ -41,7 +40,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testGetAllConstraintNames_3() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 
 		List<String> result = fixture.getAllConstraintNames();
 
@@ -50,7 +48,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testGetAllConstraintNames_4() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 
 		List<String> result = fixture.getAllConstraintNames();
 
@@ -59,7 +56,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testGetAllConstraintsinDB_1() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Constraintsdetail constraintsdetail = new Constraintsdetail();
 		constraintsdetail.setColumnsdetail1(columnsdetail);
@@ -74,7 +70,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testGetConstraintsByid_1() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 		Integer id = new Integer(1);
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Constraintsdetail constraintsdetail = new Constraintsdetail();
@@ -86,7 +81,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testSaveConstraint_1() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 		Constraintsdetail constraintsdetail = new Constraintsdetail();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		constraintsdetail.setColumnsdetail1(columnsdetail);
@@ -97,7 +91,6 @@ public class ConstraintsDAOImplTest {
 
 	@Test
 	public void testUpdate_1() throws Exception {
-		ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
 		Constraintsdetail constraintsdetail = new Constraintsdetail();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		constraintsdetail.setColumnsdetail1(columnsdetail);
