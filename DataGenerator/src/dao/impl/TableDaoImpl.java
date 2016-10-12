@@ -24,6 +24,8 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 		}
 		return tabledetail;
 	}
+	
+	
 
 	@Override
 	public Tabledetail getTabledetailByid(Integer id) throws ReadEntityException {
@@ -55,5 +57,7 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 }

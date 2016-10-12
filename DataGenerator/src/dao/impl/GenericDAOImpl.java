@@ -282,10 +282,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 
 	private void startOpereation() {
 		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
-			session = new AnnotationConfiguration().configure().buildSessionFactory().openSession();
-		} else {
-			session = new AnnotationConfiguration().configure("/dao/impl/test/hibernate.cfg.xml").buildSessionFactory()
-					.openSession();
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml")
+					.buildSessionFactory().openSession();
+		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml")
+					.buildSessionFactory().openSession();
+		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
+			session = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml")
+					.buildSessionFactory().openSession();
 		}
 		tx = session.beginTransaction();
 	}
