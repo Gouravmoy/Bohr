@@ -1,11 +1,23 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import enums.SampleType;
-
-import java.util.List;
 
 /**
  * The persistent class for the datasamplemodel database table.
@@ -29,8 +41,8 @@ public class Datasamplemodel implements Serializable {
 	private SampleType sampletype;
 
 	// bi-directional many-to-one association to Columnsdetail
-	@OneToMany(mappedBy = "datasamplemodel", fetch = FetchType.LAZY)
-	private List<Columnsdetail> columnsdetails;
+	@OneToMany(mappedBy = "datasamplemodel", fetch = FetchType.EAGER)
+	private Set<Columnsdetail> columnsdetails;
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
@@ -74,11 +86,11 @@ public class Datasamplemodel implements Serializable {
 		this.sampletype = sampletype;
 	}
 
-	public List<Columnsdetail> getColumnsdetails() {
+	public Set<Columnsdetail> getColumnsdetails() {
 		return this.columnsdetails;
 	}
 
-	public void setColumnsdetails(List<Columnsdetail> columnsdetails) {
+	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
 		this.columnsdetails = columnsdetails;
 	}
 

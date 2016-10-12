@@ -1,8 +1,19 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the tabledetails database table.
@@ -23,24 +34,24 @@ public class Tabledetail implements Serializable {
 	private String tableName;
 
 	// bi-directional many-to-one association to Changelog
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
-	private List<Changelog> changelogs;
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	private Set<Changelog> changelogs;
 
 	// bi-directional many-to-one association to Columnsdetail
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
-	private List<Columnsdetail> columnsdetails;
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	private Set<Columnsdetail> columnsdetails;
 
 	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
-	private List<Constraintsdetail> constraintsdetails;
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	private Set<Constraintsdetail> constraintsdetails;
 
 	// bi-directional many-to-one association to Datasamplemodel
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
-	private List<Datasamplemodel> datasamplemodels;
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	private Set<Datasamplemodel> datasamplemodels;
 
 	// bi-directional many-to-one association to Relationsdetail
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.LAZY)
-	private List<Relationsdetail> relationsdetails;
+	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	private Set<Relationsdetail> relationsdetails;
 
 	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
@@ -66,11 +77,11 @@ public class Tabledetail implements Serializable {
 		this.tableName = tableName;
 	}
 
-	public List<Changelog> getChangelogs() {
+	public Set<Changelog> getChangelogs() {
 		return this.changelogs;
 	}
 
-	public void setChangelogs(List<Changelog> changelogs) {
+	public void setChangelogs(Set<Changelog> changelogs) {
 		this.changelogs = changelogs;
 	}
 
@@ -88,11 +99,11 @@ public class Tabledetail implements Serializable {
 		return changelog;
 	}
 
-	public List<Columnsdetail> getColumnsdetails() {
+	public Set<Columnsdetail> getColumnsdetails() {
 		return this.columnsdetails;
 	}
 
-	public void setColumnsdetails(List<Columnsdetail> columnsdetails) {
+	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
 		this.columnsdetails = columnsdetails;
 	}
 
@@ -110,11 +121,11 @@ public class Tabledetail implements Serializable {
 		return columnsdetail;
 	}
 
-	public List<Constraintsdetail> getConstraintsdetails() {
+	public Set<Constraintsdetail> getConstraintsdetails() {
 		return this.constraintsdetails;
 	}
 
-	public void setConstraintsdetails(List<Constraintsdetail> constraintsdetails) {
+	public void setConstraintsdetails(Set<Constraintsdetail> constraintsdetails) {
 		this.constraintsdetails = constraintsdetails;
 	}
 
@@ -132,11 +143,11 @@ public class Tabledetail implements Serializable {
 		return constraintsdetail;
 	}
 
-	public List<Datasamplemodel> getDatasamplemodels() {
+	public Set<Datasamplemodel> getDatasamplemodels() {
 		return this.datasamplemodels;
 	}
 
-	public void setDatasamplemodels(List<Datasamplemodel> datasamplemodels) {
+	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
 	}
 
@@ -154,11 +165,11 @@ public class Tabledetail implements Serializable {
 		return datasamplemodel;
 	}
 
-	public List<Relationsdetail> getRelationsdetails() {
+	public Set<Relationsdetail> getRelationsdetails() {
 		return this.relationsdetails;
 	}
 
-	public void setRelationsdetails(List<Relationsdetail> relationsdetails) {
+	public void setRelationsdetails(Set<Relationsdetail> relationsdetails) {
 		this.relationsdetails = relationsdetails;
 	}
 
