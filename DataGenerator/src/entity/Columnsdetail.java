@@ -159,8 +159,6 @@ public class Columnsdetail implements Serializable {
 		this.datasamplemodel = datasamplemodel;
 	}
 
-	
-
 	public Set<Patterndetail> getPatterndetail() {
 		return patterndetail;
 	}
@@ -176,8 +174,6 @@ public class Columnsdetail implements Serializable {
 	public void setTabledetail(Tabledetail tabledetail) {
 		this.tabledetail = tabledetail;
 	}
-
-	
 
 	public Set<Constraintsdetail> getConstraintsdetails1() {
 		return constraintsdetails1;
@@ -201,8 +197,6 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-	
-
 	public Set<Constraintsdetail> getConstraintsdetails2() {
 		return constraintsdetails2;
 	}
@@ -224,8 +218,6 @@ public class Columnsdetail implements Serializable {
 
 		return constraintsdetails2;
 	}
-
-	
 
 	public Set<Datasamplemodel> getDatasamplemodels() {
 		return datasamplemodels;
@@ -273,12 +265,7 @@ public class Columnsdetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Columnsdetail [idcolumnsdetails=" + idcolumnsdetails + ", columnsdetailscol=" + columnsdetailscol
-				+ ", enumvalues=" + enumvalues + ", isnullable=" + isnullable + ", keytype=" + keytype + ", length="
-				+ length + ", name=" + name + ", type=" + type + ", datasamplemodel=" + datasamplemodel
-				+ ", patterndetail=" + patterndetail + ", tabledetail=" + tabledetail + ", constraintsdetails1="
-				+ constraintsdetails1 + ", constraintsdetails2=" + constraintsdetails2 + ", datasamplemodels="
-				+ datasamplemodels + ", relationsdetails=" + relationsdetails + "]";
+		return name;
 	}
 
 }

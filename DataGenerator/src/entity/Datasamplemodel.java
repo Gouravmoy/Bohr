@@ -46,17 +46,17 @@ public class Datasamplemodel implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name = "coulmnid",nullable=false)
+	@JoinColumn(name = "coulmnid", nullable = false)
 	private Columnsdetail columnsdetail;
 
 	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name = "schemaid",nullable=false)
+	@JoinColumn(name = "schemaid", nullable = false)
 	private Schemadetail schemadetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name = "tableid",nullable=false)
+	@JoinColumn(name = "tableid", nullable = false)
 	private Tabledetail tabledetail;
 
 	public Datasamplemodel() {
@@ -134,9 +134,7 @@ public class Datasamplemodel implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Datasamplemodel [iddatasamplemodel=" + iddatasamplemodel + ", datasamplemodelcol=" + datasamplemodelcol
-				+ ", sampletype=" + sampletype + ", columnsdetails=" + columnsdetails + ", columnsdetail="
-				+ columnsdetail + ", schemadetail=" + schemadetail + ", tabledetail=" + tabledetail + "]";
+		return datasamplemodelcol;
 	}
 
 }

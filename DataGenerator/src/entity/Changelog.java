@@ -1,45 +1,54 @@
 package entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the changelog database table.
  * 
  */
 @Entity
-@Table(name="changelog")
-@NamedQuery(name="Changelog.findAll", query="SELECT c FROM Changelog c")
+@Table(name = "changelog")
+@NamedQuery(name = "Changelog.findAll", query = "SELECT c FROM Changelog c")
 public class Changelog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private int idchangelog;
 
-	@Column(length=500)
+	@Column(length = 500)
 	private String revisioncomments;
 
 	private int revisionid;
 
-	@Column(name="sys_comments", length=200)
+	@Column(name = "sys_comments", length = 200)
 	private String sysComments;
 
-	//bi-directional many-to-one association to Databasedetail
+	// bi-directional many-to-one association to Databasedetail
 	@ManyToOne
-	@JoinColumn(name="databaseid")
+	@JoinColumn(name = "databaseid")
 	private Databasedetail databasedetail;
 
-	//bi-directional many-to-one association to Schemadetail
+	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name="schemaid")
+	@JoinColumn(name = "schemaid")
 	private Schemadetail schemadetail;
 
-	//bi-directional many-to-one association to Tabledetail
+	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name="tableid")
+	@JoinColumn(name = "tableid")
 	private Tabledetail tabledetail;
 
 	public Changelog() {
@@ -103,11 +112,7 @@ public class Changelog implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Changelog [idchangelog=" + idchangelog + ", revisioncomments=" + revisioncomments + ", revisionid="
-				+ revisionid + ", sysComments=" + sysComments + ", databasedetail=" + databasedetail + ", schemadetail="
-				+ schemadetail + ", tabledetail=" + tabledetail + "]";
+		return (new Date() + " - " + revisioncomments + "");
 	}
-	
-	
 
 }

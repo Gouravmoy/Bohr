@@ -23,15 +23,25 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import dao.DataSampleDao;
 import dao.DatabaseDao;
+import dao.impl.DataSampleDaoImpl;
 import dao.impl.DatabaseDAOImpl;
+import entity.Changelog;
+import entity.Columnsdetail;
+import entity.Constraintsdetail;
 import entity.Databasedetail;
+import entity.Datasamplemodel;
+import entity.Schemadetail;
+import entity.Tabledetail;
 import exceptions.ReadEntityException;
 import views.listners.TreeSelectionListner;
+import views.renderer.TreeViewRenderer;
 import views.util.JTreeUtil;
 
-public class TreeView {
+public class TreeView extends DefaultTreeCellRenderer {
 
+	private static final long serialVersionUID = 1L;
 	Composite composite;
 	private static JPanel panel_1;
 	private static JScrollPane mainScrollPane;
@@ -45,12 +55,13 @@ public class TreeView {
 	static DefaultTreeCellRenderer projectsTreeRenderer;
 
 	// Top Nodes
-	static DefaultMutableTreeNode databaseTreeTop;
 	static DefaultMutableTreeNode projectsTreeTop;
+	static DefaultMutableTreeNode repoTreeTop;
 
 	// DAO
 
 	DatabaseDao databaseDao;
+	DataSampleDao dataSamepleDao;
 
 	@Inject
 	public TreeView() {
@@ -82,7 +93,6 @@ public class TreeView {
 		} catch (ReadEntityException e) {
 			e.printStackTrace();
 		}
-
 		panel_1.add(databaseTree);
 		// panel_1.add(projectsTree);
 
@@ -95,44 +105,89 @@ public class TreeView {
 	}
 
 	private void createDatabaseTree() throws ReadEntityException {
+		DefaultMutableTreeNode databaseTreeTop = null;
 		DefaultMutableTreeNode category = null;
+		DefaultMutableTreeNode schemaCategory = null;
+		DefaultMutableTreeNode changeLogCategory = null;
+		DefaultMutableTreeNode dataSampelModelCategory = null;
 
 		databaseDao = new DatabaseDAOImpl();
+		dataSamepleDao = new DataSampleDaoImpl();
 		List<Databasedetail> databaseList = new ArrayList<>();
 
 		databaseList = databaseDao.getAllDatabaseinDB();
-		databaseTreeTop.removeAllChildren();
+
+		repoTreeTop.removeAllChildren();
+		databaseTreeTop = new DefaultMutableTreeNode("DATABASES");
+
 		if (databaseList.isEmpty()) {
 			category = new DefaultMutableTreeNode("...");
 			databaseTreeTop.add(category);
 		} else {
 			for (Databasedetail database : databaseList) {
-				category = new DefaultMutableTreeNode(database.getConnectionName());
+				category = new DefaultMutableTreeNode(database);
+				for (Schemadetail schemadetail : database.getSchemadetails()) {
+					schemaCategory = new DefaultMutableTreeNode(schemadetail);
+					addTableDetails(schemaCategory, schemadetail);
+					changeLogCategory = new DefaultMutableTreeNode("CHANGE LOGS");
+					for (Changelog changelog : database.getChangelogs()) {
+						changeLogCategory.add(new DefaultMutableTreeNode(changelog));
+					}
+					schemaCategory.add(changeLogCategory);
+					category.add(schemaCategory);
+				}
 				databaseTreeTop.add(category);
 			}
 		}
+		repoTreeTop.add(databaseTreeTop);
+		List<Datasamplemodel> datasamplemodels = dataSamepleDao.getAllDatasamplemodelinDB();
+		dataSampelModelCategory = new DefaultMutableTreeNode("DATA SAMPLE MODELS");
+		for (Datasamplemodel datasamplemodel : datasamplemodels) {
+			dataSampelModelCategory.add(new DefaultMutableTreeNode(datasamplemodel));
+		}
+		repoTreeTop.add(dataSampelModelCategory);
 		refreshDatabaseTree();
 	}
 
+	private void addTableDetails(DefaultMutableTreeNode schemaCategory, Schemadetail schemadetail) {
+		DefaultMutableTreeNode tableCategory;
+		DefaultMutableTreeNode columnCategory;
+		DefaultMutableTreeNode constraintsCategory;
+		for (Tabledetail tabledetail : schemadetail.getTabledetails()) {
+			tableCategory = new DefaultMutableTreeNode(tabledetail);
+			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
+				columnCategory = new DefaultMutableTreeNode(columnsdetail);
+				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
+					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);
+					columnCategory.add(constraintsCategory);
+				}
+				tableCategory.add(columnCategory);
+			}
+			schemaCategory.add(tableCategory);
+		}
+	}
+
 	private void initilizeTrees(Frame frame) {
+		TreeViewRenderer renderer = new TreeViewRenderer();
 		ImageIcon metadataImageIcon = new ImageIcon(TreeView.class.getResource("/resources/images/transform_flip.png"));
 		databaseTreeRenderer = new DefaultTreeCellRenderer();
 		databaseTreeRenderer.setIcon(new ImageIcon(TreeView.class.getResource("/resources/images/transform_flip.png")));
 		databaseTreeRenderer.setLeafIcon(metadataImageIcon);
-		databaseTreeTop = new DefaultMutableTreeNode("DATABASES");
-		databaseTree = new JTree(databaseTreeTop);
+		repoTreeTop = new DefaultMutableTreeNode("REPOSITORY");
+		databaseTree = new JTree(repoTreeTop);
 		databaseTree.setAlignmentX(Component.LEFT_ALIGNMENT);
 		databaseTree.setAlignmentY(Component.TOP_ALIGNMENT);
 		databaseTree.setBounds(322, 252, 104, 16);
 		databaseTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		databaseTree.setShowsRootHandles(true);
 		databaseTree.addTreeSelectionListener(new TreeSelectionListner(databaseTree));
-		databaseTree.setCellRenderer(databaseTreeRenderer);
+		databaseTree.setCellRenderer(renderer);
+
 	}
 
 	private static void refreshDatabaseTree() {
 		DefaultTreeModel model = (DefaultTreeModel) databaseTree.getModel();
-		model.reload(databaseTreeTop);
+		model.reload(repoTreeTop);
 		JTreeUtil.colapse(databaseTree);
 	}
 }

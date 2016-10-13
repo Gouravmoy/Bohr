@@ -55,7 +55,7 @@ public class Tabledetail implements Serializable {
 
 	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name="schema_id",nullable=false)
+	@JoinColumn(name = "schema_id", nullable = false)
 	private Schemadetail schemadetail;
 
 	public Tabledetail() {
@@ -197,10 +197,7 @@ public class Tabledetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Tabledetail [idtabledetails=" + idtabledetails + ", tableName=" + tableName + ", changelogs="
-				+ changelogs + ", columnsdetails=" + columnsdetails + ", constraintsdetails=" + constraintsdetails
-				+ ", datasamplemodels=" + datasamplemodels + ", relationsdetails=" + relationsdetails
-				+ ", schemadetail=" + schemadetail + "]";
+		return tableName;
 	}
 
 }
