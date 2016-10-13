@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +26,8 @@ import exceptions.ReadEntityException;
  * @version $Revision: 1.0 $
  */
 public class DatabaseDAOImplTest {
+	DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+
 	/**
 	 * Run the DatabaseDAOImpl() constructor test.
 	 *
@@ -52,7 +53,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Test
 	public void testGetAllConnectionNames_1() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+		// DatabaseDAOImpl fixture = new DatabaseDAOImpl();
 		List<Databasedetail> databasedetails = fixture.getAllDatabaseinDB();
 		List<String> result = fixture.getAllConnectionNames();
 
@@ -69,7 +70,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Test
 	public void testGetAllDatabaseinDB_1() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+		// DatabaseDAOImpl fixture = new DatabaseDAOImpl();
 		List<Databasedetail> result = fixture.getAllDatabaseinDB();
 
 		// add additional test code here
@@ -86,7 +87,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Test
 	public void testGetDatabaseByid_1() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+		// DatabaseDAOImpl fixture = new DatabaseDAOImpl();
 
 		List<Databasedetail> listOfTables = null;
 		Integer id = new Integer(1);
@@ -114,7 +115,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Test
 	public void testSaveDatabse_1() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+		// DatabaseDAOImpl fixture = new DatabaseDAOImpl();
 		assertNotNull(saveNewDatabase(fixture));
 
 		// add additional test code here
@@ -129,7 +130,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Test
 	public void testUpdate_1() throws Exception {
-		DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+		// DatabaseDAOImpl fixture = new DatabaseDAOImpl();
 		Databasedetail databasedetail;
 		List<Databasedetail> databasedetails;
 		databasedetails = fixture.getAllDatabaseinDB();
@@ -188,7 +189,7 @@ public class DatabaseDAOImplTest {
 	private Databasedetail saveNewDatabase(DatabaseDAOImpl fixture) throws PersistException {
 		Databasedetail databsedetail = new Databasedetail();
 
-		databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
+		//databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
 		return fixture.saveDatabse(databsedetail);
 	}
 }
