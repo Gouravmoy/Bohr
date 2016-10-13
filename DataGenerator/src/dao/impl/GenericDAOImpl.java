@@ -19,15 +19,12 @@ import exceptions.DAOException;
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
 	private Session session;
-	int count = 0;
 	Configuration configuration;
 
 	public GenericDAOImpl() {
 		super();
 		if (configuration == null) {
 			startOpereation();
-			count++;
-			System.out.println("I am here " + count);
 			buildSession();
 		}
 	}
@@ -86,7 +83,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		try {
 			buildSession();
 			tx = session.beginTransaction();
-			Query query = session.getNamedQuery(namedQueryName);
+			Query query = session.createQuery("from " + clazz.getName());
 			listT = query.list();
 			tx.commit();
 		} catch (HibernateException e) {
