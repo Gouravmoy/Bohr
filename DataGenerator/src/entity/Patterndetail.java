@@ -1,15 +1,16 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -36,9 +37,8 @@ public class Patterndetail implements Serializable {
 	@Column(length = 100)
 	private String regexpString;
 
-	@ManyToOne
-	@JoinColumn(name = "columnId", nullable = false)
-	private Columnsdetail columnsdetail;
+	@OneToMany(mappedBy = "patterndetail", fetch = FetchType.EAGER)
+	private Set<Columnsdetail> columnsdetail;
 
 	public Patterndetail() {
 	}
@@ -75,11 +75,11 @@ public class Patterndetail implements Serializable {
 		this.regexpString = regexpString;
 	}
 
-	public Columnsdetail getColumnsdetail() {
+	public Set<Columnsdetail> getColumnsdetail() {
 		return columnsdetail;
 	}
 
-	public void setColumnsdetail(Columnsdetail columnsdetail) {
+	public void setColumnsdetail(Set<Columnsdetail> columnsdetail) {
 		this.columnsdetail = columnsdetail;
 	}
 

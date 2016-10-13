@@ -20,7 +20,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
-import controller.Test;
 import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;

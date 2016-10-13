@@ -35,7 +35,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllRelationNames_1() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Relationsdetail relationsdetail = new Relationsdetail();
 		relationsdetail.setColumnsdetail(columnsdetail);
@@ -57,7 +57,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllRelationNames_2() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 
 		List<String> result = fixture.getAllRelationNames();
 
@@ -83,7 +83,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllRelationNames_3() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 
 		List<String> result = fixture.getAllRelationNames();
 
@@ -109,7 +109,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllRelationNames_4() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 
 		List<String> result = fixture.getAllRelationNames();
 
@@ -135,7 +135,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllRelationsinDB_1() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Relationsdetail relationsdetail = new Relationsdetail();
 		relationsdetail.setColumnsdetail(columnsdetail);
@@ -158,7 +158,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testGetRelationByid_1() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 		Integer id = new Integer(1);
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		Relationsdetail relationsdetail = new Relationsdetail();
@@ -177,7 +177,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testSaveRelation_1() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 		Relationsdetail relationsdetail = new Relationsdetail();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		relationsdetail.setColumnsdetail(columnsdetail);
@@ -194,7 +194,7 @@ public class RelationsDAOImplTest {
 	 */
 	@Test
 	public void testUpdate_1() throws Exception {
-		// RelationsDAOImpl fixture = new RelationsDAOImpl();
+		RelationsDAOImpl fixture = new RelationsDAOImpl();
 		Relationsdetail relationsdetail = new Relationsdetail();
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
 		relationsdetail.setColumnsdetail(columnsdetail);

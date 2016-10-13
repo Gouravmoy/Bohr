@@ -7,27 +7,25 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 
+import common.Master;
 import dao.GenericDAO;
+import enums.Environment;
 import exceptions.DAOException;
 
 public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
-	int count = 0;
-	static Configuration configuration;
-	static SessionFactory sessionFactory;
-	static Session session;
+
+	private Session session;
+	Configuration configuration;
 
 	public GenericDAOImpl() {
 		super();
-		if (count == 0) {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
-			;
-			sessionFactory = configuration.buildSessionFactory();
-			session = sessionFactory.getCurrentSession();
+		if (configuration == null) {
+			startOpereation();
+			buildSession();
 		}
 	}
 
@@ -43,8 +41,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return t;
 	}
@@ -72,8 +70,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 
 	}
@@ -85,14 +83,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		try {
 			buildSession();
 			tx = session.beginTransaction();
-			Query query = session.getNamedQuery(namedQueryName);
+			Query query = session.createQuery("from " + clazz.getName());
 			listT = query.list();
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return listT;
 	}
@@ -109,8 +107,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
+
 		}
 		return t;
 	}
@@ -127,8 +126,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return t;
 	}
@@ -154,8 +153,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return t;
 	}
@@ -175,8 +174,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return results;
 	}
@@ -192,8 +191,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return t;
 	}
@@ -220,8 +219,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 
 	}
@@ -237,8 +236,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 
 	}
@@ -258,8 +257,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 		return false;
 	}
@@ -286,8 +285,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} catch (HibernateException e) {
 			handleException(e);
 		} finally {
-			// sessionFactory.close();
-			// session.close();
+			session.getSessionFactory().close();
+			session.close();
 		}
 
 	}
@@ -298,8 +297,28 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		throw new DAOException(e);
 	}
 
+	private void startOpereation() {
+		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml");
+		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
+		}else {
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+		}
+	}
+
 	private void buildSession() {
-		System.out.println(session.hashCode());
+		if(session!=null){
+			if(session.isOpen()){
+				session.clear();
+				session.close();
+			}
+			session = session.getSessionFactory().openSession();
+			return;
+		}
+		session=configuration.buildSessionFactory().openSession();
 	}
 
 }
