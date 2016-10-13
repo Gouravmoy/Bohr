@@ -46,7 +46,9 @@ public class Columnsdetail implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private KeyType keytype;
 
-	private int length;
+	private long length;
+
+	private int decimalLength;
 
 	@Column(length = 100)
 	private String name;
@@ -72,10 +74,6 @@ public class Columnsdetail implements Serializable {
 	// bi-directional many-to-one association to Constraintsdetail
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
-
-	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "columnsdetail2", fetch = FetchType.EAGER)
-	private Set<Constraintsdetail> constraintsdetails2;
 
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
@@ -126,10 +124,6 @@ public class Columnsdetail implements Serializable {
 
 	public void setKeytype(KeyType keytype) {
 		this.keytype = keytype;
-	}
-
-	public int getLength() {
-		return this.length;
 	}
 
 	public void setLength(int length) {
@@ -191,33 +185,19 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
+	public long getLength() {
+		return length;
+	}
+
+	public void setLength(long length) {
+		this.length = length;
+	}
+
 	public Constraintsdetail removeConstraintsdetails1(Constraintsdetail constraintsdetails1) {
 		getConstraintsdetails1().remove(constraintsdetails1);
 		constraintsdetails1.setColumnsdetail1(null);
 
 		return constraintsdetails1;
-	}
-
-	public Set<Constraintsdetail> getConstraintsdetails2() {
-		return constraintsdetails2;
-	}
-
-	public void setConstraintsdetails2(Set<Constraintsdetail> constraintsdetails2) {
-		this.constraintsdetails2 = constraintsdetails2;
-	}
-
-	public Constraintsdetail addConstraintsdetails2(Constraintsdetail constraintsdetails2) {
-		getConstraintsdetails2().add(constraintsdetails2);
-		constraintsdetails2.setColumnsdetail2(this);
-
-		return constraintsdetails2;
-	}
-
-	public Constraintsdetail removeConstraintsdetails2(Constraintsdetail constraintsdetails2) {
-		getConstraintsdetails2().remove(constraintsdetails2);
-		constraintsdetails2.setColumnsdetail2(null);
-
-		return constraintsdetails2;
 	}
 
 	public Set<Datasamplemodel> getDatasamplemodels() {
@@ -226,6 +206,14 @@ public class Columnsdetail implements Serializable {
 
 	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
+	}
+
+	public int getDecimalLength() {
+		return decimalLength;
+	}
+
+	public void setDecimalLength(int decimalLength) {
+		this.decimalLength = decimalLength;
 	}
 
 	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {

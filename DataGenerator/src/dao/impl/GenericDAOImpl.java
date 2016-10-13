@@ -106,7 +106,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
-		} finally {
+		} catch(Exception exception){
+			exception.printStackTrace();
+		}finally {
 			session.getSessionFactory().close();
 			session.close();
 

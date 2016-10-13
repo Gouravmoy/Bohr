@@ -19,4 +19,6 @@ public interface ConstraintsDao {
 
 	public Constraintsdetail update(Constraintsdetail constraintsdetail) throws EntityNotPresent;
 
+	public void saveListOfConstraint(List<Constraintsdetail> constraintsdetails) throws PersistException;
+
 }
