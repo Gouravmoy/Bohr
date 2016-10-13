@@ -37,9 +37,9 @@ public class SchemaDaoImplTest {
 	 *
 	 * @generatedBy CodePro at 10/10/16 5:02 PM
 	 */
+	SchemaDaoImpl fixture = new SchemaDaoImpl();
 	@Test
 	public void testGetAllSchemainDB_1() {
-		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		List<Schemadetail> result = null;
 		try {
 			result = fixture.getAllSchemainDB();
@@ -59,7 +59,6 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testGetSchemaByid_1() {
-		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		Integer id = new Integer(1);
 		try {
 			List<Schemadetail> schemadetails = fixture.getAllSchemainDB();
@@ -86,7 +85,6 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testSaveSchema_1() {
-		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		try {
 			assertNotNull(saveNewSchema(fixture));
 		} catch (DAOException err) {
@@ -103,7 +101,6 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testUpdate_1() {
-		SchemaDaoImpl fixture = new SchemaDaoImpl();
 Schemadetail schemadetail;
 		try {
 			List<Schemadetail> schemadetails;
