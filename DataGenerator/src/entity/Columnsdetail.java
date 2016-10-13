@@ -271,4 +271,14 @@ public class Columnsdetail implements Serializable {
 		return relationsdetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Columnsdetail [idcolumnsdetails=" + idcolumnsdetails + ", columnsdetailscol=" + columnsdetailscol
+				+ ", enumvalues=" + enumvalues + ", isnullable=" + isnullable + ", keytype=" + keytype + ", length="
+				+ length + ", name=" + name + ", type=" + type + ", datasamplemodel=" + datasamplemodel
+				+ ", patterndetail=" + patterndetail + ", tabledetail=" + tabledetail + ", constraintsdetails1="
+				+ constraintsdetails1 + ", constraintsdetails2=" + constraintsdetails2 + ", datasamplemodels="
+				+ datasamplemodels + ", relationsdetails=" + relationsdetails + "]";
+	}
+
 }

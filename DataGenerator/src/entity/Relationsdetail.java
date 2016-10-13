@@ -79,4 +79,10 @@ public class Relationsdetail implements Serializable {
 		this.tabledetail = tabledetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Relationsdetail [idrelations=" + idrelations + ", description=" + description + ", type=" + type
+				+ ", columnsdetail=" + columnsdetail + ", tabledetail=" + tabledetail + "]";
+	}
+
 }

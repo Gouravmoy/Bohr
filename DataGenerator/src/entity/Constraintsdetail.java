@@ -89,4 +89,11 @@ public class Constraintsdetail implements Serializable {
 		this.columnsdetail2 = columnsdetail2;
 	}
 
+	@Override
+	public String toString() {
+		return "Constraintsdetail [idconstraintsdetails=" + idconstraintsdetails + ", constraintname=" + constraintname
+				+ ", isunique=" + isunique + ", columnsdetail1=" + columnsdetail1 + ", tabledetail=" + tabledetail
+				+ ", columnsdetail2=" + columnsdetail2 + "]";
+	}
+
 }

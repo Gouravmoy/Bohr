@@ -132,4 +132,11 @@ public class Datasamplemodel implements Serializable {
 		this.tabledetail = tabledetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Datasamplemodel [iddatasamplemodel=" + iddatasamplemodel + ", datasamplemodelcol=" + datasamplemodelcol
+				+ ", sampletype=" + sampletype + ", columnsdetails=" + columnsdetails + ", columnsdetail="
+				+ columnsdetail + ", schemadetail=" + schemadetail + ", tabledetail=" + tabledetail + "]";
+	}
+
 }

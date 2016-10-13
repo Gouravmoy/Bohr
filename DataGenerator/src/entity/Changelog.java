@@ -101,4 +101,13 @@ public class Changelog implements Serializable {
 		this.tabledetail = tabledetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Changelog [idchangelog=" + idchangelog + ", revisioncomments=" + revisioncomments + ", revisionid="
+				+ revisionid + ", sysComments=" + sysComments + ", databasedetail=" + databasedetail + ", schemadetail="
+				+ schemadetail + ", tabledetail=" + tabledetail + "]";
+	}
+	
+	
+
 }
