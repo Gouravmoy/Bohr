@@ -304,21 +304,21 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
-		}else {
+		} else {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		}
 	}
 
 	private void buildSession() {
-		if(session!=null){
-			if(session.isOpen()){
+		if (session != null) {
+			if (session.isOpen()) {
 				session.clear();
 				session.close();
 			}
 			session = session.getSessionFactory().openSession();
 			return;
 		}
-		session=configuration.buildSessionFactory().openSession();
+		session = configuration.buildSessionFactory().openSession();
 	}
 
 }
