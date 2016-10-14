@@ -28,15 +28,11 @@ public class Constraintsdetail implements Serializable {
 	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail1;
 
-	// bi-directional many-to-one association to Tabledetail
-	@ManyToOne
-	@JoinColumn(name = "referencetableid")
-	private Tabledetail tabledetail;
+	@Column
+	private String referenceTable;
 
-	// bi-directional many-to-one association to Columnsdetail
-	@ManyToOne
-	@JoinColumn(name = "referencecolumnid")
-	private Columnsdetail columnsdetail2;
+	@Column
+	private String referenceColumnName;
 
 	public Constraintsdetail() {
 	}
@@ -73,20 +69,20 @@ public class Constraintsdetail implements Serializable {
 		this.columnsdetail1 = columnsdetail1;
 	}
 
-	public Tabledetail getTabledetail() {
-		return this.tabledetail;
+	public String getReferenceTable() {
+		return referenceTable;
 	}
 
-	public void setTabledetail(Tabledetail tabledetail) {
-		this.tabledetail = tabledetail;
+	public void setReferenceTable(String referenceTable) {
+		this.referenceTable = referenceTable;
 	}
 
-	public Columnsdetail getColumnsdetail2() {
-		return this.columnsdetail2;
+	public String getReferenceColumnName() {
+		return referenceColumnName;
 	}
 
-	public void setColumnsdetail2(Columnsdetail columnsdetail2) {
-		this.columnsdetail2 = columnsdetail2;
+	public void setReferenceColumnName(String referenceColumnName) {
+		this.referenceColumnName = referenceColumnName;
 	}
 
 	@Override

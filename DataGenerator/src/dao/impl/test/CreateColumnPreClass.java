@@ -14,6 +14,7 @@ import entity.Schemadetail;
 import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.PersistException;
+import exceptions.ReadEntityException;
 
 public class CreateColumnPreClass {
 
@@ -46,8 +47,13 @@ public class CreateColumnPreClass {
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
 		try {
+			Columnsdetail columnsdetail2 = columnsDao.getColumnsdetailByid(1);
+			System.out.println(columnsdetail2);
 			columnsDao.saveColumn(columnsdetail);
 		} catch (PersistException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ReadEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

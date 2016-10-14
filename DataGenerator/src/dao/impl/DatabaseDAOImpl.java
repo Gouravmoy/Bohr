@@ -19,7 +19,6 @@ public class DatabaseDAOImpl extends GenericDAOImpl<Databasedetail, Integer> imp
 	@Override
 	public Databasedetail saveDatabse(Databasedetail databse) throws PersistException {
 		try {
-			List<String> dbNames = getAllConnectionNames();
 			save(databse);
 		} catch (Exception err) {
 			err.printStackTrace();

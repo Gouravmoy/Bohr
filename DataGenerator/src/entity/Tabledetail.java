@@ -41,10 +41,6 @@ public class Tabledetail implements Serializable {
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
 	private Set<Columnsdetail> columnsdetails;
 
-	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
-	private Set<Constraintsdetail> constraintsdetails;
-
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
@@ -119,28 +115,6 @@ public class Tabledetail implements Serializable {
 		columnsdetail.setTabledetail(null);
 
 		return columnsdetail;
-	}
-
-	public Set<Constraintsdetail> getConstraintsdetails() {
-		return this.constraintsdetails;
-	}
-
-	public void setConstraintsdetails(Set<Constraintsdetail> constraintsdetails) {
-		this.constraintsdetails = constraintsdetails;
-	}
-
-	public Constraintsdetail addConstraintsdetail(Constraintsdetail constraintsdetail) {
-		getConstraintsdetails().add(constraintsdetail);
-		constraintsdetail.setTabledetail(this);
-
-		return constraintsdetail;
-	}
-
-	public Constraintsdetail removeConstraintsdetail(Constraintsdetail constraintsdetail) {
-		getConstraintsdetails().remove(constraintsdetail);
-		constraintsdetail.setTabledetail(null);
-
-		return constraintsdetail;
 	}
 
 	public Set<Datasamplemodel> getDatasamplemodels() {

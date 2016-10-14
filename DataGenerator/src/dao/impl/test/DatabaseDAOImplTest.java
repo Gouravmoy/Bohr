@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +24,8 @@ import exceptions.ReadEntityException;
  * @version $Revision: 1.0 $
  */
 public class DatabaseDAOImplTest {
+	DatabaseDAOImpl fixture = new DatabaseDAOImpl();
+
 	/**
 	 * Run the DatabaseDAOImpl() constructor test.
 	 *
@@ -33,7 +34,6 @@ public class DatabaseDAOImplTest {
 	 * @generatedBy CodePro at 10/10/16 3:08 PM
 	 */
 
-	DatabaseDAOImpl fixture  = new DatabaseDAOImpl();
 
 	@Test
 	public void testDatabaseDAOImpl_1() throws Exception {
@@ -187,7 +187,7 @@ public class DatabaseDAOImplTest {
 	private Databasedetail saveNewDatabase(DatabaseDAOImpl fixture) throws PersistException {
 		Databasedetail databsedetail = new Databasedetail();
 
-		databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
+		//databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
 		return fixture.saveDatabse(databsedetail);
 	}
 }

@@ -64,4 +64,16 @@ public class ColumnsDAOImpl extends GenericDAOImpl<Columnsdetail, Integer> imple
 
 	}
 
+	@Override
+	public void saveListOfColumns(List<Columnsdetail> columnsdetails) throws PersistException {
+		try {
+			batchSaveDAO(columnsdetails);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new PersistException("Unable to save All Columns");
+		}
+
+	}
+
 }

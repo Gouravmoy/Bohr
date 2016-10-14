@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import dao.impl.PatternDAOImpl;
-import entity.Columnsdetail;
 import entity.Patterndetail;
 
 /**
@@ -22,6 +21,7 @@ import entity.Patterndetail;
  * @version $Revision: 1.0 $
  */
 public class PatternDAOImplTest {
+
 	/**
 	 * Run the List<String> getAllPatternNames() method test.
 	 *
@@ -30,11 +30,11 @@ public class PatternDAOImplTest {
 	 * @generatedBy CodePro at 10/11/16 1:49 PM
 	 */
 	PatternDAOImpl fixture = new PatternDAOImpl();
+
 	@Test
 	public void testGetAllPatternNames_1() throws Exception {
-		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
+		PatternDAOImpl fixture = new PatternDAOImpl();
 		Patterndetail patterndetail = new Patterndetail();
-		patterndetail.setColumnsdetail(columnsdetail);
 		fixture.save(patterndetail);
 		List<String> result = fixture.getAllPatternNames();
 		if (result.isEmpty()) {
@@ -122,9 +122,8 @@ public class PatternDAOImplTest {
 	 */
 	@Test
 	public void testGetAllPatterninDB_1() throws Exception {
-		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
+		PatternDAOImpl fixture = new PatternDAOImpl();
 		Patterndetail patterndetail = new Patterndetail();
-		patterndetail.setColumnsdetail(columnsdetail);
 		fixture.save(patterndetail);
 		List<Patterndetail> result = fixture.getAllPatterninDB();
 		if (result.isEmpty()) {
@@ -144,9 +143,9 @@ public class PatternDAOImplTest {
 	@Test
 	public void testGetPatternByid_1() throws Exception {
 		Integer id = new Integer(1);
-		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
+		// Columnsdetail columnsdetail =
+		// CreateColumnPreClass.addColumnToDatabase();
 		Patterndetail patterndetail = new Patterndetail();
-		patterndetail.setColumnsdetail(columnsdetail);
 		fixture.save(patterndetail);
 		Patterndetail result = fixture.getPatternByid(id);
 
@@ -163,9 +162,6 @@ public class PatternDAOImplTest {
 	@Test
 	public void testSavePattern_1() throws Exception {
 		Patterndetail patterndetail = new Patterndetail();
-		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
-		patterndetail.setColumnsdetail(columnsdetail);
-		fixture.save(patterndetail);
 		Patterndetail result = fixture.savePattern(patterndetail);
 		assertNotNull(result);
 	}
@@ -180,9 +176,9 @@ public class PatternDAOImplTest {
 	@Test
 	public void testUpdate_1() throws Exception {
 		Patterndetail patterndetail = new Patterndetail();
-		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();
-		patterndetail.setColumnsdetail(columnsdetail);
-		fixture.save(patterndetail);
+		// Columnsdetail columnsdetail =
+		// CreateColumnPreClass.addColumnToDatabase();
+		fixture.savePattern(patterndetail);
 		patterndetail.setPatternName("Updated_Name");
 
 		Patterndetail result = fixture.update(patterndetail);

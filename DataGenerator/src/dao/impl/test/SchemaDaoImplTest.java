@@ -30,6 +30,7 @@ import exceptions.ReadEntityException;
  * @version $Revision: 1.0 $
  */
 public class SchemaDaoImplTest {
+
 	/**
 	 * Run the List<Schemadetail> getAllSchemainDB() method test.
 	 *
@@ -41,6 +42,7 @@ public class SchemaDaoImplTest {
 
 	@Test
 	public void testGetAllSchemainDB_1() {
+		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		List<Schemadetail> result = null;
 		try {
 			result = fixture.getAllSchemainDB();
@@ -60,6 +62,7 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testGetSchemaByid_1() {
+		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		Integer id = new Integer(1);
 		try {
 			List<Schemadetail> schemadetails = fixture.getAllSchemainDB();
@@ -86,6 +89,7 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testSaveSchema_1() {
+		SchemaDaoImpl fixture = new SchemaDaoImpl();
 		try {
 			assertNotNull(saveNewSchema(fixture));
 		} catch (DAOException err) {

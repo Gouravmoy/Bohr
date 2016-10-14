@@ -15,6 +15,7 @@ import entity.Constraintsdetail;
 
 public class ConstraintsDAOImplTest {
 	ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
+
 	@Test
 	public void testGetAllConstraintNames_1() throws Exception {
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();

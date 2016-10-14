@@ -68,4 +68,17 @@ public class ConstraintsDAOImpl extends GenericDAOImpl<Constraintsdetail, Intege
 
 	}
 
+	@Override
+	public void saveListOfConstraint(List<Constraintsdetail> constraintsdetails) throws PersistException {
+
+		try {
+			batchSaveDAO(constraintsdetails);
+		} catch (DAOException e) {
+
+			e.printStackTrace();
+			throw new PersistException("Unable to save List");
+		}
+
+	}
+
 }
