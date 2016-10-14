@@ -5,7 +5,7 @@ import enums.Environment;
 public enum Master {
 	INSTANCE;
 
-	private Environment environment;
+	private  Environment environment;
 
 	public Environment getEnvironment() {
 		return environment;

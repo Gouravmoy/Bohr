@@ -61,4 +61,14 @@ public class SchemaDaoImpl extends GenericDAOImpl<Schemadetail, Integer> impleme
 		}
 	}
 
+	@Override
+	public List<Schemadetail> getSchemaByQyery(String query,Object params[]) {
+		try {
+			return getByQuery(query,params,Schemadetail.class);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

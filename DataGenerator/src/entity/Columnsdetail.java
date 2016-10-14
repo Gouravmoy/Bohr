@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -179,6 +180,9 @@ public class Columnsdetail implements Serializable {
 	}
 
 	public Constraintsdetail addConstraintsdetails1(Constraintsdetail constraintsdetails1) {
+		if (getConstraintsdetails1() == null) {
+			this.constraintsdetails1 = new HashSet<Constraintsdetail>();
+		}
 		getConstraintsdetails1().add(constraintsdetails1);
 		constraintsdetails1.setColumnsdetail1(this);
 
@@ -254,8 +258,7 @@ public class Columnsdetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Columnsdetail [idcolumnsdetails=" + idcolumnsdetails + ", name=" + name + ", tabledetail=" + tabledetail
-				+ "]";
+		return name;
 	}
 
 }

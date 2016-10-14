@@ -182,8 +182,7 @@ public class Tabledetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Tabledetail [idtabledetails=" + idtabledetails + ", tableName=" + tableName + " , Constraints"
-				+ constraintsdetails.toString() + "]";
+		return tableName;
 	}
 
 }

@@ -159,9 +159,7 @@ public class Schemadetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Schemadetail [idschema=" + idschema + ", lastUpdateTS=" + lastUpdateTS + ", name=" + name
-				+ ", changelogs=" + changelogs + ", datasamplemodels=" + datasamplemodels + ", databasedetail="
-				+ databasedetail + ", tabledetails=" + tabledetails + "]";
+		return name;
 	}
 
 }

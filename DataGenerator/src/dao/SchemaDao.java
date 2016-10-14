@@ -15,4 +15,6 @@ public interface SchemaDao {
 	public List<Schemadetail> getAllSchemainDB() throws ReadEntityException;
 
 	public void update(Schemadetail schemadetail) throws EntityNotPresent;
+	
+	public List<Schemadetail> getSchemaByQyery(String query,Object params[]);
 }

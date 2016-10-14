@@ -10,7 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.DatabaseDao;
 import dao.SchemaDao;
 import dao.TableDao;
@@ -22,7 +21,6 @@ import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Schemadetail;
 import entity.Tabledetail;
-import enums.Environment;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 
@@ -140,7 +138,7 @@ public class DataSampleDaoImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		//Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

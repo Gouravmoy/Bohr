@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.DatabaseDao;
 import dao.SchemaDao;
 import dao.impl.DatabaseDAOImpl;
@@ -18,7 +17,6 @@ import dao.impl.TableDaoImpl;
 import entity.Databasedetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
-import enums.Environment;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 
@@ -40,6 +38,7 @@ public class TableDaoImplTest {
 	 * @generatedBy CodePro at 10/11/16 12:07 PM
 	 */
 	TableDaoImpl fixture = new TableDaoImpl();
+
 	@Test
 	public void testGetAllTabledetailinDB_1() {
 		TableDaoImpl fixture = new TableDaoImpl();
@@ -134,7 +133,7 @@ public class TableDaoImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		// Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

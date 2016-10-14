@@ -9,10 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.impl.PatternDAOImpl;
 import entity.Patterndetail;
-import enums.Environment;
 
 /**
  * The class <code>PatternDAOImplTest</code> contains tests for the class
@@ -198,7 +196,7 @@ public class PatternDAOImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		//Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**
