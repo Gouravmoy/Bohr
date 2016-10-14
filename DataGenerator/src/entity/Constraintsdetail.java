@@ -87,9 +87,7 @@ public class Constraintsdetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Constraintsdetail [idconstraintsdetails=" + idconstraintsdetails + ", constraintname=" + constraintname
-				+ ", isunique=" + isunique + ", columnsdetail1=" + columnsdetail1 + ", referenceTable=" + referenceTable
-				+ ", referenceColumnName=" + referenceColumnName + "]";
+		return constraintname;
 	}
 
 }

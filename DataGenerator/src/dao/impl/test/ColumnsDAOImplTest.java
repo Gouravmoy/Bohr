@@ -9,11 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.impl.ColumnsDAOImpl;
 import entity.Columnsdetail;
 import entity.Tabledetail;
-import enums.Environment;
 
 public class ColumnsDAOImplTest {
 	ColumnsDAOImpl fixture = new ColumnsDAOImpl();
@@ -165,7 +163,7 @@ public class ColumnsDAOImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		//Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

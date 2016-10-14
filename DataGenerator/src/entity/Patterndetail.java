@@ -83,4 +83,11 @@ public class Patterndetail implements Serializable {
 		this.columnsdetail = columnsdetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Patterndetail [idpatterndetails=" + idpatterndetails + ", patternDescription=" + patternDescription
+				+ ", patternName=" + patternName + ", regexpString=" + regexpString + ", columnsdetail=" + columnsdetail
+				+ "]";
+	}
+
 }

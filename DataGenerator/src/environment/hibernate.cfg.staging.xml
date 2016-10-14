@@ -24,6 +24,7 @@
 		<mapping class="entity.Relationsdetail" />
 		<mapping class="entity.Schemadetail" />
 		<mapping class="entity.Tabledetail" />
+		<mapping class="entity.Projectdetails" />
 	</session-factory>
 
 </hibernate-configuration>  

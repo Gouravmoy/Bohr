@@ -10,13 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
 import dao.impl.SchemaDaoImpl;
 import entity.Databasedetail;
 import entity.Schemadetail;
-import enums.Environment;
 import exceptions.DAOException;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
@@ -39,6 +37,7 @@ public class SchemaDaoImplTest {
 	 * @generatedBy CodePro at 10/10/16 5:02 PM
 	 */
 	SchemaDaoImpl fixture = new SchemaDaoImpl();
+
 	@Test
 	public void testGetAllSchemainDB_1() {
 		SchemaDaoImpl fixture = new SchemaDaoImpl();
@@ -105,8 +104,7 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testUpdate_1() {
-Schemadetail schemadetail;
-		SchemaDaoImpl fixture = new SchemaDaoImpl();
+		Schemadetail schemadetail;
 		try {
 			List<Schemadetail> schemadetails;
 			schemadetails = fixture.getAllSchemainDB();
@@ -136,7 +134,7 @@ Schemadetail schemadetail;
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		// Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

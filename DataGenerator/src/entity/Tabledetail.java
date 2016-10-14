@@ -171,9 +171,7 @@ public class Tabledetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Tabledetail [idtabledetails=" + idtabledetails + ", tableName=" + tableName + ", changelogs="
-				+ changelogs + ", columnsdetails=" + columnsdetails + ", datasamplemodels=" + datasamplemodels
-				+ ", relationsdetails=" + relationsdetails + ", schemadetail=" + schemadetail + "]";
+		return tableName;
 	}
 
 }

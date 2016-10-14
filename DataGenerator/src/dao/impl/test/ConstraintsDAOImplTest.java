@@ -9,11 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.impl.ConstraintsDAOImpl;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
-import enums.Environment;
 
 public class ConstraintsDAOImplTest {
 	ConstraintsDAOImpl fixture = new ConstraintsDAOImpl();
@@ -104,7 +102,7 @@ public class ConstraintsDAOImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		//Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	@After

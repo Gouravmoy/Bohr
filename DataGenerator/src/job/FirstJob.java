@@ -25,6 +25,7 @@ import jobs.tasks.CreateColumnTask;
 import jobs.tasks.CreateConstraintTask;
 import jobs.tasks.CreateSchemaTask;
 import jobs.tasks.CreateTableTask;
+import jobs.tasks.RefrehTreeTask;
 
 public class FirstJob extends Job {
 	Databasedetail databasedetail;
@@ -43,6 +44,7 @@ public class FirstJob extends Job {
 		CreateTableTask createTableTask;
 		CreateColumnTask createColumnTask;
 		CreateConstraintTask constraintTask;
+		RefrehTreeTask refrehTreeTask;
 		createSchemaTask.execute();
 		List<Schemadetail> schemadetailList = createSchemaTask.getSchemadetails();
 		for (Schemadetail schemadetail : schemadetailList) {
@@ -61,9 +63,10 @@ public class FirstJob extends Job {
 					constraintTask.execute();
 					List<Constraintsdetail> constraintsdetailList = constraintTask.getConstraintsdetails();
 					constraintsDao.saveListOfConstraint(constraintsdetailList);
+					refrehTreeTask = new RefrehTreeTask();
+					refrehTreeTask.execute();
 				}
 			} catch (PersistException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

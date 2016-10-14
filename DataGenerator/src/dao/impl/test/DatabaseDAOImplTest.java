@@ -10,10 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;
-import enums.Environment;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 
@@ -157,7 +155,7 @@ public class DatabaseDAOImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		//Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**
