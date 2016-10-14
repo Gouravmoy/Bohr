@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import entity.Projectdetails;
@@ -35,7 +36,7 @@ public class GenerateDataJob extends Job {
 		GenerateScriptsTask generateScriptsTask = new GenerateScriptsTask(
 				"C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG", GenerateTableDataTask.tableDatas);
 		generateScriptsTask.execute();
-		return null;
+		return Status.OK_STATUS;
 	}
 
 	public void setProjectdetails(Projectdetails projectdetails) {
