@@ -76,4 +76,13 @@ public class ColumnsDAOImpl extends GenericDAOImpl<Columnsdetail, Integer> imple
 
 	}
 
+	@Override
+	public void updateBatch(List<Columnsdetail> columnsdetails) {
+		try {
+			saveOrUpdateBatch(columnsdetails);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

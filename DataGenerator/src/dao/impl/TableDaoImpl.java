@@ -24,12 +24,11 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 		}
 		return tabledetail;
 	}
-	
-	
 
 	@Override
 	public Tabledetail getTabledetailByid(Integer id) throws ReadEntityException {
 		try {
+
 			return readById(Tabledetail.class, id);
 		} catch (Exception err) {
 			throw new ReadEntityException("Could not get Tabledetail Data for ID - " + id);
@@ -40,6 +39,9 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 	public List<Tabledetail> getAllTabledetailinDB() throws ReadEntityException {
 		List<Tabledetail> tabledetails;
 		try {
+			//String queryExecute = "FROM Tabledetail t join fetch t.columnsdetails";
+			//Object[] pars = {  };
+			//tabledetails =  getByQuery(queryExecute, pars, Tabledetail.class);
 			tabledetails = readAll("Schemadetail.findAll", Tabledetail.class);
 		} catch (Exception err) {
 			throw new ReadEntityException("Could not get All Tabledetail Information");
@@ -57,7 +59,5 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }

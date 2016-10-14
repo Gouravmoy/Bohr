@@ -3,6 +3,7 @@ package dao.impl.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -122,6 +123,15 @@ public class SchemaDaoImplTest {
 			assertTrue(false);
 		}
 
+	}
+
+	@Test
+	public void testGetSchemaByQyery() {
+		List<Schemadetail> schemadetails = new ArrayList<>();
+		String query = "from Schemadetail s where s.databasedetail.iddatabase=:arg0";
+		Object[] pars = { 1 };
+		schemadetails = fixture.getSchemaByQyery(query, pars);
+		assertNotNull(schemadetails);
 	}
 
 	/**
