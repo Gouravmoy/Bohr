@@ -306,8 +306,6 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		} else {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
-			// configuration = new
-			// AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		}
 	}
 

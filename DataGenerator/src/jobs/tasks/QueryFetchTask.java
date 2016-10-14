@@ -1,11 +1,14 @@
 package jobs.tasks;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -27,9 +30,14 @@ public class QueryFetchTask extends Task {
 
 		InputStream inputStream;
 		Properties properties = new Properties();
+		File queryFile = new File("D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\MYSQL.properties");
+		URL resultTemplateURL;
 		try {
-			String path = "D:\\Bohr\\DataGenerator\\";
-			inputStream = new FileInputStream(path + databasedetail.getType() + ".properties");
+			// String path = "platform:/plugin/DataGenerator/resources/files/"+
+			// databasedetail.getType() + ".properties";
+			// resultTemplateURL = new URL(path);
+			// FileUtils.copyURLToFile(resultTemplateURL, queryFile);
+			inputStream = new FileInputStream(queryFile);
 			properties.load(inputStream);
 			query = properties.getProperty(propertyName);
 			inputStream.close();

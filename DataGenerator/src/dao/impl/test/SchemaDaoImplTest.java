@@ -10,13 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
 import dao.impl.SchemaDaoImpl;
 import entity.Databasedetail;
 import entity.Schemadetail;
-import enums.Environment;
 import exceptions.DAOException;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;

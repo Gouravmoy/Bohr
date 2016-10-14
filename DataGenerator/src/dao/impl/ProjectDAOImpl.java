@@ -4,7 +4,6 @@ import java.util.List;
 
 import dao.ProjectDao;
 import entity.Projectdetails;
-import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.EntityNotPresent;
 import exceptions.PersistException;

@@ -9,7 +9,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -17,7 +16,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import javax.xml.validation.Schema;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -38,7 +36,9 @@ import entity.Datasamplemodel;
 import entity.Projectdetails;
 import entity.Schemadetail;
 import entity.Tabledetail;
+import exceptions.DAOException;
 import exceptions.ReadEntityException;
+import exceptions.ServiceException;
 import views.listners.TreeSelectionListner;
 import views.renderer.TreeViewRenderer;
 import views.util.JTreeUtil;
@@ -64,9 +64,9 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	// DAO
 
-	DatabaseDao databaseDao;
-	DataSampleDao dataSamepleDao;
-	ProjectDao projectDao;
+	static DatabaseDao databaseDao;
+	static DataSampleDao dataSamepleDao;
+	static ProjectDao projectDao;
 
 	@Inject
 	public TreeView() {
@@ -94,19 +94,30 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		try {
 			createDatabaseTree();
-			createProjectsTree();
+			// createProjectsTree();
 		} catch (ReadEntityException e) {
 			e.printStackTrace();
 		}
 		panel_1.add(databaseTree);
-		panel_1.add(projectsTree);
+		// panel_1.add(projectsTree);
 
 		mainScrollPane.setViewportView(panel_1);
 		panel.add(mainScrollPane);
 
 	}
 
-	private void createProjectsTree() throws ReadEntityException {
+	public static void queryAndRefresh() throws DAOException, ServiceException {
+		createDatabaseTree();
+		// createProjectsTree();
+		collapseAll();
+	}
+
+	private static void collapseAll() {
+		JTreeUtil.colapse(databaseTree);
+		// JTreeUtil.colapse(projectsTree);
+	}
+
+	private static void createProjectsTree() throws ReadEntityException {
 		DefaultMutableTreeNode category = null;
 		DefaultMutableTreeNode schemaCategory = null;
 		DefaultMutableTreeNode changeLogCategory = null;
@@ -127,7 +138,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	}
 
-	private void createDatabaseTree() throws ReadEntityException {
+	private static void createDatabaseTree() throws ReadEntityException {
 		DefaultMutableTreeNode databaseTreeTop = null;
 		DefaultMutableTreeNode category = null;
 		DefaultMutableTreeNode schemaCategory = null;
@@ -172,7 +183,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		refreshDatabaseTree();
 	}
 
-	private void addTableDetails(DefaultMutableTreeNode schemaCategory, Schemadetail schemadetail) {
+	private static void addTableDetails(DefaultMutableTreeNode schemaCategory, Schemadetail schemadetail) {
 		DefaultMutableTreeNode tableCategory;
 		DefaultMutableTreeNode columnCategory;
 		DefaultMutableTreeNode constraintsCategory;

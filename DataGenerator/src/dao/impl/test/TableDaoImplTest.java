@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.Master;
 import dao.DatabaseDao;
 import dao.SchemaDao;
 import dao.impl.DatabaseDAOImpl;
@@ -18,7 +17,6 @@ import dao.impl.TableDaoImpl;
 import entity.Databasedetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
-import enums.Environment;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 

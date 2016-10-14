@@ -18,8 +18,7 @@ import enums.Environment;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ DatabaseDAOImplTest.class, SchemaDaoImplTest.class, TableDaoImplTest.class,
-		ColumnsDAOImplTest.class, ConstraintsDAOImplTest.class, PatternDAOImplTest.class, RelationsDAOImplTest.class,
-		ProjectDAOImplTest.class })
+		ColumnsDAOImplTest.class, ConstraintsDAOImplTest.class, PatternDAOImplTest.class, RelationsDAOImplTest.class })
 public class TestAll {
 
 	/**
