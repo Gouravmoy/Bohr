@@ -26,7 +26,7 @@ import enums.KeyType;
  */
 @Entity
 @Table(name = "columnsdetails")
-@NamedQuery(name = "Columnsdetail.findAll", query = "select p,c from Columnsdetail p join p.patterndetail c")
+@NamedQuery(name = "Columnsdetail.findAll", query = "SELECT c FROM Columnsdetail c")
 public class Columnsdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,9 @@ public class Columnsdetail implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private KeyType keytype;
 
-	private int length;
+	private long length;
+
+	private int decimalLength;
 
 	@Column(length = 100)
 	private String name;
@@ -60,8 +62,9 @@ public class Columnsdetail implements Serializable {
 	private Datasamplemodel datasamplemodel;
 
 	// bi-directional many-to-one association to Patterndetail
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
-	private Set<Patterndetail> patterndetail;
+	@ManyToOne
+	@JoinColumn(name = "patternId", nullable = true)
+	private Patterndetail patterndetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
@@ -71,10 +74,6 @@ public class Columnsdetail implements Serializable {
 	// bi-directional many-to-one association to Constraintsdetail
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
-
-	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "columnsdetail2", fetch = FetchType.EAGER)
-	private Set<Constraintsdetail> constraintsdetails2;
 
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
@@ -127,10 +126,6 @@ public class Columnsdetail implements Serializable {
 		this.keytype = keytype;
 	}
 
-	public int getLength() {
-		return this.length;
-	}
-
 	public void setLength(int length) {
 		this.length = length;
 	}
@@ -159,13 +154,11 @@ public class Columnsdetail implements Serializable {
 		this.datasamplemodel = datasamplemodel;
 	}
 
-	
-
-	public Set<Patterndetail> getPatterndetail() {
+	public Patterndetail getPatterndetail() {
 		return patterndetail;
 	}
 
-	public void setPatterndetail(Set<Patterndetail> patterndetail) {
+	public void setPatterndetail(Patterndetail patterndetail) {
 		this.patterndetail = patterndetail;
 	}
 
@@ -176,8 +169,6 @@ public class Columnsdetail implements Serializable {
 	public void setTabledetail(Tabledetail tabledetail) {
 		this.tabledetail = tabledetail;
 	}
-
-	
 
 	public Set<Constraintsdetail> getConstraintsdetails1() {
 		return constraintsdetails1;
@@ -194,6 +185,14 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
+	public long getLength() {
+		return length;
+	}
+
+	public void setLength(long length) {
+		this.length = length;
+	}
+
 	public Constraintsdetail removeConstraintsdetails1(Constraintsdetail constraintsdetails1) {
 		getConstraintsdetails1().remove(constraintsdetails1);
 		constraintsdetails1.setColumnsdetail1(null);
@@ -201,38 +200,20 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-	
-
-	public Set<Constraintsdetail> getConstraintsdetails2() {
-		return constraintsdetails2;
-	}
-
-	public void setConstraintsdetails2(Set<Constraintsdetail> constraintsdetails2) {
-		this.constraintsdetails2 = constraintsdetails2;
-	}
-
-	public Constraintsdetail addConstraintsdetails2(Constraintsdetail constraintsdetails2) {
-		getConstraintsdetails2().add(constraintsdetails2);
-		constraintsdetails2.setColumnsdetail2(this);
-
-		return constraintsdetails2;
-	}
-
-	public Constraintsdetail removeConstraintsdetails2(Constraintsdetail constraintsdetails2) {
-		getConstraintsdetails2().remove(constraintsdetails2);
-		constraintsdetails2.setColumnsdetail2(null);
-
-		return constraintsdetails2;
-	}
-
-	
-
 	public Set<Datasamplemodel> getDatasamplemodels() {
 		return datasamplemodels;
 	}
 
 	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
+	}
+
+	public int getDecimalLength() {
+		return decimalLength;
+	}
+
+	public void setDecimalLength(int decimalLength) {
+		this.decimalLength = decimalLength;
 	}
 
 	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {

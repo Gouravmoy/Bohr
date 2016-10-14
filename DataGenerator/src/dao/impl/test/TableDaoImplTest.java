@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +31,7 @@ import exceptions.ReadEntityException;
  * @version $Revision: 1.0 $
  */
 public class TableDaoImplTest {
+
 	/**
 	 * Run the List<Tabledetail> getAllTabledetailinDB() method test.
 	 *
@@ -42,6 +42,7 @@ public class TableDaoImplTest {
 	TableDaoImpl fixture = new TableDaoImpl();
 	@Test
 	public void testGetAllTabledetailinDB_1() {
+		TableDaoImpl fixture = new TableDaoImpl();
 		List<Tabledetail> result = null;
 		try {
 			result = fixture.getAllTabledetailinDB();
@@ -61,6 +62,7 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testGetTabledetailByid_1() throws Exception {
+		TableDaoImpl fixture = new TableDaoImpl();
 		Integer id = new Integer(1);
 
 		List<Tabledetail> listOfTables = null;
@@ -88,6 +90,7 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testSaveTabledetail_1() {
+		TableDaoImpl fixture = new TableDaoImpl();
 		try {
 			assertNotNull(saveNewTable(fixture));
 		} catch (PersistException e) {
@@ -105,6 +108,7 @@ public class TableDaoImplTest {
 	 */
 	@Test
 	public void testUpdate_1() throws Exception {
+		TableDaoImpl fixture = new TableDaoImpl();
 		Tabledetail tabledetail;
 		List<Tabledetail> tabledetails;
 		tabledetails = fixture.getAllTabledetailinDB();
@@ -166,7 +170,6 @@ public class TableDaoImplTest {
 		Schemadetail schemadetail = new Schemadetail();
 		Databasedetail databsedetail = new Databasedetail();
 
-		databsedetail.setConnectionName("TEST_" + ThreadLocalRandom.current().nextInt(0, 999 + 1));
 		databaseDao.saveDatabse(databsedetail);
 		schemadetail.setDatabasedetail(databsedetail);
 		schemaDao.saveSchema(schemadetail);

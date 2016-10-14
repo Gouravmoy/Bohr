@@ -19,4 +19,6 @@ public interface ColumnsDao {
 
 	public Columnsdetail update(Columnsdetail columnsdetail) throws EntityNotPresent;
 
+	public void saveListOfColumns(List<Columnsdetail> columnsdetails) throws PersistException;
+
 }

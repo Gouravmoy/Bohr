@@ -30,8 +30,6 @@ public class ConstraintDaoTest extends TestCase {
 			Tabledetail tabledetail = new Tabledetail();
 			columnsdetail = columnsDao.getColumnsdetailByid(1);
 			tabledetail = dao.getFirstRecord(Tabledetail.class);
-			constraintsdetail.setTabledetail(tabledetail);
-			constraintsdetail.setColumnsdetail2(columnsdetail);
 			constraintsdetail.setColumnsdetail1(columnsdetail);
 
 		} catch (Exception e) {

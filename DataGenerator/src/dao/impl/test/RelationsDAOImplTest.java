@@ -24,6 +24,7 @@ import enums.Environment;
  * @version $Revision: 1.0 $
  */
 public class RelationsDAOImplTest {
+
 	/**
 	 * Run the List<String> getAllRelationNames() method test.
 	 *
@@ -32,6 +33,7 @@ public class RelationsDAOImplTest {
 	 * @generatedBy CodePro at 10/11/16 5:18 PM
 	 */
 	RelationsDAOImpl fixture = new RelationsDAOImpl();
+
 	@Test
 	public void testGetAllRelationNames_1() throws Exception {
 		Columnsdetail columnsdetail = CreateColumnPreClass.addColumnToDatabase();

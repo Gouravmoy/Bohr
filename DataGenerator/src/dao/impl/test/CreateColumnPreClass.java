@@ -1,7 +1,5 @@
 package dao.impl.test;
 
-import java.util.List;
-
 import dao.ColumnsDao;
 import dao.DatabaseDao;
 import dao.SchemaDao;
@@ -49,8 +47,8 @@ public class CreateColumnPreClass {
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
 		try {
-			List<Columnsdetail> columnsdetails = columnsDao.getAllColumnsinDB();
-			System.out.println(columnsdetails.size());
+			Columnsdetail columnsdetail2 = columnsDao.getColumnsdetailByid(1);
+			System.out.println(columnsdetail2);
 			columnsDao.saveColumn(columnsdetail);
 		} catch (PersistException e) {
 			// TODO Auto-generated catch block

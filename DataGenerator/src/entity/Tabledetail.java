@@ -41,10 +41,6 @@ public class Tabledetail implements Serializable {
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
 	private Set<Columnsdetail> columnsdetails;
 
-	// bi-directional many-to-one association to Constraintsdetail
-	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
-	private Set<Constraintsdetail> constraintsdetails;
-
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
@@ -55,7 +51,7 @@ public class Tabledetail implements Serializable {
 
 	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name="schema_id",nullable=false)
+	@JoinColumn(name = "schema_id", nullable = false)
 	private Schemadetail schemadetail;
 
 	public Tabledetail() {
@@ -121,28 +117,6 @@ public class Tabledetail implements Serializable {
 		return columnsdetail;
 	}
 
-	public Set<Constraintsdetail> getConstraintsdetails() {
-		return this.constraintsdetails;
-	}
-
-	public void setConstraintsdetails(Set<Constraintsdetail> constraintsdetails) {
-		this.constraintsdetails = constraintsdetails;
-	}
-
-	public Constraintsdetail addConstraintsdetail(Constraintsdetail constraintsdetail) {
-		getConstraintsdetails().add(constraintsdetail);
-		constraintsdetail.setTabledetail(this);
-
-		return constraintsdetail;
-	}
-
-	public Constraintsdetail removeConstraintsdetail(Constraintsdetail constraintsdetail) {
-		getConstraintsdetails().remove(constraintsdetail);
-		constraintsdetail.setTabledetail(null);
-
-		return constraintsdetail;
-	}
-
 	public Set<Datasamplemodel> getDatasamplemodels() {
 		return this.datasamplemodels;
 	}
@@ -198,9 +172,8 @@ public class Tabledetail implements Serializable {
 	@Override
 	public String toString() {
 		return "Tabledetail [idtabledetails=" + idtabledetails + ", tableName=" + tableName + ", changelogs="
-				+ changelogs + ", columnsdetails=" + columnsdetails + ", constraintsdetails=" + constraintsdetails
-				+ ", datasamplemodels=" + datasamplemodels + ", relationsdetails=" + relationsdetails
-				+ ", schemadetail=" + schemadetail + "]";
+				+ changelogs + ", columnsdetails=" + columnsdetails + ", datasamplemodels=" + datasamplemodels
+				+ ", relationsdetails=" + relationsdetails + ", schemadetail=" + schemadetail + "]";
 	}
 
 }

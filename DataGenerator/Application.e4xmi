@@ -6,6 +6,7 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_6wlLksgZEeSyMNYR5xypkQ" elementId="DataGenerator.partsashcontainer.sample">
           <children xsi:type="basic:PartStack" xmi:id="_6wlLk8gZEeSyMNYR5xypkQ" elementId="DataGenerator.partstack.sample">
             <children xsi:type="basic:Part" xmi:id="_6wlLlMgZEeSyMNYR5xypkQ" elementId="DataGenerator.part.sample" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart" label="Sample Part"/>
+            <children xsi:type="basic:Part" xmi:id="_jz47EJFFEean3IvbC27O0w" elementId="datagenerator.part.part2" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart2" label="Part 2"/>
           </children>
         </children>
       </children>

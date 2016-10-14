@@ -17,8 +17,10 @@ import enums.Environment;
 
 public class ColumnsDAOImplTest {
 	ColumnsDAOImpl fixture = new ColumnsDAOImpl();
+
 	@Test
 	public void testGetAllColumnsNames_2() throws Exception {
+		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
 		columnsdetail.setTabledetail(tabledetail);
@@ -70,6 +72,7 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetAllColumnsNames_5() throws Exception {
+		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 
 		List<String> result = fixture.getAllColumnsNames();
 
@@ -106,6 +109,7 @@ public class ColumnsDAOImplTest {
 	 */
 	@Test
 	public void testGetColumnsdetailByid_2() throws Exception {
+		ColumnsDAOImpl fixture = new ColumnsDAOImpl();
 		Integer id = new Integer(1);
 		Tabledetail tabledetail = CreateColumnPreClass.addTableToDataBase();
 		Columnsdetail columnsdetail = new Columnsdetail();
