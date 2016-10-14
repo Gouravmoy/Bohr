@@ -9,10 +9,13 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import dao.TableDao;
+import dao.impl.TableDaoImpl;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Tabledetail;
+import exceptions.ReadEntityException;
 
 public class CreateConstraintTask extends Task {
 	Databasedetail databasedetail;
@@ -30,6 +33,7 @@ public class CreateConstraintTask extends Task {
 	public void execute() throws BuildException {
 
 		try {
+			TableDao tableDao = new TableDaoImpl();
 			constraintsdetails = new ArrayList<>();
 			ConnectonCreateTask connectonCreateTask = new ConnectonCreateTask(databasedetail);
 			connectonCreateTask.execute();
@@ -45,12 +49,22 @@ public class CreateConstraintTask extends Task {
 			executeTask.execute();
 			ResultSet resultSet = executeTask.getResultSet();
 			Constraintsdetail constraintsdetail;
+			int schemaId = columnsdetailList.get(0).getTabledetail().getSchemadetail().getIdschema();
 			while (resultSet.next()) {
 				constraintsdetail = new Constraintsdetail();
 				String columnName = resultSet.getString("COLUMN_NAME");
 				constraintsdetail.setConstraintname(resultSet.getString("CONSTRAINT_NAME"));
 				constraintsdetail.setReferenceColumnName(resultSet.getString("REFERENCED_COLUMN_NAME"));
-				constraintsdetail.setReferenceTable(resultSet.getString("REFERENCED_TABLE_NAME"));
+				if (resultSet.getString("REFERENCED_TABLE_NAME") != null) {
+					try {
+						Tabledetail tabledetail = tableDao
+								.getTableByNameAndSchema(resultSet.getString("REFERENCED_TABLE_NAME"), schemaId);
+						constraintsdetail.setReferenceTable(tabledetail);
+ 					} catch (ReadEntityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				for (Columnsdetail columnsdetail : columnsdetailList) {
 					if (columnsdetail.getName().equalsIgnoreCase(columnName)) {
 						constraintsdetail.setColumnsdetail1(columnsdetail);

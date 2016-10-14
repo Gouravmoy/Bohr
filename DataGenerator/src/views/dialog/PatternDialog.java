@@ -11,24 +11,24 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import entity.Columnsdetail;
+import dao.PatternDao;
+import dao.impl.PatternDAOImpl;
 import entity.Patterndetail;
+import exceptions.PersistException;
 
 public class PatternDialog extends TitleAreaDialog {
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	Columnsdetail columnsdetail;
+	private Text textName;
+	private Text textDesc;
+	private Text textPreFix;
+	Patterndetail patterndetail;
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parentShell
 	 */
-	public PatternDialog(Shell parentShell, Columnsdetail columnsdetail) {
+	public PatternDialog(Shell parentShell, Patterndetail patterndetail) {
 		super(parentShell);
-		this.columnsdetail = columnsdetail;
-
 	}
 
 	/**
@@ -58,14 +58,14 @@ public class PatternDialog extends TitleAreaDialog {
 		lblRegExp.setBounds(33, 136, 83, 15);
 		lblRegExp.setText("Reg Exp");
 
-		text = new Text(container, SWT.BORDER);
-		text.setBounds(297, 56, 162, 21);
+		textName = new Text(container, SWT.BORDER);
+		textName.setBounds(297, 56, 162, 21);
 
-		text_1 = new Text(container, SWT.BORDER);
-		text_1.setBounds(297, 91, 162, 21);
+		textDesc = new Text(container, SWT.BORDER);
+		textDesc.setBounds(297, 91, 162, 21);
 
-		text_2 = new Text(container, SWT.BORDER);
-		text_2.setBounds(297, 130, 162, 21);
+		textPreFix = new Text(container, SWT.BORDER);
+		textPreFix.setBounds(297, 130, 162, 21);
 
 		return area;
 	}
@@ -78,7 +78,7 @@ public class PatternDialog extends TitleAreaDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
 	}
 
 	/**
@@ -91,6 +91,14 @@ public class PatternDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed() {
-		Patterndetail patterndetail = new Patterndetail();
+		PatternDao patternDao = new PatternDAOImpl();
+		patterndetail.setPatternDescription(textDesc.getText());
+		patterndetail.setPatternName(textName.getText());
+		patterndetail.setRegexpString(textPreFix.getText());
+		try {
+			patternDao.savePattern(patterndetail);
+		} catch (PersistException e) {
+		}
+		super.okPressed();
 	}
 }

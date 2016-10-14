@@ -1,29 +1,37 @@
 package controller;
 
-import dao.DatabaseDao;
-import dao.impl.DatabaseDAOImpl;
-import entity.Databasedetail;
-import exceptions.PersistException;
-import job.FirstJob;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.SchemaDao;
+import dao.impl.SchemaDaoImpl;
+import entity.Constraintsdetail;
+import entity.Schemadetail;
+import entity.Tabledetail;
+import exceptions.ReadEntityException;
+import jobs.tasks.SortTableTask;
 
 public class DeleteMain {
 
 	public static void main(String[] args) {
-		FirstJob firstJob = new FirstJob("My Job");
-		DatabaseDao databaseDao = new DatabaseDAOImpl();
-		Databasedetail databasedetail = new Databasedetail();
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila");
-		databasedetail.setUsername("root");
-		databasedetail.setPassword("root");
+
+		SchemaDao dao = new SchemaDaoImpl();
 		try {
-			databaseDao.saveDatabse(databasedetail);
-		} catch (PersistException e) {
+			Schemadetail schemadetail = dao.getSchemaByid(7);
+			List<Tabledetail> list = new ArrayList<>(schemadetail.getTabledetails());
+			for (Tabledetail tabledetail : list) {
+				for (Constraintsdetail constraintsdetail : tabledetail.getConstraintsdetails()) {
+					System.out.println(constraintsdetail.getColumnsdetail1().getTabledetail().getTableName()
+							+ " is dependetn on " + tabledetail.getTableName());
+				}
+			}
+
+			SortTableTask sortTableTask = new SortTableTask(list);
+			sortTableTask.execute();
+		} catch (ReadEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		firstJob.setDatabasedetail(databasedetail);
-		System.out.println(firstJob.getResult());
-		firstJob.schedule();
 	}
 
 }

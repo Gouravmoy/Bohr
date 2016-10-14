@@ -15,4 +15,8 @@ public interface TableDao {
 	public List<Tabledetail> getAllTabledetailinDB() throws ReadEntityException;
 
 	public void update(Tabledetail tabledetail) throws EntityNotPresent;
+
+	public void saveListOfTables(List<Tabledetail> tabledetails) throws PersistException;
+
+	public Tabledetail getTableByNameAndSchema(String tableName, int schemaId) throws ReadEntityException;
 }

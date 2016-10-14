@@ -28,8 +28,9 @@ public class Constraintsdetail implements Serializable {
 	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail1;
 
-	@Column
-	private String referenceTable;
+	@ManyToOne
+	@JoinColumn(name = "referenceTable", nullable = true)
+	private Tabledetail referenceTable;
 
 	@Column
 	private String referenceColumnName;
@@ -69,11 +70,11 @@ public class Constraintsdetail implements Serializable {
 		this.columnsdetail1 = columnsdetail1;
 	}
 
-	public String getReferenceTable() {
+	public Tabledetail getReferenceTable() {
 		return referenceTable;
 	}
 
-	public void setReferenceTable(String referenceTable) {
+	public void setReferenceTable(Tabledetail referenceTable) {
 		this.referenceTable = referenceTable;
 	}
 
@@ -88,8 +89,8 @@ public class Constraintsdetail implements Serializable {
 	@Override
 	public String toString() {
 		return "Constraintsdetail [idconstraintsdetails=" + idconstraintsdetails + ", constraintname=" + constraintname
-				+ ", isunique=" + isunique + ", columnsdetail1=" + columnsdetail1 + ", referenceTable=" + referenceTable
-				+ ", referenceColumnName=" + referenceColumnName + "]";
+				+ ", isunique=" + isunique + ", columnsdetail1=" + columnsdetail1 + ", referenceColumnName="
+				+ referenceColumnName + "]";
 	}
 
 }

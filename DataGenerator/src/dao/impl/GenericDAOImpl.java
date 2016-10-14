@@ -106,6 +106,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
+		} catch (Exception exception) {
+			exception.printStackTrace();
 		} finally {
 			session.getSessionFactory().close();
 			session.close();
@@ -164,6 +166,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public List<T> getByQuery(String queryExecute, Object[] pars, Class clazz) throws DAOException {
 		List<T> results = null;
 		try {
+			buildSession();
 			Query query = session.createQuery(queryExecute);
 			if (pars != null) {
 				for (int i = 0; i < pars.length; i++) {
