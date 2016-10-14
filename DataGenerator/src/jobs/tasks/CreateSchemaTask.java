@@ -37,7 +37,6 @@ public class CreateSchemaTask extends Task {
 				schemadetail.setDatabasedetail(databasedetail);
 				schemadetail.setName(resultSet.getString("SCHEMA_NAME"));
 				schemadetails.add(schemadetail);
-				schemadetails.add(schemadetail);
 			}
 			resultSet.close();
 			connection.close();

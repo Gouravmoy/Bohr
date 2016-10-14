@@ -57,12 +57,10 @@ public class FirstJob extends Job {
 					createColumnTask.execute();
 					List<Columnsdetail> columnsdetailList = createColumnTask.getColumnsdetails();
 					columnsDao.saveListOfColumns(columnsdetailList);
-					for (Columnsdetail columnsdetail : columnsdetailList) {
-						constraintTask = new CreateConstraintTask(databasedetail, columnsdetail);
-						constraintTask.execute();
-						List<Constraintsdetail> constraintsdetailList = constraintTask.getConstraintsdetails();
-						constraintsDao.saveListOfConstraint(constraintsdetailList);
-					}
+					constraintTask = new CreateConstraintTask(databasedetail, columnsdetailList);
+					constraintTask.execute();
+					List<Constraintsdetail> constraintsdetailList = constraintTask.getConstraintsdetails();
+					constraintsDao.saveListOfConstraint(constraintsdetailList);
 				}
 			} catch (PersistException e) {
 				// TODO Auto-generated catch block

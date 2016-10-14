@@ -12,16 +12,18 @@ import org.apache.tools.ant.Task;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
+import entity.Tabledetail;
 
 public class CreateConstraintTask extends Task {
 	Databasedetail databasedetail;
-	Columnsdetail columnsdetail;
+	Tabledetail tabledetail;
+	List<Columnsdetail> columnsdetailList;
 	List<Constraintsdetail> constraintsdetails;
 
-	public CreateConstraintTask(Databasedetail databasedetail, Columnsdetail columnsdetail) {
+	public CreateConstraintTask(Databasedetail databasedetail, List<Columnsdetail> columnsdetail) {
 		super();
 		this.databasedetail = databasedetail;
-		this.columnsdetail = columnsdetail;
+		this.columnsdetailList = columnsdetail;
 	}
 
 	@Override
@@ -36,18 +38,25 @@ public class CreateConstraintTask extends Task {
 			fetchTask.execute();
 			String queryExecute = fetchTask.getQuery();
 			queryExecute = queryExecute.replace("schemaName_replace",
-					columnsdetail.getTabledetail().getSchemadetail().getName());
-			queryExecute = queryExecute.replace("tableName_replace", columnsdetail.getTabledetail().getTableName());
+					columnsdetailList.get(0).getTabledetail().getSchemadetail().getName());
+			queryExecute = queryExecute.replace("tableName_replace",
+					columnsdetailList.get(0).getTabledetail().getTableName());
 			QueryExecuteTask executeTask = new QueryExecuteTask(connection, queryExecute);
 			executeTask.execute();
 			ResultSet resultSet = executeTask.getResultSet();
 			Constraintsdetail constraintsdetail;
 			while (resultSet.next()) {
 				constraintsdetail = new Constraintsdetail();
+				String columnName = resultSet.getString("COLUMN_NAME");
 				constraintsdetail.setConstraintname(resultSet.getString("CONSTRAINT_NAME"));
 				constraintsdetail.setReferenceColumnName(resultSet.getString("REFERENCED_COLUMN_NAME"));
 				constraintsdetail.setReferenceTable(resultSet.getString("REFERENCED_TABLE_NAME"));
-				constraintsdetail.setColumnsdetail1(columnsdetail);
+				for (Columnsdetail columnsdetail : columnsdetailList) {
+					if (columnsdetail.getName().equalsIgnoreCase(columnName)) {
+						constraintsdetail.setColumnsdetail1(columnsdetail);
+						break;
+					}
+				}
 				constraintsdetails.add(constraintsdetail);
 			}
 			resultSet.close();
