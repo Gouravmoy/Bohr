@@ -13,6 +13,7 @@ import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Tabledetail;
+import enums.KeyType;
 
 public class CreateConstraintTask extends Task {
 	Databasedetail databasedetail;
@@ -45,14 +46,40 @@ public class CreateConstraintTask extends Task {
 			executeTask.execute();
 			ResultSet resultSet = executeTask.getResultSet();
 			Constraintsdetail constraintsdetail;
+			boolean isUnique = false;
 			while (resultSet.next()) {
 				constraintsdetail = new Constraintsdetail();
-				String columnName = resultSet.getString("COLUMN_NAME");
+				String colName = resultSet.getString("COLUMN_NAME");
+				String constaintName = resultSet.getString("CONSTRAINT_NAME");
+				String refTable = resultSet.getString("REFERENCED_TABLE_NAME");
+				String refColName = resultSet.getString("REFERENCED_COLUMN_NAME");
 				constraintsdetail.setConstraintname(resultSet.getString("CONSTRAINT_NAME"));
 				constraintsdetail.setReferenceColumnName(resultSet.getString("REFERENCED_COLUMN_NAME"));
 				constraintsdetail.setReferenceTable(resultSet.getString("REFERENCED_TABLE_NAME"));
+				constraintsdetail.setIsunique((byte) 0);
+				if (!constaintName.equals("PRIMARY")) {
+					if (refTable == null && refColName == null) {
+						isUnique = true;
+						constraintsdetail.setIsunique((byte) 1);
+					}
+				}
+				for (Columnsdetail column : columnsdetailList) {
+					if (column.getName().equals(colName)) {
+						column.addConstraintsdetails1(constraintsdetail);
+						if (column.getKeytype() == null)
+							column.setKeytype(getKeyType(constraintsdetail, isUnique));
+						else {
+							if (column.getKeytype() == KeyType.UK && getKeyType(constraintsdetail, isUnique) == KeyType.FK
+									|| column.getKeytype() == KeyType.FK
+											&& getKeyType(constraintsdetail, isUnique) == KeyType.UK) {
+								column.setKeytype(KeyType.UK_FK);
+							}
+						}
+						break;
+					}
+				}
 				for (Columnsdetail columnsdetail : columnsdetailList) {
-					if (columnsdetail.getName().equalsIgnoreCase(columnName)) {
+					if (columnsdetail.getName().equalsIgnoreCase(colName)) {
 						constraintsdetail.setColumnsdetail1(columnsdetail);
 						break;
 					}
@@ -69,6 +96,17 @@ public class CreateConstraintTask extends Task {
 			throw new BuildException("invalid number");
 		}
 
+	}
+	
+	private static KeyType getKeyType(Constraintsdetail constraint, boolean isUnique) {
+		if (constraint.getConstraintname().equals("PRIMARY"))
+			return KeyType.PK;
+		else if (isUnique)
+			return KeyType.UK;
+		else if (constraint.getReferenceTable() == null)
+			return KeyType.NO_KEY;
+		else
+			return KeyType.FK;
 	}
 
 	public List<Constraintsdetail> getConstraintsdetails() {
