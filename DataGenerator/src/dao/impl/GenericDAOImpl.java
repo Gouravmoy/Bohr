@@ -106,9 +106,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
-		} catch(Exception exception){
+		} catch (Exception exception) {
 			exception.printStackTrace();
-		}finally {
+		} finally {
 			session.getSessionFactory().close();
 			session.close();
 
@@ -166,6 +166,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	public List<T> getByQuery(String queryExecute, Object[] pars, Class clazz) throws DAOException {
 		List<T> results = null;
 		try {
+			buildSession();
 			Query query = session.createQuery(queryExecute);
 			if (pars != null) {
 				for (int i = 0; i < pars.length; i++) {
@@ -306,21 +307,21 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
-		}else {
+		} else {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
 		}
 	}
 
 	private void buildSession() {
-		if(session!=null){
-			if(session.isOpen()){
+		if (session != null) {
+			if (session.isOpen()) {
 				session.clear();
 				session.close();
 			}
 			session = session.getSessionFactory().openSession();
 			return;
 		}
-		session=configuration.buildSessionFactory().openSession();
+		session = configuration.buildSessionFactory().openSession();
 	}
 
 }

@@ -24,8 +24,6 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 		}
 		return tabledetail;
 	}
-	
-	
 
 	@Override
 	public Tabledetail getTabledetailByid(Integer id) throws ReadEntityException {
@@ -57,7 +55,32 @@ public class TableDaoImpl extends GenericDAOImpl<Tabledetail, Integer> implement
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	@Override
+	public void saveListOfTables(List<Tabledetail> tabledetails) throws PersistException {
+		try {
+			batchSaveDAO(tabledetails);
+		} catch (DAOException e) {
+			e.printStackTrace();
+			throw new PersistException("Unable to save batch");
+		}
+
+	}
+
+	@Override
+	public Tabledetail getTableByNameAndSchema(String tableName, int schemaId) throws ReadEntityException {
+		String query = "FROM Tabledetail T where T.tableName=:arg0 and  T.schemadetail.idschema=:arg1";
+		Object[] pars = { tableName, schemaId };
+		List<Tabledetail> qList;
+		try {
+			qList = getByQuery(query, pars, Tabledetail.class);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ReadEntityException("Unable to read Table with name" + tableName);
+		}
+		return qList.get(0);
+
+	}
 
 }

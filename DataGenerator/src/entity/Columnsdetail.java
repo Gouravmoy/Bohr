@@ -252,4 +252,10 @@ public class Columnsdetail implements Serializable {
 		return relationsdetail;
 	}
 
+	@Override
+	public String toString() {
+		return "Columnsdetail [idcolumnsdetails=" + idcolumnsdetails + ", name=" + name + ", tabledetail=" + tabledetail
+				+ "]";
+	}
+
 }

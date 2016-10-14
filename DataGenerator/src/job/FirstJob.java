@@ -51,8 +51,8 @@ public class FirstJob extends Job {
 				createTableTask = new CreateTableTask(databasedetail, schemadetail);
 				createTableTask.execute();
 				List<Tabledetail> tabledetailList = createTableTask.getTabledetails();
+				tableDao.saveListOfTables(tabledetailList);
 				for (Tabledetail tabledetail : tabledetailList) {
-					tableDao.saveTabledetail(tabledetail);
 					createColumnTask = new CreateColumnTask(databasedetail, tabledetail);
 					createColumnTask.execute();
 					List<Columnsdetail> columnsdetailList = createColumnTask.getColumnsdetails();
