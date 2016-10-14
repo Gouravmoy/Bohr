@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.validation.Schema;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -25,13 +26,16 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import dao.DataSampleDao;
 import dao.DatabaseDao;
+import dao.ProjectDao;
 import dao.impl.DataSampleDaoImpl;
 import dao.impl.DatabaseDAOImpl;
+import dao.impl.ProjectDAOImpl;
 import entity.Changelog;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
+import entity.Projectdetails;
 import entity.Schemadetail;
 import entity.Tabledetail;
 import exceptions.ReadEntityException;
@@ -48,7 +52,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	// Trees
 	private static JTree databaseTree;
-	// private static JTree projectsTree;
+	private static JTree projectsTree;
 
 	// Renderer
 	static DefaultTreeCellRenderer databaseTreeRenderer;
@@ -62,6 +66,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	DatabaseDao databaseDao;
 	DataSampleDao dataSamepleDao;
+	ProjectDao projectDao;
 
 	@Inject
 	public TreeView() {
@@ -94,7 +99,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			e.printStackTrace();
 		}
 		panel_1.add(databaseTree);
-		// panel_1.add(projectsTree);
+		panel_1.add(projectsTree);
 
 		mainScrollPane.setViewportView(panel_1);
 		panel.add(mainScrollPane);
@@ -102,6 +107,24 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private void createProjectsTree() throws ReadEntityException {
+		DefaultMutableTreeNode category = null;
+		DefaultMutableTreeNode schemaCategory = null;
+		DefaultMutableTreeNode changeLogCategory = null;
+		DefaultMutableTreeNode dataSampelModelCategory = null;
+		projectDao = new ProjectDAOImpl();
+
+		List<Projectdetails> projectdetails = projectDao.getAllProjectdetailsinDB();
+
+		projectsTreeTop.removeAllChildren();
+
+		for (Projectdetails projectdetail : projectdetails) {
+			category = new DefaultMutableTreeNode(projectdetail);
+			Schemadetail schemadetail = projectdetail.getSchemadetail();
+			schemaCategory = new DefaultMutableTreeNode(schemadetail);
+			addTableDetails(schemaCategory, schemadetail);
+			projectsTreeTop.add(category);
+		}
+
 	}
 
 	private void createDatabaseTree() throws ReadEntityException {
@@ -169,10 +192,6 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	private void initilizeTrees(Frame frame) {
 		TreeViewRenderer renderer = new TreeViewRenderer();
-		ImageIcon metadataImageIcon = new ImageIcon(TreeView.class.getResource("/resources/images/transform_flip.png"));
-		databaseTreeRenderer = new DefaultTreeCellRenderer();
-		databaseTreeRenderer.setIcon(new ImageIcon(TreeView.class.getResource("/resources/images/transform_flip.png")));
-		databaseTreeRenderer.setLeafIcon(metadataImageIcon);
 		repoTreeTop = new DefaultMutableTreeNode("REPOSITORY");
 		databaseTree = new JTree(repoTreeTop);
 		databaseTree.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -182,6 +201,16 @@ public class TreeView extends DefaultTreeCellRenderer {
 		databaseTree.setShowsRootHandles(true);
 		databaseTree.addTreeSelectionListener(new TreeSelectionListner(databaseTree));
 		databaseTree.setCellRenderer(renderer);
+
+		projectsTreeTop = new DefaultMutableTreeNode("PROJECTS");
+		projectsTree = new JTree(projectsTreeTop);
+		projectsTree.setAlignmentX(Component.LEFT_ALIGNMENT);
+		projectsTree.setAlignmentY(Component.TOP_ALIGNMENT);
+		projectsTree.setBounds(322, 252, 104, 16);
+		projectsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		projectsTree.setShowsRootHandles(true);
+		projectsTree.addTreeSelectionListener(new TreeSelectionListner(projectsTree));
+		projectsTree.setCellRenderer(renderer);
 
 	}
 

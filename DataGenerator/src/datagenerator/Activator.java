@@ -21,7 +21,7 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		Master.INSTANCE.setEnvironment(Environment.STAGING);
 		MainController.setLogger();
 	}
 

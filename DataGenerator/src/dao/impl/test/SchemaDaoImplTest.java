@@ -38,6 +38,7 @@ public class SchemaDaoImplTest {
 	 * @generatedBy CodePro at 10/10/16 5:02 PM
 	 */
 	SchemaDaoImpl fixture = new SchemaDaoImpl();
+
 	@Test
 	public void testGetAllSchemainDB_1() {
 		List<Schemadetail> result = null;
@@ -101,7 +102,7 @@ public class SchemaDaoImplTest {
 	 */
 	@Test
 	public void testUpdate_1() {
-Schemadetail schemadetail;
+		Schemadetail schemadetail;
 		try {
 			List<Schemadetail> schemadetails;
 			schemadetails = fixture.getAllSchemainDB();
@@ -131,7 +132,7 @@ Schemadetail schemadetail;
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		// Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

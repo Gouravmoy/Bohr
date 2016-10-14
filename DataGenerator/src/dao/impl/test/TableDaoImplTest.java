@@ -40,6 +40,7 @@ public class TableDaoImplTest {
 	 * @generatedBy CodePro at 10/11/16 12:07 PM
 	 */
 	TableDaoImpl fixture = new TableDaoImpl();
+
 	@Test
 	public void testGetAllTabledetailinDB_1() {
 		List<Tabledetail> result = null;
@@ -130,7 +131,7 @@ public class TableDaoImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Master.INSTANCE.setEnvironment(Environment.TEST);
+		// Master.INSTANCE.setEnvironment(Environment.TEST);
 	}
 
 	/**

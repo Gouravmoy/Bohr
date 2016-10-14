@@ -18,7 +18,8 @@ import enums.Environment;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ DatabaseDAOImplTest.class, SchemaDaoImplTest.class, TableDaoImplTest.class,
-		ColumnsDAOImplTest.class, ConstraintsDAOImplTest.class, PatternDAOImplTest.class, RelationsDAOImplTest.class })
+		ColumnsDAOImplTest.class, ConstraintsDAOImplTest.class, PatternDAOImplTest.class, RelationsDAOImplTest.class,
+		ProjectDAOImplTest.class })
 public class TestAll {
 
 	/**
@@ -29,7 +30,7 @@ public class TestAll {
 	 *
 	 * @generatedBy CodePro at 10/10/16 5:02 PM
 	 */
-	
+
 	public static void main(String[] args) {
 		Master.INSTANCE.setEnvironment(Environment.STAGING);
 		JUnitCore.runClasses(new Class[] { TestAll.class });
