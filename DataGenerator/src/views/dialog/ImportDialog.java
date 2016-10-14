@@ -88,6 +88,7 @@ public class ImportDialog extends Dialog {
 		firstJob.setDatabasedetail(databasedetail);
 		System.out.println(firstJob.getResult());
 		firstJob.schedule();
+		super.okPressed();
 	}
 
 	@Override

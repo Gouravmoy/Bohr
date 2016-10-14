@@ -51,6 +51,7 @@
       </children>
       <children xsi:type="menu:Menu" xmi:id="_Etn2IJHTEeaUVcSqx7g-yA" elementId="datagenerator.menu.functions" label="Functions">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_IXyawJHTEeaUVcSqx7g-yA" elementId="datagenerator.handledmenuitem.importdatabase" label="Import Database" iconURI="platform:/plugin/DataGenerator/resources/images/connect-icon.png" command="_UCE60JHXEeaUVcSqx7g-yA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_u7Le4JIREeaUVcSqx7g-yA" elementId="datagenerator.handledmenuitem.createproject" label="Create Project" iconURI="platform:/plugin/DataGenerator/resources/images/addd.png" command="_w7ph0JIREeaUVcSqx7g-yA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_6wlLjsgZEeSyMNYR5xypkQ" elementId="help" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLj8gZEeSyMNYR5xypkQ" elementId="DataGenerator.handleditem.about" label="About" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
@@ -68,6 +69,7 @@
   <handlers xmi:id="_6wlLhMgZEeSyMNYR5xypkQ" elementId="datagenerator.handler.saveCommand" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.SaveHandler" command="_6wlLg8gZEeSyMNYR5xypkQ"/>
   <handlers xmi:id="_6wlLh8gZEeSyMNYR5xypkQ" elementId="datagenerator.handler.aboutCommand" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.AboutHandler" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
   <handlers xmi:id="_a7MHsJHXEeaUVcSqx7g-yA" elementId="datagenerator.handler.0" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.ImportDatabaseHandler" command="_UCE60JHXEeaUVcSqx7g-yA"/>
+  <handlers xmi:id="_GoqA0JISEeaUVcSqx7g-yA" elementId="datagenerator.handler.1" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.CreateProjectHandler" command="_w7ph0JIREeaUVcSqx7g-yA"/>
   <bindingTables xmi:id="_6wlLfsgZEeSyMNYR5xypkQ" elementId="DataGenerator.bindingtable" bindingContext="_6wlLecgZEeSyMNYR5xypkQ">
     <bindings xmi:id="_6wlLf8gZEeSyMNYR5xypkQ" elementId="DataGenerator.keybinding.m1q" keySequence="M1+Q" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
     <bindings xmi:id="_6wlLgsgZEeSyMNYR5xypkQ" elementId="DataGenerator.keybinding.m1o" keySequence="M1+O" command="_6wlLgMgZEeSyMNYR5xypkQ"/>
@@ -83,6 +85,7 @@
   <commands xmi:id="_6wlLg8gZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.file.save" commandName="saveCommand"/>
   <commands xmi:id="_6wlLhsgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
   <commands xmi:id="_UCE60JHXEeaUVcSqx7g-yA" elementId="datagenerator.command.importdatabase" commandName="Import Database" description="Import Database"/>
+  <commands xmi:id="_w7ph0JIREeaUVcSqx7g-yA" elementId="datagenerator.command.createproject" commandName="Create Project"/>
   <addons xmi:id="_6wlLcsgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_6wlLc8gZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_6wlLdMgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
