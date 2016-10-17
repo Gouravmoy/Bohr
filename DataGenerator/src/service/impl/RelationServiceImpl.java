@@ -24,11 +24,13 @@ public class RelationServiceImpl implements RelationService {
 	@Override
 	public Relationsdetail getRelationForColumnId(Integer id, Integer tableId) {
 		List<Relationsdetail> relationsdetail = new ArrayList<>();
-		String query = "from Relationsdetail r where r.columnsdetail.idcolumnsdetails=:arg0 and r.tabledetail.idtabledetails=:arg1";
+		String query = "from Relationsdetail r where r.columnsdetail.idcolumnsdetails=:arg0 and r.projectdetail.idproject=:arg1";
 		Object[] pars = { id, tableId };
 		relationsdetail = relationDao.getSchemaByQyery(query, pars);
-		if (relationsdetail != null)
-			return relationsdetail.get(0);
+		if (relationsdetail != null) {
+			if (relationsdetail.size() > 0)
+				return relationsdetail.get(0);
+		}
 		return null;
 	}
 

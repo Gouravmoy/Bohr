@@ -8,6 +8,6 @@ public interface RelationService {
 
 	public List<Relationsdetail> getAllRelationsForProjectId(Integer id);
 
-	public Relationsdetail getRelationForColumnId(Integer id, Integer tableId);
+	public Relationsdetail getRelationForColumnId(Integer id, Integer projectId);
 
 }

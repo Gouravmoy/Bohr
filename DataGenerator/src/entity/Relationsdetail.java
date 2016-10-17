@@ -40,6 +40,18 @@ public class Relationsdetail implements Serializable {
 	@JoinColumn(name = "idproject")
 	private Projectdetails projectdetail;
 
+	@ManyToOne
+	@JoinColumn(name = "relatedcolumnId")
+	private Columnsdetail relatedColumndetail;
+
+	public Columnsdetail getRelatedColumndetail() {
+		return relatedColumndetail;
+	}
+
+	public void setRelatedColumndetail(Columnsdetail relatedColumndetail) {
+		this.relatedColumndetail = relatedColumndetail;
+	}
+
 	public Projectdetails getProjectdetail() {
 		return projectdetail;
 	}
@@ -93,8 +105,8 @@ public class Relationsdetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Relationsdetail [idrelations=" + idrelations + ", description=" + description + ", type=" + type
-				+ ", columnsdetail=" + columnsdetail + ", tabledetail=" + tabledetail + "]";
+		return columnsdetail.getTabledetail().getTableName().toUpperCase() + "."
+				+ columnsdetail.getName().toUpperCase();
 	}
 
 }

@@ -84,7 +84,18 @@ public class Columnsdetail implements Serializable {
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
 	private Set<Relationsdetail> relationsdetails;
 
+	@OneToMany(mappedBy = "relatedColumndetail", fetch = FetchType.EAGER)
+	private Set<Relationsdetail> relatedColumndetail;
+
 	public Columnsdetail() {
+	}
+
+	public Set<Relationsdetail> getRelatedColumndetail() {
+		return relatedColumndetail;
+	}
+
+	public void setRelatedColumndetail(Set<Relationsdetail> relatedColumndetail) {
+		this.relatedColumndetail = relatedColumndetail;
 	}
 
 	public int getIdcolumnsdetails() {

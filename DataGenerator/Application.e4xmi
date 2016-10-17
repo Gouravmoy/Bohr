@@ -6,37 +6,27 @@
       <children xsi:type="advanced:Perspective" xmi:id="_6wlLkcgZEeSyMNYR5xypkQ" elementId="DataGenerator.perspective.sample">
         <children xsi:type="basic:PartSashContainer" xmi:id="_6wlLksgZEeSyMNYR5xypkQ" elementId="DataGenerator.partsashcontainer.sample">
           <children xsi:type="basic:PartSashContainer" xmi:id="_QDhmMJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.0" containerData="70" horizontal="true">
-            <children xsi:type="basic:PartSashContainer" xmi:id="_VxMToJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.2" containerData="20">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_VxMToJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.2" containerData="25">
               <children xsi:type="basic:PartStack" xmi:id="_fPwf0JEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.0">
                 <children xsi:type="basic:Part" xmi:id="_lu4fYJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.workspace" contributionURI="bundleclass://DataGenerator/views.tree.TreeView" label="Workspace" iconURI="platform:/plugin/DataGenerator/resources/images/Home.png"/>
               </children>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_WOt9IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.3" containerData="60">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_WOt9IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.3" containerData="75">
               <children xsi:type="basic:PartStack" xmi:id="_i0t0UJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.1">
                 <children xsi:type="basic:Part" xmi:id="_r8_ncJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/transform_flip.png"/>
               </children>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_Wk62oJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.4" containerData="20">
-              <children xsi:type="basic:PartStack" xmi:id="_jKw80JEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.2">
-                <children xsi:type="basic:Part" xmi:id="_zC3d8JEJEeaUVcSqx7g-yA" elementId="datagenerator.part.properties" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Properties" iconURI="platform:/plugin/DataGenerator/resources/images/Locking.png"/>
-              </children>
-            </children>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_QqopgJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.1" containerData="30" horizontal="true">
-            <children xsi:type="basic:PartSashContainer" xmi:id="_W69_IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.5" containerData="20">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_W69_IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.5" containerData="25">
               <children xsi:type="basic:PartStack" xmi:id="_jtBVUJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.3">
                 <children xsi:type="basic:Part" xmi:id="_8DWnAJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.properties" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Properties" iconURI="platform:/plugin/DataGenerator/resources/images/connect.png"/>
               </children>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_XU13sJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.6" containerData="60">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_XU13sJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.6" containerData="75">
               <children xsi:type="basic:PartStack" xmi:id="_kBKZUJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.4">
                 <children xsi:type="basic:Part" xmi:id="_BtdDEJEKEeaUVcSqx7g-yA" elementId="datagenerator.part.progress" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Progress" iconURI="platform:/plugin/DataGenerator/resources/images/lightning.png"/>
                 <children xsi:type="basic:Part" xmi:id="_EuekEJEKEeaUVcSqx7g-yA" elementId="datagenerator.part.console" contributionURI="bundleclass://DataGenerator/views.util.ConsoleView" label="Console" iconURI="platform:/plugin/DataGenerator/resources/images/Exit.png"/>
-              </children>
-            </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_XohosJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.7" containerData="20">
-              <children xsi:type="basic:PartStack" xmi:id="_kUsZUJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.5">
-                <children xsi:type="basic:Part" xmi:id="_K9H3oJEKEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/load.png"/>
               </children>
             </children>
           </children>

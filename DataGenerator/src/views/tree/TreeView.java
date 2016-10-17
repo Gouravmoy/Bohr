@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +24,8 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import ch.qos.logback.classic.Logger;
+import controller.MainController;
 import dao.DataSampleDao;
 import dao.DatabaseDao;
 import dao.ProjectDao;
@@ -33,12 +37,18 @@ import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
+import entity.Patterndetail;
 import entity.Projectdetails;
+import entity.Relationsdetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
+import service.PatternService;
+import service.RelationService;
+import service.impl.PatternServiceImpl;
+import service.impl.RelationServiceImpl;
 import views.listners.TreeSelectionListner;
 import views.renderer.TreeViewRenderer;
 import views.util.JTreeUtil;
@@ -62,11 +72,24 @@ public class TreeView extends DefaultTreeCellRenderer {
 	static DefaultMutableTreeNode projectsTreeTop;
 	static DefaultMutableTreeNode repoTreeTop;
 
+	// Deafult Nodes
+
+	static DefaultMutableTreeNode relationsNodes = null;
+	static DefaultMutableTreeNode patternsNodes = null;
+
 	// DAO
 
 	static DatabaseDao databaseDao;
 	static DataSampleDao dataSamepleDao;
 	static ProjectDao projectDao;
+
+	// Service
+
+	static RelationService relationService;
+	static PatternService patternService;
+
+	// Logger
+	Logger logger = MainController.getLogger(TreeView.class);
 
 	@Inject
 	public TreeView() {
@@ -74,6 +97,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
+		logger.error("Inside TreeView12345");
 		composite = new Composite(parent, SWT.EMBEDDED);
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		composite.setBounds(0, 0, 277, 465);
@@ -94,12 +118,12 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		try {
 			createDatabaseTree();
-			// createProjectsTree();
+			createProjectsTree();
 		} catch (ReadEntityException e) {
 			e.printStackTrace();
 		}
 		panel_1.add(databaseTree);
-		// panel_1.add(projectsTree);
+		panel_1.add(projectsTree);
 
 		mainScrollPane.setViewportView(panel_1);
 		panel.add(mainScrollPane);
@@ -108,20 +132,18 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	public static void queryAndRefresh() throws DAOException, ServiceException {
 		createDatabaseTree();
-		// createProjectsTree();
+		createProjectsTree();
 		collapseAll();
 	}
 
 	private static void collapseAll() {
 		JTreeUtil.colapse(databaseTree);
-		// JTreeUtil.colapse(projectsTree);
+		JTreeUtil.colapse(projectsTree);
 	}
 
 	private static void createProjectsTree() throws ReadEntityException {
 		DefaultMutableTreeNode category = null;
 		DefaultMutableTreeNode schemaCategory = null;
-		DefaultMutableTreeNode changeLogCategory = null;
-		DefaultMutableTreeNode dataSampelModelCategory = null;
 		projectDao = new ProjectDAOImpl();
 
 		List<Projectdetails> projectdetails = projectDao.getAllProjectdetailsinDB();
@@ -129,10 +151,15 @@ public class TreeView extends DefaultTreeCellRenderer {
 		projectsTreeTop.removeAllChildren();
 
 		for (Projectdetails projectdetail : projectdetails) {
+			relationsNodes = new DefaultMutableTreeNode("RELATIONS");
+			patternsNodes = new DefaultMutableTreeNode("PATTERNS");
 			category = new DefaultMutableTreeNode(projectdetail);
 			Schemadetail schemadetail = projectdetail.getSchemadetail();
 			schemaCategory = new DefaultMutableTreeNode(schemadetail);
-			addTableDetails(schemaCategory, schemadetail);
+			addTableDetails(schemaCategory, schemadetail, true, projectdetail.getIdproject());
+			category.add(schemaCategory);
+			category.add(relationsNodes);
+			category.add(patternsNodes);
 			projectsTreeTop.add(category);
 		}
 
@@ -162,7 +189,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 				category = new DefaultMutableTreeNode(database);
 				for (Schemadetail schemadetail : database.getSchemadetails()) {
 					schemaCategory = new DefaultMutableTreeNode(schemadetail);
-					addTableDetails(schemaCategory, schemadetail);
+					addTableDetails(schemaCategory, schemadetail, false, 0);
 					changeLogCategory = new DefaultMutableTreeNode("CHANGE LOGS");
 					for (Changelog changelog : database.getChangelogs()) {
 						changeLogCategory.add(new DefaultMutableTreeNode(changelog));
@@ -183,14 +210,24 @@ public class TreeView extends DefaultTreeCellRenderer {
 		refreshDatabaseTree();
 	}
 
-	private static void addTableDetails(DefaultMutableTreeNode schemaCategory, Schemadetail schemadetail) {
+	private static void addTableDetails(DefaultMutableTreeNode schemaCategory, Schemadetail schemadetail,
+			boolean addRelation, int Id) {
 		DefaultMutableTreeNode tableCategory;
 		DefaultMutableTreeNode columnCategory;
 		DefaultMutableTreeNode constraintsCategory;
-		for (Tabledetail tabledetail : schemadetail.getTabledetails()) {
+		relationService = new RelationServiceImpl();
+		patternService = new PatternServiceImpl();
+
+		List<Tabledetail> tabledetails = new ArrayList<>();
+		tabledetails.addAll(schemadetail.getTabledetails());
+		sortList(tabledetails);
+		for (Tabledetail tabledetail : tabledetails) {
 			tableCategory = new DefaultMutableTreeNode(tabledetail);
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				columnCategory = new DefaultMutableTreeNode(columnsdetail);
+				if (addRelation) {
+					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
+				}
 				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
 					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);
 					columnCategory.add(constraintsCategory);
@@ -198,6 +235,43 @@ public class TreeView extends DefaultTreeCellRenderer {
 				tableCategory.add(columnCategory);
 			}
 			schemaCategory.add(tableCategory);
+		}
+	}
+
+	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,
+			int projectId) {
+		DefaultMutableTreeNode relationCategory;
+		DefaultMutableTreeNode patternCategory;
+		Patterndetail patterndetail = null;
+		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
+				projectId);
+		
+		if (columnsdetail.getPatterndetail() != null
+				&& columnsdetail.getPatterndetail().getProjectdetail().getIdproject() == projectId) {
+			patterndetail = columnsdetail.getPatterndetail();
+		}
+		relationCategory = new DefaultMutableTreeNode("RELATIONS");
+		if (relationsdetail != null) {
+			relationCategory.add(new DefaultMutableTreeNode(relationsdetail));
+			relationsNodes.add(new DefaultMutableTreeNode(relationsdetail));
+		}
+		columnCategory.add(relationCategory);
+		patternCategory = new DefaultMutableTreeNode("PATTERNS");
+		if (patterndetail != null) {
+			patternCategory.add(new DefaultMutableTreeNode(patterndetail));
+			patternsNodes.add(new DefaultMutableTreeNode(patterndetail));
+		}
+		columnCategory.add(patternCategory);
+	}
+
+	private static void sortList(List<Tabledetail> tabledetails) {
+		if (tabledetails.size() > 0) {
+			Collections.sort(tabledetails, new Comparator<Tabledetail>() {
+				@Override
+				public int compare(final Tabledetail object1, final Tabledetail object2) {
+					return object1.getTableName().compareTo(object2.getTableName());
+				}
+			});
 		}
 	}
 

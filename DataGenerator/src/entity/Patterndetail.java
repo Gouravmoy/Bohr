@@ -1,6 +1,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -99,9 +101,13 @@ public class Patterndetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Patterndetail [idpatterndetails=" + idpatterndetails + ", patternDescription=" + patternDescription
-				+ ", patternName=" + patternName + ", regexpString=" + regexpString + ", columnsdetail=" + columnsdetail
-				+ "]";
+		List<Columnsdetail> columndetails = new ArrayList<>();
+		columndetails.addAll(this.getColumnsdetail());
+		for (Columnsdetail columnsdetail : columndetails) {
+			return columnsdetail.getTabledetail().getTableName().toUpperCase() + "."
+					+ columnsdetail.getName().toUpperCase();
+		}
+		return null;
 	}
 
 }
