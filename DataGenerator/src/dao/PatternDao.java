@@ -19,5 +19,7 @@ public interface PatternDao {
 
 	public Patterndetail update(Patterndetail patterndetail) throws EntityNotPresent;
 
+	public List<Patterndetail> getSchemaByQyery(String query, Object[] pars);
+
 
 }

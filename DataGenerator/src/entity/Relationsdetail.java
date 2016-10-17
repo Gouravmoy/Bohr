@@ -28,13 +28,25 @@ public class Relationsdetail implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name = "columnId",nullable=false)
+	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
 	@JoinColumn(name = "tableid")
 	private Tabledetail tabledetail;
+
+	@ManyToOne
+	@JoinColumn(name = "idproject")
+	private Projectdetails projectdetail;
+
+	public Projectdetails getProjectdetail() {
+		return projectdetail;
+	}
+
+	public void setProjectdetail(Projectdetails projectdetail) {
+		this.projectdetail = projectdetail;
+	}
 
 	public Relationsdetail() {
 	}
