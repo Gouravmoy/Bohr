@@ -10,12 +10,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import dao.DatabaseDao;
-import dao.impl.DatabaseDAOImpl;
-import entity.Databasedetail;
-import enums.DBType;
-import exceptions.PersistException;
-import job.FirstJob;
+import dao.ProjectDao;
+import dao.impl.ProjectDAOImpl;
+import entity.Projectdetails;
+import exceptions.ReadEntityException;
+import job.GenerateDataJob;
 
 public class SamplePart2 {
 	@Inject
@@ -34,23 +33,17 @@ public class SamplePart2 {
 		btnClick.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FirstJob firstJob = new FirstJob("My Job");
-				DatabaseDao databaseDao = new DatabaseDAOImpl();
-				Databasedetail databasedetail = new Databasedetail();
-				databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila");
-				databasedetail.setUsername("root");
-				databasedetail.setPassword("root");
-				databasedetail.setType(DBType.MYSQL);
+				ProjectDao dao = new ProjectDAOImpl();
+				GenerateDataJob dataJob = new GenerateDataJob("Generate Data");
+				Projectdetails projectdetails = null;
 				try {
-					databaseDao.saveDatabse(databasedetail);
-				} catch (PersistException W) {
+					projectdetails = dao.getProjectdetailsByid(1);
+				} catch (ReadEntityException e1) {
 					// TODO Auto-generated catch block
-					W.printStackTrace();
+					e1.printStackTrace();
 				}
-				firstJob.setDatabasedetail(databasedetail);
-				System.out.println(firstJob.getResult());
-				firstJob.schedule();
-
+				dataJob.setProjectdetails(projectdetails);
+				dataJob.schedule();
 			}
 		});
 		btnClick.setBounds(114, 63, 75, 25);

@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -39,10 +41,15 @@ public class SamplePart {
 	@Inject
 	private MDirtyable dirty;
 
+	@Inject
+	public static EPartService partService = null;
+	@Inject
+	public static EModelService modelService = null;
+
 	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void createComposite(Composite parent) {
-
+		System.out.println("I am gee");
 		rfAppender.setContext(loggerContext);
 		rfAppender.setFile(System.getProperty("log_file_loc") + "/log/" + "rapid" + ".log");
 		PatternLayoutEncoder encoder = new PatternLayoutEncoder();

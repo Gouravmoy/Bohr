@@ -13,7 +13,8 @@
             </children>
             <children xsi:type="basic:PartSashContainer" xmi:id="_WOt9IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.3" containerData="60">
               <children xsi:type="basic:PartStack" xmi:id="_i0t0UJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.1">
-                <children xsi:type="basic:Part" xmi:id="_r8_ncJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/transform_flip.png"/>
+                <children xsi:type="basic:Part" xmi:id="_r8_ncJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/transform_flip.png"/>
+                <children xsi:type="basic:Part" xmi:id="_HGloIJPBEeaPa-3-e5bw6w" elementId="datagenerator.part.samplepart2" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart2" label="Sample Part 2"/>
               </children>
             </children>
             <children xsi:type="basic:PartSashContainer" xmi:id="_Wk62oJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.4" containerData="20">
@@ -43,6 +44,7 @@
         </children>
       </children>
     </children>
+    <handlers xmi:id="_Y3auYJQiEeaVVPcjskpX9g" elementId="datagenerator.handler.1"/>
     <mainMenu xmi:id="_6wlLicgZEeSyMNYR5xypkQ" elementId="org.eclipse.ui.main.menu">
       <children xsi:type="menu:Menu" xmi:id="_6wlLisgZEeSyMNYR5xypkQ" elementId="file" label="File">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLi8gZEeSyMNYR5xypkQ" elementId="DataGenerator.handleditem.file.open" label="Open" iconURI="platform:/plugin/DataGenerator/icons/sample.png" command="_6wlLgMgZEeSyMNYR5xypkQ"/>

@@ -18,5 +18,23 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="parts.DisplayTablePartView"
+            id="parts.DisplayTablePartView"
+            name="New ViewPart">
+      </view>
+      <view
+            class="parts.Sample"
+            id="parts.Sample"
+            name="New ViewPart">
+      </view>
+      <view
+            class="datagenerator.parts.DisplayTableViewParyt"
+            id="datagenerator.parts.DisplayTableViewParyt"
+            name="New ViewPart">
+      </view>
+   </extension>
 
 </plugin>
