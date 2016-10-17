@@ -1,15 +1,18 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -26,10 +29,18 @@ public class Projectdetails implements Serializable {
 
 	@Column(length = 200, unique = true)
 	private String projectName;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idschema")
 	private Schemadetail schemadetail;
+
+	// bi-directional many-to-one association to Relationsdetail
+	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
+	private Set<Relationsdetail> relationsdetails;
+
+	// bi-directional many-to-one association to Patterndetail
+	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
+	private Set<Patterndetail> patterndetails;
 
 	public int getIdproject() {
 		return idproject;
@@ -59,6 +70,5 @@ public class Projectdetails implements Serializable {
 	public String toString() {
 		return projectName;
 	}
-	
-	
+
 }

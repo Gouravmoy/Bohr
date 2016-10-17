@@ -69,4 +69,14 @@ public class RelationsDAOImpl extends GenericDAOImpl<Relationsdetail, Integer> i
 		}
 	}
 
+	@Override
+	public List<Relationsdetail> getSchemaByQyery(String query, Object[] pars) {
+		try {
+			return getByQuery(query, pars, Relationsdetail.class);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

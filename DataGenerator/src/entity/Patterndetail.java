@@ -1,6 +1,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -39,6 +43,18 @@ public class Patterndetail implements Serializable {
 
 	@OneToMany(mappedBy = "patterndetail", fetch = FetchType.EAGER)
 	private Set<Columnsdetail> columnsdetail;
+
+	@ManyToOne
+	@JoinColumn(name = "idproject")
+	private Projectdetails projectdetail;
+
+	public Projectdetails getProjectdetail() {
+		return projectdetail;
+	}
+
+	public void setProjectdetail(Projectdetails projectdetail) {
+		this.projectdetail = projectdetail;
+	}
 
 	public Patterndetail() {
 	}
@@ -85,9 +101,13 @@ public class Patterndetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Patterndetail [idpatterndetails=" + idpatterndetails + ", patternDescription=" + patternDescription
-				+ ", patternName=" + patternName + ", regexpString=" + regexpString + ", columnsdetail=" + columnsdetail
-				+ "]";
+		List<Columnsdetail> columndetails = new ArrayList<>();
+		columndetails.addAll(this.getColumnsdetail());
+		for (Columnsdetail columnsdetail : columndetails) {
+			return columnsdetail.getTabledetail().getTableName().toUpperCase() + "."
+					+ columnsdetail.getName().toUpperCase();
+		}
+		return null;
 	}
 
 }

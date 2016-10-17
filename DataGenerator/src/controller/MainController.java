@@ -13,7 +13,7 @@ import ch.qos.logback.core.util.StatusPrinter;
 
 public class MainController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void setLogger() {
+	public static Logger getLogger(Class clazz) {
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
 		RollingFileAppender rfAppender = new RollingFileAppender();
@@ -52,7 +52,7 @@ public class MainController {
 		hibernateAll.addAppender(rfAppender);
 
 		// attach the rolling file appender to the logger of your choice
-		Logger logbackLogger = loggerContext.getLogger("MainController");
+		Logger logbackLogger = loggerContext.getLogger(clazz.getName());
 		logbackLogger.addAppender(rfAppender);
 
 		// OPTIONAL: print logback internal status messages
@@ -60,5 +60,6 @@ public class MainController {
 
 		// log something
 		logbackLogger.debug("hello");
+		return logbackLogger;
 	}
 }
