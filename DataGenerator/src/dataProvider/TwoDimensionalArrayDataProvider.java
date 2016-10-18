@@ -5,41 +5,45 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import entity.GeneratedTableData;
 
 public class TwoDimensionalArrayDataProvider implements IDataProvider {
-	private String[][] data;
+	String[][] dataTable;
+	GeneratedTableData generatedData;
 
-	public TwoDimensionalArrayDataProvider(GeneratedTableData generatedTableData) {
-		data = new String[generatedTableData.getRows().size()][generatedTableData.getTable().getColumnsdetails()
-				.size()];
-		int row = 0;
-		int col = 0;
-		for (String columnValues : generatedTableData.getRows()) {
-			col = 0;
-			for (String columnValue : columnValues.split("\\,")) {
-				setDataValue(row, col, columnValue);
-				col++;
-			}
-			row++;
-		}
+	@Override
+	public Object getDataValue(int columnIndex, int rowIndex) {
+		// TODO Auto-generated method stub
+		return dataTable[columnIndex][rowIndex];
 	}
 
 	@Override
-	public void setDataValue(int rowIndex, int columnIndex, Object newValue) {
-		this.data[rowIndex][columnIndex] = newValue != null ? newValue.toString() : null;
+	public void setDataValue(int columnIndex, int rowIndex, Object newValue) {
+		dataTable[columnIndex][rowIndex] = (String) newValue;
+
 	}
 
 	@Override
 	public int getColumnCount() {
-		return this.data[0].length;
+		return generatedData.getTable().getColumnsdetails().size();
 	}
 
 	@Override
 	public int getRowCount() {
-		return this.data.length;
+		return generatedData.getRows().size();
 	}
 
-	@Override
-	public Object getDataValue(int columnIndex, int rowIndex) {
-		return this.data[rowIndex][columnIndex];
+	public TwoDimensionalArrayDataProvider(GeneratedTableData generatedData) {
+		super();
+		this.generatedData = generatedData;
+		dataTable = new String[generatedData.getTable().getColumnsdetails().size()][generatedData.getRows().size()];
+		int rowCount = 0;
+		int colCount = 0;
+		for (String rowValue : generatedData.getRows()) {
+			colCount = 0;
+			for (String colValue : rowValue.split("\\,")) {
+				setDataValue(colCount, rowCount, colValue);
+				colCount++;
+			}
+			rowCount++;
+		}
 	}
 
 }

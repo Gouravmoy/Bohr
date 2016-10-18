@@ -28,6 +28,9 @@ public class SortTableTask extends Task {
 		try {
 			getPriorityOneTables();
 			callPriorityTwoSorting();
+			System.out.println("-----------------------------------------------------------------------------");
+			System.out.println(validatedTabledetails);
+			System.out.println("-----------------------------------------------------------------------------");
 		} catch (BuildException buildException) {
 			throw new BuildException(buildException.getMessage());
 		}

@@ -31,6 +31,10 @@ public class GenerateDataJob extends Job {
 		tabledetails.addAll(schemadetail.getTabledetails());
 		SortTableTask sortTableTask = new SortTableTask(tabledetails);
 		sortTableTask.execute();
+		List<Tabledetail> tabledetails1 = new ArrayList<>();
+		tabledetails.addAll(schemadetail.getTabledetails());
+		SortTableTask sortTableTask1 = new SortTableTask(tabledetails1);
+		sortTableTask1.execute();
 		GenerateTableDataTask generateTableDataTask = new GenerateTableDataTask(
 				sortTableTask.getTabledetailListSorted());
 		generateTableDataTask.execute();
