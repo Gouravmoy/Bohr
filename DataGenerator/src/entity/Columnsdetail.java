@@ -33,7 +33,7 @@ public class Columnsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private int idcolumnsdetails;
 
 	@Column(length = 45)

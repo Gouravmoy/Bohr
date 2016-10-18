@@ -24,7 +24,7 @@ import entity.Projectdetails;
 import entity.Schemadetail;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
-import job.GenerateDataJob;
+import jobs.tasks.RefrehTreeTask;
 import service.SchemaService;
 import service.impl.SchemaServiceImpl;
 
@@ -97,7 +97,7 @@ public class NewProjectDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		GenerateDataJob generateDataJob = new GenerateDataJob("My Job");
+		// GenerateDataJob generateDataJob = new GenerateDataJob("My Job");
 		Projectdetails projectdetails = new Projectdetails();
 		projectdetails.setProjectName(text.getText());
 		projectdetails.setSchemadetail((Schemadetail) schemaCombo.getData(schemaCombo.getText()));
@@ -106,8 +106,10 @@ public class NewProjectDialog extends Dialog {
 		} catch (PersistException e) {
 			e.printStackTrace();
 		}
-		generateDataJob.setProjectdetails(projectdetails);
-		generateDataJob.schedule();
+		RefrehTreeTask refrehTreeTask = new RefrehTreeTask();
+		refrehTreeTask.execute();
+		// generateDataJob.setProjectdetails(projectdetails);
+		// generateDataJob.schedule();
 		super.okPressed();
 	}
 

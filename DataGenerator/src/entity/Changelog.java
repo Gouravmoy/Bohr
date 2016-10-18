@@ -25,7 +25,7 @@ public class Changelog implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private int idchangelog;
 
 	@Column(length = 500)

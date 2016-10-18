@@ -15,7 +15,7 @@ public class Constraintsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private int idconstraintsdetails;
 
 	@Column(length = 200)

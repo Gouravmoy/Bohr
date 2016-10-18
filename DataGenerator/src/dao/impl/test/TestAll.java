@@ -31,7 +31,7 @@ public class TestAll {
 	 */
 
 	public static void main(String[] args) {
-		Master.INSTANCE.setEnvironment(Environment.STAGING);
+		Master.INSTANCE.setEnvironment(Environment.TEST);
 		JUnitCore.runClasses(new Class[] { TestAll.class });
 	}
 }

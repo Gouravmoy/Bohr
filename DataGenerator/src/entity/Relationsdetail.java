@@ -17,7 +17,7 @@ public class Relationsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column( nullable = false)
 	private int idrelations;
 
 	@Column(length = 200)

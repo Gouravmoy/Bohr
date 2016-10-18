@@ -28,7 +28,7 @@ public class Tabledetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private int idtabledetails;
 
 	@Column(length = 100)
