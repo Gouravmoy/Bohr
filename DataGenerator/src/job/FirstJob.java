@@ -64,9 +64,9 @@ public class FirstJob extends Job {
 					columnsDao.updateBatch(columnsdetailList);
 					List<Constraintsdetail> constraintsdetailList = constraintTask.getConstraintsdetails();
 					constraintsDao.saveListOfConstraint(constraintsdetailList);
-					refrehTreeTask = new RefrehTreeTask();
-					refrehTreeTask.execute();
 				}
+				refrehTreeTask = new RefrehTreeTask();
+				refrehTreeTask.execute();
 			} catch (PersistException e) {
 				e.printStackTrace();
 			}

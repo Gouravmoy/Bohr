@@ -71,4 +71,14 @@ public class PatternDAOImpl extends GenericDAOImpl<Patterndetail, Integer> imple
 
 	}
 
+	@Override
+	public List<Patterndetail> getSchemaByQyery(String query, Object[] pars) {
+		try {
+			return getByQuery(query, pars, Patterndetail.class);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

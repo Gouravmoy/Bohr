@@ -2,8 +2,8 @@
 package datagenerator.parts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -99,9 +99,9 @@ public class DisplayTableValuesPart {
 	}
 
 	protected static void registerConfigLabelsOnColumns(ColumnOverrideLabelAccumulator columnLabelAccumulator,
-			Set<Columnsdetail> set) {
+			List<Columnsdetail> list) {
 		int i = 0;
-		for (Columnsdetail columnsdetail : set) {
+		for (Columnsdetail columnsdetail : list) {
 			if (columnsdetail.getConstraintsdetails1().size() == 0) {
 				columnLabelAccumulator.registerColumnOverrides(i++, EDITABLE_LABEL, SECURITY_ID_EDITOR,
 						SECURITY_ID_CONFIG_LABEL);
@@ -113,13 +113,13 @@ public class DisplayTableValuesPart {
 
 	public static AbstractRegistryConfiguration editableGridConfiguration(
 			final ColumnOverrideLabelAccumulator columnLabelAccumulator, final IDataProvider dataProvider,
-			Set<Columnsdetail> set) {
+			List<Columnsdetail> list) {
 
 		return new AbstractRegistryConfiguration() {
 
 			@Override
 			public void configureRegistry(IConfigRegistry configRegistry) {
-				DisplayTableValuesPart.registerConfigLabelsOnColumns(columnLabelAccumulator, set);
+				DisplayTableValuesPart.registerConfigLabelsOnColumns(columnLabelAccumulator, list);
 				registerISINValidator(configRegistry);
 				registerEditableRules(configRegistry, dataProvider);
 			}

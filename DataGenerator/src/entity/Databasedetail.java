@@ -32,7 +32,7 @@ public class Databasedetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private int iddatabase;
 
 	@Column(length = 200, unique = true)

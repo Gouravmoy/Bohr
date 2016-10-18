@@ -19,4 +19,6 @@ public interface RealationsDao {
 
 	public Relationsdetail update(Relationsdetail relationsdetail) throws EntityNotPresent;
 
+	public List<Relationsdetail> getSchemaByQyery(String query, Object[] pars);
+
 }

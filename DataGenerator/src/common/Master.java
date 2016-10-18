@@ -12,6 +12,15 @@ public enum Master {
 
 	private List<GeneratedTableData> generatedTableData;
 	private GeneratedTableData currentGeneratedData;
+	public boolean clearAll;
+
+	public boolean isClearAll() {
+		return clearAll;
+	}
+
+	public void setClearAll(boolean clearAll) {
+		this.clearAll = clearAll;
+	}
 
 	public Environment getEnvironment() {
 		return environment;

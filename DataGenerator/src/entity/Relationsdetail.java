@@ -17,7 +17,7 @@ public class Relationsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@Column( nullable = false)
 	private int idrelations;
 
 	@Column(length = 200)
@@ -28,13 +28,37 @@ public class Relationsdetail implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name = "columnId",nullable=false)
+	@JoinColumn(name = "columnId", nullable = false)
 	private Columnsdetail columnsdetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
 	@JoinColumn(name = "tableid")
 	private Tabledetail tabledetail;
+
+	@ManyToOne
+	@JoinColumn(name = "idproject")
+	private Projectdetails projectdetail;
+
+	@ManyToOne
+	@JoinColumn(name = "relatedcolumnId")
+	private Columnsdetail relatedColumndetail;
+
+	public Columnsdetail getRelatedColumndetail() {
+		return relatedColumndetail;
+	}
+
+	public void setRelatedColumndetail(Columnsdetail relatedColumndetail) {
+		this.relatedColumndetail = relatedColumndetail;
+	}
+
+	public Projectdetails getProjectdetail() {
+		return projectdetail;
+	}
+
+	public void setProjectdetail(Projectdetails projectdetail) {
+		this.projectdetail = projectdetail;
+	}
 
 	public Relationsdetail() {
 	}
@@ -81,8 +105,8 @@ public class Relationsdetail implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Relationsdetail [idrelations=" + idrelations + ", description=" + description + ", type=" + type
-				+ ", columnsdetail=" + columnsdetail + ", tabledetail=" + tabledetail + "]";
+		return columnsdetail.getTabledetail().getTableName().toUpperCase() + "."
+				+ columnsdetail.getName().toUpperCase();
 	}
 
 }
