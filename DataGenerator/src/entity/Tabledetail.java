@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class Tabledetail implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
-	private Set<Columnsdetail> columnsdetails;
+	private List<Columnsdetail> columnsdetails;
 
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
@@ -95,11 +96,11 @@ public class Tabledetail implements Serializable {
 		return changelog;
 	}
 
-	public Set<Columnsdetail> getColumnsdetails() {
+	public List<Columnsdetail> getColumnsdetails() {
 		return this.columnsdetails;
 	}
 
-	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
+	public void setColumnsdetails(List<Columnsdetail> columnsdetails) {
 		this.columnsdetails = columnsdetails;
 	}
 

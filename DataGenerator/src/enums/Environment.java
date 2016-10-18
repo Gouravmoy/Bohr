@@ -1,5 +1,6 @@
 package enums;
 
 public enum Environment {
-	TEST, STAGING, PROD,
+	TEST, STAGING, PROD;
+
 }

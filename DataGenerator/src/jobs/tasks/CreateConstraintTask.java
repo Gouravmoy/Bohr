@@ -48,6 +48,7 @@ public class CreateConstraintTask extends Task {
 			Constraintsdetail constraintsdetail;
 			boolean isUnique = false;
 			while (resultSet.next()) {
+				isUnique = false;
 				constraintsdetail = new Constraintsdetail();
 				String colName = resultSet.getString("COLUMN_NAME");
 				String constaintName = resultSet.getString("CONSTRAINT_NAME");
