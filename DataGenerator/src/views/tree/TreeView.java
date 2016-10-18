@@ -161,6 +161,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			category.add(relationsNodes);
 			category.add(patternsNodes);
 			projectsTreeTop.add(category);
+			refreshProjectTree();
 		}
 
 	}
@@ -245,7 +246,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		Patterndetail patterndetail = null;
 		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
 				projectId);
-		
+
 		if (columnsdetail.getPatterndetail() != null
 				&& columnsdetail.getPatterndetail().getProjectdetail().getIdproject() == projectId) {
 			patterndetail = columnsdetail.getPatterndetail();
@@ -303,5 +304,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultTreeModel model = (DefaultTreeModel) databaseTree.getModel();
 		model.reload(repoTreeTop);
 		JTreeUtil.colapse(databaseTree);
+	}
+
+	private static void refreshProjectTree() {
+		DefaultTreeModel model = (DefaultTreeModel) projectsTree.getModel();
+		model.reload(projectsTreeTop);
+		JTreeUtil.colapse(projectsTree);
 	}
 }

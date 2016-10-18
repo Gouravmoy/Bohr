@@ -52,6 +52,7 @@ public class CreateConstraintTask extends Task {
 			boolean isUnique = false;
 			int schemaId = columnsdetailList.get(0).getTabledetail().getSchemadetail().getIdschema();
 			while (resultSet.next()) {
+				isUnique = false;
 				constraintsdetail = new Constraintsdetail();
 				String colName = resultSet.getString("COLUMN_NAME");
 				String constaintName = resultSet.getString("CONSTRAINT_NAME");
