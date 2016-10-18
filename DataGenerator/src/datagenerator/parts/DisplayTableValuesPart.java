@@ -139,7 +139,7 @@ public class DisplayTableValuesPart {
 				textCellEditor.setErrorDecorationEnabled(true);
 				textCellEditor.setErrorDecorationText(
 						"Security Id must be 3 alpha characters optionally followed by numbers");
-				textCellEditor.setDecorationPositionOverride(SWT.CENTER | SWT.TOP);
+				textCellEditor.setDecorationPositionOverride(SWT.TOP | SWT.CENTER);
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, textCellEditor,
 						DisplayMode.NORMAL, SECURITY_ID_EDITOR);
 				configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR, getSecurtityIdValidator(),
