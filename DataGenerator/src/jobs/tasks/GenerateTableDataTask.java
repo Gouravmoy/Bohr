@@ -16,6 +16,7 @@ import entity.GeneratedTableData;
 import entity.KeysData;
 import entity.Tabledetail;
 import enums.KeyType;
+import exceptions.CannotFindParentException;
 
 public class GenerateTableDataTask extends Task {
 	List<Tabledetail> tabledetailListSorted = new ArrayList<>();
@@ -44,6 +45,7 @@ public class GenerateTableDataTask extends Task {
 	@Override
 	public void execute() throws BuildException {
 		createInsertScripts(tabledetailListSorted, 5);
+
 	}
 
 	public static List<GeneratedTableData> createInsertScripts(List<Tabledetail> sortedTableList, int noOfRows) {
@@ -80,7 +82,16 @@ public class GenerateTableDataTask extends Task {
 					String compositeKey = "";
 					boolean matched = false;
 					for (Columnsdetail compositeCol : uniqueCols) {
-						generatedValue = getForeignKeyValue(compositeCol, tableDatas);
+						if (tabledetail.getTableName().equals("store")) {
+							System.out.println("Here");
+						}
+						try {
+							generatedValue = getForeignKeyValue(compositeCol, tableDatas);
+						} catch (CannotFindParentException e) {
+							System.out.println(e.getMessage());
+							generatedValue = null;
+						}
+
 						compositeKey += compositeCol.getName() + ":" + generatedValue + ",";
 						keysData = checkKeyData(keyDataList, compositeCol, KeyType.UK_FK);
 						if (keysData.getValues() == null)
@@ -110,7 +121,12 @@ public class GenerateTableDataTask extends Task {
 						storeForeignKey = false;
 					} else if (column.getKeytype() == KeyType.FK) {
 						generateRandom = false;
-						generatedValue = getForeignKeyValue(column, tableDatas);
+						try {
+							generatedValue = getForeignKeyValue(column, tableDatas);
+						} catch (CannotFindParentException e) {
+							System.out.println(e.getMessage());
+							generatedValue = null;
+						}
 						keysData = checkKeyData(keyDataList, column, KeyType.FK);
 						storeForeignKey = true;
 						storePrimaryKey = false;
@@ -209,11 +225,21 @@ public class GenerateTableDataTask extends Task {
 		return keysData;
 	}
 
-	private static String getForeignKeyValue(Columnsdetail column, List<GeneratedTableData> tableDatas) {
+	private static String getForeignKeyValue(Columnsdetail column, List<GeneratedTableData> tableDatas)
+			throws CannotFindParentException {
 		for (Constraintsdetail constraint : column.getConstraintsdetails1()) {
-			if (constraint.getConstraintname().equals("PRIMARY"))
+			if (constraint.getConstraintname().equals("idx_unique_manager")) {
+				System.out.println("Here");
+			}
+			if (constraint.getConstraintname().equals("PRIMARY") || constraint.getReferenceTable() == null)
 				continue;
-			String refTableName = constraint.getReferenceTable().getTableName();
+
+			String refTableName = null;
+			try {
+				refTableName = constraint.getReferenceTable().getTableName();
+			} catch (Exception err) {
+				err.printStackTrace();
+			}
 			String refColumnName = constraint.getReferenceColumnName();
 			Random random = new Random();
 			for (GeneratedTableData tableData : tableDatas) {
@@ -225,6 +251,10 @@ public class GenerateTableDataTask extends Task {
 					}
 				}
 			}
+
+			throw new CannotFindParentException("Error in load order.. cannot find parent table for constraint "
+					+ constraint.getColumnsdetail1().getName() + "." + constraint.getConstraintname());
+
 		}
 		return null;
 	}
@@ -293,7 +323,12 @@ public class GenerateTableDataTask extends Task {
 				break;
 			case ENUM:
 				try {
-					String[] enums = column.getEnumvalues().split(",");
+					String[] enums = null;
+					try {
+						enums = column.getEnumvalues().split(",");
+					} catch (Exception err) {
+						err.printStackTrace();
+					}
 					int index = r.nextInt(enums.length);
 					builder.append("\'");
 					builder.append("" + enums[index]);

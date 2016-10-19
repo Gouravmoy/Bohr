@@ -38,8 +38,8 @@ public class GenerateDataJob extends Job {
 		GenerateTableDataTask generateTableDataTask = new GenerateTableDataTask(
 				sortTableTask.getTabledetailListSorted());
 		generateTableDataTask.execute();
-		GenerateScriptsTask generateScriptsTask = new GenerateScriptsTask("C:\\Users\\M1026352\\Desktop\\DataGn",
-				GenerateTableDataTask.tableDatas);
+		GenerateScriptsTask generateScriptsTask = new GenerateScriptsTask(
+				"C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG", GenerateTableDataTask.tableDatas);
 		generateScriptsTask.execute();
 		AddPartTask deleteTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		deleteTask.execute();
