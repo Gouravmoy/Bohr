@@ -78,6 +78,11 @@ public class CreateColumnTask extends Task {
 						columnsdetail.setLength(Integer.valueOf(resultSet.getString("MAX_LENGTH")));
 					}
 					columnsdetail.setType(getColType(resultSet.getString("DATA_TYPE")));
+					if(columnsdetail.getType()==ColumnType.ENUM){
+						String[] colTypeSplit = resultSet.getString("DATA_TYPE").split("\\(");
+						colTypeSplit[1] = colTypeSplit[1].replace(")", "");
+						columnsdetail.setEnumvalues(colTypeSplit[1]);
+					}
 					columnsdetails.add(columnsdetail);
 				} catch (NumberFormatException exception) {
 					System.out.println("Leave this");
