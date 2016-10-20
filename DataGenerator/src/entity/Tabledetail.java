@@ -16,6 +16,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 /**
  * The persistent class for the tabledetails database table.
  * 
@@ -39,6 +42,7 @@ public class Tabledetail implements Serializable {
 	private Set<Changelog> changelogs;
 
 	// bi-directional many-to-one association to Columnsdetail
+	@Fetch (FetchMode.SELECT) 
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
 	private List<Columnsdetail> columnsdetails;
 

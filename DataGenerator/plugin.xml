@@ -6,15 +6,15 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            name="datagenerator"
+            name="DataGenerator"
             application="org.eclipse.e4.ui.workbench.swt.E4Application">
          <property
                name="lifeCycleURI"
                value="bundleclass://DataGenerator/datagenerator.E4LifeCycle">
          </property>
          <property
-               name="applicationCSS"
-               value="platform:/plugin/DataGenerator/css/default.css">
+               name="appName"
+               value="DataGenerator">
          </property>
       </product>
    </extension>
