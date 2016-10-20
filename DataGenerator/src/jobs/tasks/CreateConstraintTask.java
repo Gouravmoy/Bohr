@@ -52,21 +52,24 @@ public class CreateConstraintTask extends Task {
 			boolean isUnique = false;
 			int schemaId = columnsdetailList.get(0).getTabledetail().getSchemadetail().getIdschema();
 			while (resultSet.next()) {
+				Tabledetail referenceTabledetail = null;
 				isUnique = false;
 				constraintsdetail = new Constraintsdetail();
 				String colName = resultSet.getString("COLUMN_NAME");
 				String constaintName = resultSet.getString("CONSTRAINT_NAME");
 				String refTable = resultSet.getString("REFERENCED_TABLE_NAME");
 				String refColName = resultSet.getString("REFERENCED_COLUMN_NAME");
+				if(colName.equals("manager_staff_id")){
+					System.out.println("Here");
+				}
 				constraintsdetail.setConstraintname(resultSet.getString("CONSTRAINT_NAME"));
 				constraintsdetail.setReferenceColumnName(resultSet.getString("REFERENCED_COLUMN_NAME"));
 				if (resultSet.getString("REFERENCED_TABLE_NAME") != null) {
 					try {
-						Tabledetail tabledetail = tableDao
+						referenceTabledetail = tableDao
 								.getTableByNameAndSchema(resultSet.getString("REFERENCED_TABLE_NAME"), schemaId);
-						constraintsdetail.setReferenceTable(tabledetail);
+						constraintsdetail.setReferenceTable(referenceTabledetail);
 					} catch (ReadEntityException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -96,6 +99,7 @@ public class CreateConstraintTask extends Task {
 				for (Columnsdetail columnsdetail : columnsdetailList) {
 					if (columnsdetail.getName().equalsIgnoreCase(colName)) {
 						constraintsdetail.setColumnsdetail1(columnsdetail);
+						//constraintsdetail.setReferenceTable(tabledetail);
 						break;
 					}
 				}
