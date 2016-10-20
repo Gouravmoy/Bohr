@@ -5,7 +5,6 @@ import java.util.List;
 
 import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
-import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Schemadetail;

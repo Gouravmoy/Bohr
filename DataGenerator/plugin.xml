@@ -6,7 +6,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            name="datagenerator"
+            name="DataGenerator"
             application="org.eclipse.e4.ui.workbench.swt.E4Application">
          <property
                name="lifeCycleURI"
@@ -15,6 +15,10 @@
          <property
                name="applicationCSS"
                value="platform:/plugin/DataGenerator/css/default.css">
+         </property>
+         <property
+               name="appName"
+               value="DataGenerator">
          </property>
       </product>
    </extension>
@@ -35,6 +39,12 @@
             id="datagenerator.parts.DisplayTableViewParyt"
             name="New ViewPart">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+   </extension>
+   <extension
+         point="org.eclipse.ui.themes">
    </extension>
 
 </plugin>

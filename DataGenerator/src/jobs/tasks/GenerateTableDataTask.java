@@ -27,20 +27,6 @@ public class GenerateTableDataTask extends Task {
 		GenerateTableDataTask.tableDatas = new ArrayList<>();
 	}
 
-	/*
-	 * public static void main(String args[]) {
-	 * Master.INSTANCE.setEnvironment(Environment.STAGING); SchemaDao schemaDao
-	 * = new SchemaDaoImpl(); try { List<Schemadetail> schemadetails =
-	 * schemaDao.getAllSchemainDB(); for (Schemadetail schemadetail :
-	 * schemadetails) { if(schemadetail.getName().equals("nagios")){
-	 * List<Tabledetail> tabledetails = new ArrayList<>();
-	 * tabledetails.addAll(schemadetail.getTabledetails()); SortTableTask
-	 * sortTableTask = new SortTableTask(tabledetails);
-	 * sortTableTask.executeSort();
-	 * executeGenerate(sortTableTask.getTabledetailListSorted()); } } } catch
-	 * (ReadEntityException e) { e.printStackTrace(); } }
-	 */
-
 	@Override
 	public void execute() throws BuildException {
 		createInsertScripts(tabledetailListSorted, 5);
@@ -60,6 +46,7 @@ public class GenerateTableDataTask extends Task {
 		boolean generateRandom = true;
 		int tableOrder = 0;
 		for (Tabledetail tabledetail : sortedTableList) {
+			System.out.println(tabledetail.getTableName());
 			rowDataList = new ArrayList<>();
 			keyDataList = new ArrayList<>();
 			keysData = null;
@@ -76,7 +63,6 @@ public class GenerateTableDataTask extends Task {
 				rowBuilder = new StringBuilder();
 				// generateCompositeKeyCombination()
 				while (!uniqueCols.isEmpty()) {
-					System.out.println("in loop");
 					String compositeKey = "";
 					boolean matched = false;
 					for (Columnsdetail compositeCol : uniqueCols) {
@@ -213,7 +199,12 @@ public class GenerateTableDataTask extends Task {
 		for (Constraintsdetail constraint : column.getConstraintsdetails1()) {
 			if (constraint.getConstraintname().equals("PRIMARY"))
 				continue;
-			String refTableName = constraint.getReferenceTable().getTableName();
+			String refTableName = null;
+			try {
+				refTableName = constraint.getReferenceTable().getTableName();
+			} catch (NullPointerException refTableName1) {
+				System.out.println();
+			}
 			String refColumnName = constraint.getReferenceColumnName();
 			Random random = new Random();
 			for (GeneratedTableData tableData : tableDatas) {
