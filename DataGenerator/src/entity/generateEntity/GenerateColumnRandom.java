@@ -28,11 +28,13 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 			int newLineStartNumber = 0;
 			currentLineNumber = getLastLineNo();
 			newLineStartNumber = currentLineNumber + 1;
-			if (newLineStartNumber % 5 == 0) {
-				writer.write("");
+			if (newLineStartNumber == 1) {
+				writer.write(generateRandomValue() + "\n");
+			} else if (newLineStartNumber % 5 == 0 && isNullable) {
+				writer.write("" + "\n");
 			} else {
 				if (!generateAllUnique)
-					writer.write(generateRandomValue());
+					writer.write(generateRandomValue() + "\n");
 				else {
 					generateRandomUnique(writer, reader, randomValue);
 				}
@@ -50,23 +52,41 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 			throws IOException {
 		String line;
 		boolean matched;
+		boolean willRepeat = true;
 		matched = false;
-		while (!matched) {
+		int generateTry = 0;
+		while (willRepeat) {
+			matched = false;
+			reader = new BufferedReader(new FileReader(new File(filePath)));
+			if (generateTry++ > 500) {
+				System.out.println("500 attempts exceeded");
+				break;
+			}
 			randomValue = generateRandomValue();
 			while ((line = reader.readLine()) != null) {
 				line = line.replace(",", "");
-				if (randomValue.equals(line))
+				if (randomValue.equals(line)) {
 					matched = true;
+					break;
+				}
+			}
+			if (matched) {
+				willRepeat = true;
+			} else {
+				willRepeat = false;
 			}
 		}
-		writer.write(randomValue);
+		reader.close();
+		System.out.println(generateTry);
+		if (!(generateTry > 500))
+			writer.write(randomValue + "\n");
 	}
 
 	private int getLastLineNo() throws FileNotFoundException, IOException {
 		int currentLineNumber;
-		LineNumberReader lnr = new LineNumberReader(new FileReader(new File("File1")));
+		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(filePath)));
 		lnr.skip(Long.MAX_VALUE);
-		currentLineNumber = lnr.getLineNumber() + 1;
+		currentLineNumber = lnr.getLineNumber();
 		lnr.close();
 		return currentLineNumber;
 	}
@@ -98,14 +118,9 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 				builder.append("\"");
 				break;
 			case INTEGER:
-				if (!usePreviousKey) {
-					builder.append("" + (r.nextInt(((2 ^ 31) - 0) + 1) + 0) + 1);
-				} else {
-					// String previousKey =
-					// keysData.getValues().get(keysData.getValues().size() -
-					// 1);
-					// builder.append("" + (Integer.parseInt(previousKey) + 1));
-				}
+				int minimum = 1;
+				int maximum = (int) Math.pow(2, 31);
+				builder.append("" + minimum + (int) (Math.random() * maximum));
 				break;
 			case FLOAT:
 				float minX = 50.0f;
@@ -116,14 +131,7 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 				}
 				break;
 			case TINYINT:
-				if (!usePreviousKey) {
-					builder.append("" + r.nextInt(128));
-				} else {
-					// String previousKey =
-					// keysData.getValues().get(keysData.getValues().size() -
-					// 1);
-					// builder.append("" + (Integer.parseInt(previousKey) + 1));
-				}
+				builder.append("" + r.nextInt(128));
 				break;
 			case DATE:
 				String startDate = "2013-02-08 00:00:00";
@@ -140,8 +148,8 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 				builder.append("\"");
 				break;
 			case YEAR:
-				String startDate1 = "2013-02-08 00:00:00";
-				String endDate1 = "2016-02-08 00:58:00";
+				String startDate1 = "1900-02-08 00:00:00";
+				String endDate1 = "2100-02-08 00:58:00";
 				String finalDateFormat1 = "yyyy";
 				long rangebegin1 = Timestamp.valueOf(startDate1).getTime();
 				long rangeend1 = Timestamp.valueOf(endDate1).getTime();

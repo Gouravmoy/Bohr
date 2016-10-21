@@ -12,11 +12,11 @@ import org.apache.tools.ant.Task;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Tabledetail;
+import entity.generateEntity.GenerateColumnPreDefined;
 import entity.generateEntity.GenerateColumnPrimaryKey;
 import entity.generateEntity.GenerateColumnRandom;
 import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedColumnEnum;
-import entity.generateEntity.GeneratedColumnPredefined;
 import entity.generateEntity.GeneratedTable;
 import enums.ColumnType;
 
@@ -81,10 +81,10 @@ public class GenerateTableDataTask_1 extends Task {
 	}
 
 	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail) {
-		GeneratedColumnPredefined generatedColumn = new GeneratedColumnPredefined();
+		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
-		generatedColumn.setPredefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
+		generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumnList.add(generatedColumn);
 	}
