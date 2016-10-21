@@ -84,7 +84,7 @@ public class GenerateTableDataTask_1 extends Task {
 		GeneratedColumnPredefined generatedColumn = new GeneratedColumnPredefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
-		generatedColumn.setPredefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+		generatedColumn.setPredefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumnList.add(generatedColumn);
 	}
@@ -95,7 +95,7 @@ public class GenerateTableDataTask_1 extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColLength(columnsdetail.getLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		generatedColumn.setUnique(true);
+		generatedColumn.setGenerateAllUnique(true);
 		generatedColumnList.add(generatedColumn);
 	}
 
@@ -141,6 +141,7 @@ public class GenerateTableDataTask_1 extends Task {
 		if (columnsdetail.getIsnullable() == 1) {
 			generatedColumn.setNullable(true);
 		}
+		generatedColumn.setGenerateAllUnique(false);
 		generatedColumnList.add(generatedColumn);
 	}
 

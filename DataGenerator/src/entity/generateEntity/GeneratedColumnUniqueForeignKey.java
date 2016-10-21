@@ -1,8 +1,6 @@
 package entity.generateEntity;
 
-import entity.Interface.GenerateColumnInterface;
-
-public class GeneratedColumnUniqueForeignKey implements GenerateColumnInterface {
+public class GeneratedColumnUniqueForeignKey extends GeneratedColumn {
 	public void generateColumn() {
 
 	}
