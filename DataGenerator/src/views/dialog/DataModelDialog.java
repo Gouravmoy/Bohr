@@ -24,14 +24,18 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import dao.DataSampleDao;
 import dao.DatabaseDao;
+import dao.impl.DataSampleDaoImpl;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
 import enums.SampleType;
+import exceptions.PersistException;
 import exceptions.ReadEntityException;
 import jobs.tasks.ConnectonCreateTask;
 import jobs.tasks.QueryExecuteTask;
+import jobs.tasks.RefrehTreeTask;
 
 public class DataModelDialog extends Dialog {
 	private Text text;
@@ -46,6 +50,7 @@ public class DataModelDialog extends Dialog {
 	String[] titles = { "Sl No", "Model Values" };
 
 	DatabaseDao databaseDao = new DatabaseDAOImpl();
+	DataSampleDao dataSampleDao = new DataSampleDaoImpl();
 
 	public DataModelDialog(Shell parentShell) {
 		super(parentShell);
@@ -182,7 +187,7 @@ public class DataModelDialog extends Dialog {
 				databaseList.add(databasedetail.getConnectionName());
 			}
 		} catch (ReadEntityException e1) {
-			showError("Error in fetching Database List" + e1.getMessage(), parent);
+			showError("Error in fetching Database List" + e1.getMessage(), getShell());
 		}
 		return parent;
 
@@ -191,7 +196,23 @@ public class DataModelDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
-		//datasamplemodel.set
+		RefrehTreeTask refrehTreeTask;
+		datasamplemodel.setSampleModelName(text.getText());
+		StringBuilder sb = new StringBuilder();
+		for (String modelValue : modelValues) {
+			sb.append(modelValue + ",");
+		}
+		datasamplemodel.setSampelValues(sb.toString());
+		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
+		try {
+			dataSampleDao.saveDatasamplemodel(datasamplemodel);
+		} catch (PersistException e) {
+			// showError("Unable to Save", parent);
+			e.printStackTrace();
+		}
+		refrehTreeTask = new RefrehTreeTask();
+		refrehTreeTask.execute();
+		super.okPressed();
 	}
 
 	@Override

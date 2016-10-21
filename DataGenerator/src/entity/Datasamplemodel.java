@@ -31,11 +31,14 @@ public class Datasamplemodel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column( nullable = false)
+	@Column(nullable = false)
 	private int iddatasamplemodel;
 
+	@Column(length = 200)
+	private String sampleModelName;
+
 	@Column(length = 30000)
-	private String datasamplemodelcol;
+	private String sampelValues;
 
 	@Enumerated(EnumType.STRING)
 	private SampleType sampletype;
@@ -46,17 +49,17 @@ public class Datasamplemodel implements Serializable {
 
 	// bi-directional many-to-one association to Columnsdetail
 	@ManyToOne
-	@JoinColumn(name = "coulmnid", nullable = false)
+	@JoinColumn(name = "coulmnid", nullable = true)
 	private Columnsdetail columnsdetail;
 
 	// bi-directional many-to-one association to Schemadetail
 	@ManyToOne
-	@JoinColumn(name = "schemaid", nullable = false)
+	@JoinColumn(name = "schemaid", nullable = true)
 	private Schemadetail schemadetail;
 
 	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
-	@JoinColumn(name = "tableid", nullable = false)
+	@JoinColumn(name = "tableid", nullable = true)
 	private Tabledetail tabledetail;
 
 	public Datasamplemodel() {
@@ -68,14 +71,6 @@ public class Datasamplemodel implements Serializable {
 
 	public void setIddatasamplemodel(int iddatasamplemodel) {
 		this.iddatasamplemodel = iddatasamplemodel;
-	}
-
-	public String getDatasamplemodelcol() {
-		return this.datasamplemodelcol;
-	}
-
-	public void setDatasamplemodelcol(String datasamplemodelcol) {
-		this.datasamplemodelcol = datasamplemodelcol;
 	}
 
 	public SampleType getSampletype() {
@@ -132,9 +127,25 @@ public class Datasamplemodel implements Serializable {
 		this.tabledetail = tabledetail;
 	}
 
+	public String getSampleModelName() {
+		return sampleModelName;
+	}
+
+	public void setSampleModelName(String sampleModelName) {
+		this.sampleModelName = sampleModelName;
+	}
+
+	public String getSampelValues() {
+		return sampelValues;
+	}
+
+	public void setSampelValues(String sampelValues) {
+		this.sampelValues = sampelValues;
+	}
+
 	@Override
 	public String toString() {
-		return datasamplemodelcol;
+		return sampleModelName;
 	}
 
 }
