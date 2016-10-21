@@ -3,9 +3,9 @@ package entity.generateEntity;
 import entity.Interface.GenerateColumnInterface;
 import enums.ColumnType;
 
-abstract class GeneratedColumn implements GenerateColumnInterface {
+public abstract class GeneratedColumn implements GenerateColumnInterface {
 	String colName;
-	long cilLength;
+	long colLength;
 	ColumnType columnType;
 	String filePath;
 
@@ -17,12 +17,12 @@ abstract class GeneratedColumn implements GenerateColumnInterface {
 		this.colName = colName;
 	}
 
-	public long getCilLength() {
-		return cilLength;
+	public long getColLength() {
+		return colLength;
 	}
 
-	public void setCilLength(long cilLength) {
-		this.cilLength = cilLength;
+	public void setColLength(long cilLength) {
+		this.colLength = cilLength;
 	}
 
 	public ColumnType getColumnType() {
@@ -39,6 +39,12 @@ abstract class GeneratedColumn implements GenerateColumnInterface {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	@Override
+	public String toString() {
+		return "GeneratedColumn [colName=" + colName + ", colLength=" + colLength + ", columnType=" + columnType
+				+ ", filePath=" + filePath + "]";
 	}
 
 }
