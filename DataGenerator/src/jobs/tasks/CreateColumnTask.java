@@ -79,7 +79,7 @@ public class CreateColumnTask extends Task {
 					}
 					columnsdetail.setType(getColType(resultSet.getString("DATA_TYPE")));
 					if(columnsdetail.getType()==ColumnType.ENUM){
-						String[] colTypeSplit = resultSet.getString("DATA_TYPE").split("\\(");
+						String[] colTypeSplit = resultSet.getString("COLUMN_TYPE").split("\\(");
 						colTypeSplit[1] = colTypeSplit[1].replace(")", "");
 						columnsdetail.setEnumvalues(colTypeSplit[1]);
 					}
