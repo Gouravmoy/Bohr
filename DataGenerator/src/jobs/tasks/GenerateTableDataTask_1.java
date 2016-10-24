@@ -12,13 +12,14 @@ import org.apache.tools.ant.Task;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Tabledetail;
+import entity.generateEntity.GenerateColumnPreDefined;
 import entity.generateEntity.GenerateColumnPrimaryKey;
 import entity.generateEntity.GenerateColumnRandom;
 import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedColumnEnum;
-import entity.generateEntity.GeneratedColumnPredefined;
 import entity.generateEntity.GeneratedTable;
 import enums.ColumnType;
+import enums.KeyType;
 
 public class GenerateTableDataTask_1 extends Task {
 	List<Tabledetail> sortedTableList;
@@ -52,25 +53,23 @@ public class GenerateTableDataTask_1 extends Task {
 				if (columnsdetail.getDatasamplemodel() != null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
 					continue;
-				}
-				if (columnsdetail.getConstraintsdetails1().size() == 0) {
-					if (columnsdetail.getType() == ColumnType.ENUM) {
-						generateEnumColumn(textFilePath, columnsdetail);
-						continue;
-					}
-					generateRandomColumn(textFilePath, columnsdetail);
 				} else {
-					for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
-						if (constraintsdetail.getConstraintname().equals("PRIMARY")) {
-							generatePrimaryKeyColumn(textFilePath, columnsdetail);
-							break;
-						} else if (constraintsdetail.getReferenceTable() != null) {
-							generatePrimaryColumnAsForeignKey(columnsdetail, constraintsdetail);
-							break;
-						} else if (constraintsdetail.getIsunique() == 1
-								&& constraintsdetail.getReferenceTable() != null) {
+					if (columnsdetail.getKeytype() == null) {
+						generateRandomColumn(textFilePath, columnsdetail);
+					} else {
+						if (columnsdetail.getType() == ColumnType.ENUM) {
+							generateEnumColumn(textFilePath, columnsdetail);
+							continue;
+						} else if (columnsdetail.getKeytype().equals(KeyType.UK)) {
 							generateRandomColumnWithUnique(textFilePath, columnsdetail);
-							break;
+						} else if (columnsdetail.getKeytype().equals(KeyType.PK)) {
+							generatePrimaryKeyColumn(textFilePath, columnsdetail);
+						} else if (columnsdetail.getKeytype().equals(KeyType.FK)) {
+							generatePrimaryColumnAsForeignKey(columnsdetail,
+									columnsdetail.getConstraintsdetails1().iterator().next());
+						} else if (columnsdetail.getKeytype().equals(KeyType.UK_FK)) {
+						} else {
+							generateRandomColumn(textFilePath, columnsdetail);
 						}
 					}
 				}
@@ -81,10 +80,10 @@ public class GenerateTableDataTask_1 extends Task {
 	}
 
 	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail) {
-		GeneratedColumnPredefined generatedColumn = new GeneratedColumnPredefined();
+		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
-		generatedColumn.setPredefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
+		generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumnList.add(generatedColumn);
 	}

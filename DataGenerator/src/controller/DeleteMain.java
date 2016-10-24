@@ -26,9 +26,15 @@ public class DeleteMain {
 			dataTask_1.execute();
 			for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
 				System.out.println(generatedTable.getTableName() + " : " + generatedTable.getTablePath());
+				if (generatedTable.getTableName().equalsIgnoreCase("store")
+						|| generatedTable.getTableName().equalsIgnoreCase("store")) {
+					System.out.println(generatedTable.getTableName() + " : " + generatedTable.getTablePath());
+				}
 				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-					System.out.println(column.getColName());
-					System.out.println(column.getFilePath());
+					System.out.println(column);
+					if (column.getFilePath() == null) {
+						System.out.println(column);
+					}
 				}
 			}
 		} catch (ReadEntityException e) {

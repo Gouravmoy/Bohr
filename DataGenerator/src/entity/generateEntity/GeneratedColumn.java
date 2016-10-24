@@ -13,6 +13,7 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	long colLength;
 	ColumnType columnType;
 	String filePath;
+	int numberOfRows=10;
 
 	@Override
 	public void writeToFile(String value) {
@@ -56,6 +57,14 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public int getNumberOfRows() {
+		return numberOfRows;
+	}
+
+	public void setNumberOfRows(int numberOfRows) {
+		this.numberOfRows = numberOfRows;
 	}
 
 	@Override
