@@ -26,10 +26,10 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 			String randomValue = "";
 			int currentLineNumber = 0;
 			int newLineStartNumber = 0;
-			currentLineNumber = getLastLineNo();
+			//currentLineNumber = getLastLineNo();
 			newLineStartNumber = currentLineNumber + 1;
 			if (newLineStartNumber % 5 == 0) {
-				writer.write("");
+				writer.write("1234");
 			} else {
 				if (!generateAllUnique)
 					writer.write(generateRandomValue());
