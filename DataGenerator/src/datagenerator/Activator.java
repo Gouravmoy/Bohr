@@ -25,6 +25,7 @@ public class Activator implements BundleActivator {
 		Activator.context = bundleContext;
 		Master.INSTANCE.setEnvironment(Environment.STAGING);
 		Master.INSTANCE.setClearAll(false);
+		MainController.loadPredefData();
 		MainController.getLogger(Activator.class);
 	}
 

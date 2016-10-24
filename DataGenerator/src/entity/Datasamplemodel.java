@@ -61,6 +61,10 @@ public class Datasamplemodel implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "tableid", nullable = true)
 	private Tabledetail tabledetail;
+	
+	@ManyToOne
+	@JoinColumn(name = "idproject", nullable = true)
+	private Projectdetails projectdetail;
 
 	public Datasamplemodel() {
 	}

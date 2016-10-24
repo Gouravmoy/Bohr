@@ -25,6 +25,7 @@
 		<mapping class="entity.Schemadetail" />
 		<mapping class="entity.Tabledetail" />
 		<mapping class="entity.Projectdetails" />
+		<mapping class="entity.PreDefinedModels" />
 	</session-factory>
 
 </hibernate-configuration>  

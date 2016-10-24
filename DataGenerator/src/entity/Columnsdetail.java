@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -79,6 +82,11 @@ public class Columnsdetail implements Serializable {
 	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
+
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@JoinTable(name = "column_predefinedmodels", joinColumns = {
+			@JoinColumn(name = "idcolumnsdetails") }, inverseJoinColumns = { @JoinColumn(name = "idpredefinedDS") })
+	private Set<PreDefinedModels> predefinedModels;
 
 	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
@@ -270,6 +278,14 @@ public class Columnsdetail implements Serializable {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public Set<PreDefinedModels> getPredefinedModels() {
+		return predefinedModels;
+	}
+
+	public void setPredefinedModels(Set<PreDefinedModels> predefinedModels) {
+		this.predefinedModels = predefinedModels;
 	}
 
 }
