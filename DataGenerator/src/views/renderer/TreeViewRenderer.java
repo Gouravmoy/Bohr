@@ -13,6 +13,7 @@ import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Patterndetail;
+import entity.PreDefinedModels;
 import entity.Relationsdetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
@@ -59,7 +60,7 @@ public class TreeViewRenderer extends DefaultTreeCellRenderer {
 				setIcon(constraintsIcon);
 			} else if (o.getClass().equals(Changelog.class)) {
 				setIcon(changeLogIcon);
-			} else if (o.getClass().equals(Datasamplemodel.class)) {
+			} else if (o.getClass().equals(Datasamplemodel.class) || o.getClass().equals(PreDefinedModels.class)) {
 				setIcon(dataSampleIcon);
 			} else if (o.getClass().equals(Relationsdetail.class)) {
 				setIcon(relationIcon);
