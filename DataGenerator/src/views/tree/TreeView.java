@@ -3,6 +3,8 @@ package views.tree;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +13,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -19,9 +23,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import ch.qos.logback.classic.Logger;
@@ -52,6 +58,8 @@ import service.RelationService;
 import service.impl.ModelServiceImpl;
 import service.impl.PatternServiceImpl;
 import service.impl.RelationServiceImpl;
+import views.dialog.RelationDialog;
+import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
 import views.renderer.TreeViewRenderer;
 import views.util.JTreeUtil;
@@ -93,6 +101,16 @@ public class TreeView extends DefaultTreeCellRenderer {
 	static PatternService patternService;
 	static ModelService modelService;
 
+	// Menu
+	static JPopupMenu popup = new JPopupMenu();
+
+	// Menu Items
+	JMenuItem refressAll;
+	JMenuItem edit;
+	JMenuItem createRelations;
+	JMenuItem createPatterns;
+	JMenuItem createDataModel;
+
 	// Logger
 	Logger logger = MainController.getLogger(TreeView.class);
 
@@ -119,6 +137,10 @@ public class TreeView extends DefaultTreeCellRenderer {
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		mainScrollPane = new JScrollPane();
 
+		assignMenuItems();
+		popup.add(createRelations);
+		//popup.add(createPatterns);
+		//popup.add(createDataModel);
 		initilizeTrees(frame);
 
 		try {
@@ -132,6 +154,39 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		mainScrollPane.setViewportView(panel_1);
 		panel.add(mainScrollPane);
+
+	}
+
+	private void assignMenuItems() {
+		createRelations = new JMenuItem("Create a Relation");
+		createRelations.setActionCommand("createRelation");
+		createRelations.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				System.out.println("Here");
+				Component selectedComponent = MousePopupListner.currentComponent;
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog dialog = new RelationDialog(composite.getShell(), (Columnsdetail) node.getUserObject());
+						dialog.open();
+					}
+				});
+
+			}
+		});
 
 	}
 
@@ -255,7 +310,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode modelCategory;
 		Datasamplemodel datasamplemodel = modelService
 				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
-		PreDefinedModels preDefinedModels =modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails());
+		PreDefinedModels preDefinedModels = modelService
+				.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails());
 		modelCategory = new DefaultMutableTreeNode("DATA MODELS");
 		if (datasamplemodel != null) {
 			modelCategory.add(new DefaultMutableTreeNode(datasamplemodel));
@@ -327,6 +383,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		projectsTree.setShowsRootHandles(true);
 		projectsTree.addTreeSelectionListener(new TreeSelectionListner(projectsTree));
 		projectsTree.setCellRenderer(renderer);
+		projectsTree.addMouseListener(new MousePopupListner(popup, panel_1));
 
 	}
 
