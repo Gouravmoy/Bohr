@@ -25,7 +25,7 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Temp";
+	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\DataGeneration";
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -41,6 +41,7 @@ public class GenerateColumnDataTask extends Task {
 		mainFolder.mkdir();
 		generatedTableData = new ArrayList<>();
 		String textFilePath;
+		boolean hasUKFK = false;
 		for (Tabledetail tabledetail : sortedTableList) {
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
@@ -69,6 +70,9 @@ public class GenerateColumnDataTask extends Task {
 							generatePrimaryColumnAsForeignKey(columnsdetail,
 									columnsdetail.getConstraintsdetails1().iterator().next());
 						} else if (columnsdetail.getKeytype().equals(KeyType.UK_FK)) {
+							hasUKFK = true;
+							generatePrimaryColumnAsForeignKey(columnsdetail,
+									columnsdetail.getConstraintsdetails1().iterator().next());
 						} else {
 							generateRandomColumn(textFilePath, columnsdetail);
 						}

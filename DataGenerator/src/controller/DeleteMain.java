@@ -21,7 +21,7 @@ public class DeleteMain {
 	public static void main(String[] args) {
 		SchemaDao dao = new SchemaDaoImpl();
 		try {
-			Master.INSTANCE.setEnvironment(Environment.TEST);
+			Master.INSTANCE.setEnvironment(Environment.STAGING);
 			Master.INSTANCE.setClearAll(false);
 			Schemadetail schemadetail = dao.getSchemaByid(1);
 			List<Tabledetail> tableList = new ArrayList<>(schemadetail.getTabledetails());
@@ -39,7 +39,6 @@ public class DeleteMain {
 				}
 			}
 		} catch (ReadEntityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -53,7 +53,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 			while (rowCount > 0 && wirteToText) {
 				int colDataIntCount = 0;
 				rowString = OPENBRACKET;
-				
+
 				if (wirteToText) {
 					rowString = rowString.substring(0, rowString.length() - 1);
 					rowString = rowString + CLOSEBRACKET + COMMA + NEWLINE;
