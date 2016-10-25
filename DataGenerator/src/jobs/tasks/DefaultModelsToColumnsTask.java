@@ -11,6 +11,7 @@ import entity.Columnsdetail;
 import entity.PreDefinedModels;
 import entity.Projectdetails;
 import entity.Tabledetail;
+import enums.ColumnType;
 import exceptions.EntityNotPresent;
 import exceptions.ReadEntityException;
 
@@ -39,11 +40,16 @@ public class DefaultModelsToColumnsTask extends Task {
 				columnsdetails = new ArrayList<>();
 				columnsdetails = tabledetail.getColumnsdetails();
 				for (Columnsdetail columnsdetail : columnsdetails) {
+					if (columnsdetail.getType() != ColumnType.VARCHAR)
+						continue;
 					colPredefinedData = new HashSet<>();
 					for (PreDefinedModels preDefinedModel : preDefinedModels) {
 						String colName = columnsdetail.getName();
+						colName = colName.replace("_", "");
 						for (String expectedColName : preDefinedModel.getExpectedColumnName().split(",")) {
-							if (colName.equals(expectedColName) || colName.endsWith(expectedColName)) {
+							String tablePlusCol = tabledetail.getTableName() + "" + colName;
+							if (colName.equalsIgnoreCase(expectedColName) || colName.endsWith(expectedColName)
+									|| tablePlusCol.contains(expectedColName)) {
 								colPredefinedData.add(preDefinedModel);
 								columnsdetail.setPredefinedModels(colPredefinedData);
 								columnsDao.update(columnsdetail);

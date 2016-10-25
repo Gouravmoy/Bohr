@@ -38,6 +38,7 @@ import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Patterndetail;
+import entity.PreDefinedModels;
 import entity.Projectdetails;
 import entity.Relationsdetail;
 import entity.Schemadetail;
@@ -45,8 +46,10 @@ import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
+import service.ModelService;
 import service.PatternService;
 import service.RelationService;
+import service.impl.ModelServiceImpl;
 import service.impl.PatternServiceImpl;
 import service.impl.RelationServiceImpl;
 import views.listners.TreeSelectionListner;
@@ -76,6 +79,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	static DefaultMutableTreeNode relationsNodes = null;
 	static DefaultMutableTreeNode patternsNodes = null;
+	static DefaultMutableTreeNode dataModels = null;
 
 	// DAO
 
@@ -87,6 +91,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	static RelationService relationService;
 	static PatternService patternService;
+	static ModelService modelService;
 
 	// Logger
 	Logger logger = MainController.getLogger(TreeView.class);
@@ -150,9 +155,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		projectsTreeTop.removeAllChildren();
 
+		System.out.println("Inside Project");
 		for (Projectdetails projectdetail : projectdetails) {
 			relationsNodes = new DefaultMutableTreeNode("RELATIONS");
 			patternsNodes = new DefaultMutableTreeNode("PATTERNS");
+			dataModels = new DefaultMutableTreeNode("DATA MODELS");
 			category = new DefaultMutableTreeNode(projectdetail);
 			Schemadetail schemadetail = projectdetail.getSchemadetail();
 			schemaCategory = new DefaultMutableTreeNode(schemadetail);
@@ -160,8 +167,10 @@ public class TreeView extends DefaultTreeCellRenderer {
 			category.add(schemaCategory);
 			category.add(relationsNodes);
 			category.add(patternsNodes);
+			category.add(dataModels);
 			projectsTreeTop.add(category);
 			refreshProjectTree();
+			System.out.println("Exit Project");
 		}
 
 	}
@@ -218,6 +227,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode constraintsCategory;
 		relationService = new RelationServiceImpl();
 		patternService = new PatternServiceImpl();
+		modelService = new ModelServiceImpl();
 
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
@@ -228,6 +238,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 				columnCategory = new DefaultMutableTreeNode(columnsdetail);
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
+					getModels(columnCategory, columnsdetail, Id);
 				}
 				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
 					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);
@@ -237,6 +248,25 @@ public class TreeView extends DefaultTreeCellRenderer {
 			}
 			schemaCategory.add(tableCategory);
 		}
+	}
+
+	private static void getModels(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail, int id) {
+		System.out.println("Inside getModels");
+		DefaultMutableTreeNode modelCategory;
+		Datasamplemodel datasamplemodel = modelService
+				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
+		PreDefinedModels preDefinedModels =modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails());
+		modelCategory = new DefaultMutableTreeNode("DATA MODELS");
+		if (datasamplemodel != null) {
+			modelCategory.add(new DefaultMutableTreeNode(datasamplemodel));
+			dataModels.add(new DefaultMutableTreeNode(datasamplemodel));
+		}
+		if (preDefinedModels != null) {
+			modelCategory.add(new DefaultMutableTreeNode(preDefinedModels));
+			dataModels.add(new DefaultMutableTreeNode(preDefinedModels));
+		}
+		columnCategory.add(modelCategory);
+		System.out.println("Exit getModels");
 	}
 
 	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,

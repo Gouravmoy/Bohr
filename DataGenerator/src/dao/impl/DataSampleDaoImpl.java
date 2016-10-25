@@ -54,4 +54,14 @@ public class DataSampleDaoImpl extends GenericDAOImpl<Datasamplemodel, Integer> 
 		}
 	}
 
+	@Override
+	public List<Datasamplemodel> getDatasamplemodelByQyery(String query, Object[] pars) {
+		try {
+			return getByQuery(query, pars, Datasamplemodel.class);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

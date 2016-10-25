@@ -3,6 +3,7 @@ package dao.impl;
 import java.util.List;
 
 import dao.PreDefinedModelDao;
+import entity.Patterndetail;
 import entity.PreDefinedModels;
 import exceptions.DAOException;
 import exceptions.EntityNotPresent;
@@ -52,6 +53,16 @@ public class PreDefinedModelsDaoImpl extends GenericDAOImpl<PreDefinedModels, In
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<PreDefinedModels> getPreDefinedModelsByQyery(String query, Object[] pars) {
+		try {
+			return getByQuery(query, pars, PreDefinedModels.class);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

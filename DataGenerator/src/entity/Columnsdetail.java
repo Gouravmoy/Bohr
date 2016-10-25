@@ -60,26 +60,21 @@ public class Columnsdetail implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private ColumnType type;
 
-	// bi-directional many-to-one association to Datasamplemodel
 	@ManyToOne
 	@JoinColumn(name = "datasampleid")
 	private Datasamplemodel datasamplemodel;
 
-	// bi-directional many-to-one association to Patterndetail
 	@ManyToOne
 	@JoinColumn(name = "patternId", nullable = true)
 	private Patterndetail patterndetail;
 
-	// bi-directional many-to-one association to Tabledetail
 	@ManyToOne
 	@JoinColumn(name = "tableId", nullable = false)
 	private Tabledetail tabledetail;
 
-	// bi-directional many-to-one association to Constraintsdetail
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
 
-	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
 

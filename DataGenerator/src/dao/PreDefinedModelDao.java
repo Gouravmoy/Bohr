@@ -15,4 +15,6 @@ public interface PreDefinedModelDao {
 	public List<PreDefinedModels> getAllPreDefinedModelsinDB() throws ReadEntityException;
 
 	public void update(PreDefinedModels preDefinedModels) throws EntityNotPresent;
+	
+	public List<PreDefinedModels> getPreDefinedModelsByQyery(String query, Object[] pars);
 }

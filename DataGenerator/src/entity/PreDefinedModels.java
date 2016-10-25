@@ -1,12 +1,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -27,6 +30,9 @@ public class PreDefinedModels implements Serializable {
 
 	@Column(length = 30000)
 	private String sampelValues;
+
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "predefinedModels")
+	private Set<Columnsdetail> columnsdetails;
 
 	public int getIdpredefinedDS() {
 		return idpredefinedDS;
@@ -50,6 +56,16 @@ public class PreDefinedModels implements Serializable {
 
 	public void setSampelValues(String sampelValues) {
 		this.sampelValues = sampelValues;
+	}
+
+	
+
+	public Set<Columnsdetail> getColumnsdetails() {
+		return columnsdetails;
+	}
+
+	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
+		this.columnsdetails = columnsdetails;
 	}
 
 	@Override
