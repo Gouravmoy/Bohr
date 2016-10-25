@@ -1,12 +1,37 @@
 package entity.generateEntity;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class GenerateColumnPrimaryKey extends GeneratedColumn {
 	int startValue;
 	String startValueString;
 	boolean foreignKey;
 
-	@Override
 	public void generateColumn() {
+		if (!foreignKey) {
+			FileWriter fileWriter;
+			try {
+				fileWriter = new FileWriter(filePath);
+				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+				int count = 0;
+				while (numberOfRows > 0) {
+					startValue++;
+					bufferedWriter.write(startValue + "\n");
+					if (count % 100 == 0) {
+						bufferedWriter.flush();
+					}
+					numberOfRows--;
+				}
+				bufferedWriter.flush();
+				bufferedWriter.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 
 	}
 

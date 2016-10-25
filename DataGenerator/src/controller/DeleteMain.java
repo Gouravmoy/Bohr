@@ -10,6 +10,7 @@ import entity.Tabledetail;
 import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
 import exceptions.ReadEntityException;
+import jobs.tasks.GenerateColumnDataTask;
 import jobs.tasks.GenerateTableDataTask_1;
 import jobs.tasks.SortTableTask;
 
@@ -22,13 +23,15 @@ public class DeleteMain {
 			List<Tabledetail> tableList = new ArrayList<>(schemadetail.getTabledetails());
 			SortTableTask sortTableTask = new SortTableTask(tableList);
 			sortTableTask.execute();
-			GenerateTableDataTask_1 dataTask_1 = new GenerateTableDataTask_1(sortTableTask.getTabledetailListSorted());
+			GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
 			dataTask_1.execute();
 			for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
-				System.out.println(generatedTable.getTableName() + " : " + generatedTable.getTablePath());
-				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-					System.out.println(column.getColName());
-					System.out.println(column.getFilePath());
+				if (generatedTable.getTableName().equals("country")) {
+					for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
+						column.generateColumn();
+					}
+					GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
+					dataTask_12.execute();
 				}
 			}
 		} catch (ReadEntityException e) {

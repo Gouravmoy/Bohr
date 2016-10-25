@@ -67,7 +67,6 @@ public class FirstJob extends Job {
 				}
 				refrehTreeTask = new RefrehTreeTask();
 				refrehTreeTask.execute();
-				
 			} catch (PersistException e) {
 				e.printStackTrace();
 			}
