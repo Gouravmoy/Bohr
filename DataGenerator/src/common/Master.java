@@ -2,16 +2,16 @@ package common;
 
 import java.util.List;
 
-import entity.GeneratedTableData;
+import entity.generateEntity.GeneratedTable;
 import enums.Environment;
 
 public enum Master {
 	INSTANCE;
 
-	private Environment environment;
+	List<GeneratedTable> generatedTables;
+	GeneratedTable currentGeneratedTable;
 
-	private List<GeneratedTableData> generatedTableData;
-	private GeneratedTableData currentGeneratedData;
+	private Environment environment;
 	public boolean clearAll;
 
 	public boolean isClearAll() {
@@ -30,20 +30,20 @@ public enum Master {
 		this.environment = environment;
 	}
 
-	public List<GeneratedTableData> getGeneratedTableData() {
-		return generatedTableData;
+	public List<GeneratedTable> getGeneratedTables() {
+		return generatedTables;
 	}
 
-	public void setGeneratedTableData(List<GeneratedTableData> generatedTableData) {
-		this.generatedTableData = generatedTableData;
+	public void setGeneratedTables(List<GeneratedTable> generatedTables) {
+		this.generatedTables = generatedTables;
 	}
 
-	public GeneratedTableData getCurrentGeneratedData() {
-		return currentGeneratedData;
+	public GeneratedTable getCurrentGeneratedTable() {
+		return currentGeneratedTable;
 	}
 
-	public void setCurrentGeneratedData(GeneratedTableData currentGeneratedData) {
-		this.currentGeneratedData = currentGeneratedData;
+	public void setCurrentGeneratedTable(GeneratedTable currentGeneratedTable) {
+		this.currentGeneratedTable = currentGeneratedTable;
 	}
 
 }
