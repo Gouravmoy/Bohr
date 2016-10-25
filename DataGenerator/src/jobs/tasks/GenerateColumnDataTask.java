@@ -47,6 +47,7 @@ public class GenerateColumnDataTask extends Task {
 			tableFolder = new File(mainFolderPath + "\\" + tabledetail.getTableName());
 			tableFolder.mkdir();
 			generatedTable.setTablePath(tableFolder.getPath() + "\\TableFile_" + tabledetail.getTableName() + ".txt");
+			generatedTable.setSchemaName(tabledetail.getSchemadetail().getName());
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";

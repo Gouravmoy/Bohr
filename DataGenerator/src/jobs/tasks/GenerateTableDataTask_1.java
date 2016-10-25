@@ -19,6 +19,17 @@ public class GenerateTableDataTask_1 extends Task {
 	BufferedReader[] bufferedReaders;
 	HashMap<Integer, String> columnFilePath = new HashMap<>();
 	HashMap<Integer, Boolean> fileReopen = new HashMap<>();
+	static String AUTOCOMMIT = "SET AUTOCOMMIT=0;";
+	static String INSERT = "INSERT INTO ";
+	static String NEWLINE = "\n";
+	static String QUOTE = "`";
+	static String SEMICOLON = ";";
+	static String COMMIT = "COMMIT ;";
+	static String COMMA = ",";
+	static String DOT = ".";
+	static String OPENBRACKET = "(";
+	static String CLOSEBRACKET = ")";
+	boolean wirteToText = true;
 
 	public GenerateTableDataTask_1(GeneratedTable generatedTableData) {
 		this.generatedTableData = generatedTableData;
@@ -33,11 +44,15 @@ public class GenerateTableDataTask_1 extends Task {
 		int rowCount = generatedTableData.getRowCount();
 		rowCount = 10;// remove this
 		try {
+			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
+			bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
+					+ generatedTableData.getTableName() + QUOTE + " values");
 			String rowString = null;
+			String completeString = "";
 			String colString;
-			while (rowCount > 0) {
+			while (rowCount > 0 && wirteToText) {
 				int colDataIntCount = 0;
-				rowString = "";
+				rowString = OPENBRACKET;
 				while (colDataIntCount < columnCount) {
 					colString = "";
 					colString = bufferedReaders[colDataIntCount].readLine();
@@ -51,23 +66,35 @@ public class GenerateTableDataTask_1 extends Task {
 							if (colString.length() > 0) {
 								rowString += colString;
 							} else {
-								rowCount = 0;
+								wirteToText = false;
 								break;
 							}
 						} else {
-							rowCount = 0;
+							wirteToText = false;
 							break;
 						}
 					}
 					colDataIntCount++;
 				}
-				if (rowCount > 0)
-					bufferedWriter.write(rowString.substring(0, rowString.length() - 1) + "\n");
-				if (rowCount % 50 == 0) {
+				if (wirteToText) {
+					rowString = rowString.substring(0, rowString.length() - 1);
+					rowString = rowString + CLOSEBRACKET + COMMA + NEWLINE;
+					completeString += rowString;
+				}
+				if (rowCount % 50 == 0 && wirteToText) {
+					completeString = completeString.substring(0, completeString.length() - 2);
+					bufferedWriter.write(completeString);
+					bufferedWriter.write(COMMIT + NEWLINE);
+					bufferedWriter.write(AUTOCOMMIT + NEWLINE);
+					bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
+							+ generatedTableData.getTableName() + QUOTE + " values");
 					bufferedWriter.flush();
 				}
 				rowCount--;
 			}
+			completeString = completeString.substring(0, completeString.length() - 2);
+			bufferedWriter.write(completeString + NEWLINE);
+			bufferedWriter.write(SEMICOLON + COMMIT + NEWLINE);
 			bufferedWriter.flush();
 			bufferedWriter.close();
 		} catch (IOException exception) {
