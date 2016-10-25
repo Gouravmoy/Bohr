@@ -9,7 +9,6 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 	String startValueString;
 	boolean foreignKey;
 
-	@Override
 	public void generateColumn() {
 		if (!foreignKey) {
 			FileWriter fileWriter;

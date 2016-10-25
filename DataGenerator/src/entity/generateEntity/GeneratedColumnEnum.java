@@ -1,25 +1,13 @@
 package entity.generateEntity;
 
-import java.util.Random;
+import entity.Interface.GenerateColumnInterface;
 
-public class GeneratedColumnEnum extends GeneratedColumn {
+public class GeneratedColumnEnum extends GeneratedColumn implements GenerateColumnInterface {
 
 	String enumValues;
 
-	@Override
 	public void generateColumn() {
-		StringBuilder builder = new StringBuilder();
-		Random random = new Random();
-		try {
-			String[] enums = enumValues.split("\\,");
-			int index = random.nextInt(enums.length);
-			builder.append("\'");
-			builder.append(enums[index]);
-			builder.append("\'\n");
-			writeToFile(builder.toString());
-		} catch (Exception err) {
-			err.printStackTrace();
-		}
+
 	}
 
 	public String getEnumValues() {

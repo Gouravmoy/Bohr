@@ -84,7 +84,7 @@ public class GenerateColumnDataTask extends Task {
 		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
-		generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getSampelValues());
+		generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumnList.add(generatedColumn);
 	}
