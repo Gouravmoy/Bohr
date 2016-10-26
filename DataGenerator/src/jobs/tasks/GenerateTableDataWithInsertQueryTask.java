@@ -2,6 +2,7 @@ package jobs.tasks;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,6 +32,10 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 
 	public GenerateTableDataWithInsertQueryTask(GeneratedTable generatedTableData, String folderPath, int tableCount) {
 		this.generatedTableData = generatedTableData;
+		File floder = new File(folderPath);
+		if(!floder.exists()){
+			floder.mkdir();
+		}
 		this.generatedTableData.setTableOutPutPath(folderPath + "\\" + tableCount + "_");
 	}
 
@@ -39,6 +44,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 		int rowCount = 1;
 		try {
 			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
+			
 			bufferedWriter = new BufferedWriter(new FileWriter(
 					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".sql"));
 			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
