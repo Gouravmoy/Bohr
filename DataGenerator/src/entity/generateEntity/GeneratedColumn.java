@@ -7,11 +7,13 @@ import java.io.IOException;
 
 import entity.Interface.GenerateColumnInterface;
 import enums.ColumnType;
+import enums.KeyType;
 
 public abstract class GeneratedColumn implements GenerateColumnInterface {
 	String colName;
 	long colLength;
 	ColumnType columnType;
+	KeyType keyType;
 	String filePath;
 	int numberOfRows;
 	boolean fileReopen;
@@ -76,10 +78,19 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 		this.fileReopen = fileReopen;
 	}
 
+	public KeyType getKeyType() {
+		return keyType;
+	}
+
+	public void setKeyType(KeyType keyType) {
+		this.keyType = keyType;
+	}
+
 	@Override
 	public String toString() {
 		return "GeneratedColumn [colName=" + colName + ", colLength=" + colLength + ", columnType=" + columnType
-				+ ", filePath=" + filePath + "]";
+				+ ", keyType=" + keyType + ", filePath=" + filePath + ", numberOfRows=" + numberOfRows + ", fileReopen="
+				+ fileReopen + "]";
 	}
 
 }

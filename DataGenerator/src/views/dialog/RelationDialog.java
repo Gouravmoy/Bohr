@@ -41,14 +41,36 @@ public class RelationDialog extends Dialog {
 	private Combo relationTypeCombo;
 
 	Relationsdetail relationsdetail;
+	Projectdetails projectdetails;
+	Columnsdetail columnsdetail;
+	String projectName;
 	ProjectDao projectDao;
 	RealationsDao realationsDao;
 	ColumnsDao columnsDao;
 	private Text text;
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public RelationDialog(Shell parentShell, Relationsdetail relationsdetail) {
 		super(parentShell);
 		this.relationsdetail = relationsdetail;
+		projectDao = new ProjectDAOImpl();
+		realationsDao = new RelationsDAOImpl();
+		columnsDao = new ColumnsDAOImpl();
+	}
+
+	public RelationDialog(Shell parentShell, Projectdetails projectdetails) {
+		super(parentShell);
+		this.projectdetails = projectdetails;
+		projectDao = new ProjectDAOImpl();
+		realationsDao = new RelationsDAOImpl();
+		columnsDao = new ColumnsDAOImpl();
+	}
+
+	public RelationDialog(Shell parentShell, Columnsdetail sourceColumn) {
+		super(parentShell);
+		this.columnsdetail = sourceColumn;
 		projectDao = new ProjectDAOImpl();
 		realationsDao = new RelationsDAOImpl();
 		columnsDao = new ColumnsDAOImpl();
@@ -70,12 +92,7 @@ public class RelationDialog extends Dialog {
 		projectNameCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Schemadetail schemadetail;
-				Projectdetails projectdetails = (Projectdetails) projectNameCombo.getData(projectNameCombo.getText());
-				schemadetail = projectdetails.getSchemadetail();
-				schemaNameCombo.removeAll();
-				schemaNameCombo.add(schemadetail.getName());
-				schemaNameCombo.setData(schemadetail.getName(), schemadetail);
+				assignSchemaValues();
 
 			}
 		});
@@ -92,17 +109,7 @@ public class RelationDialog extends Dialog {
 		schemaNameCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Schemadetail schemadetail = (Schemadetail) schemaNameCombo.getData(schemaNameCombo.getText());
-				List<Tabledetail> tabledetails = new ArrayList<>();
-				tabledetails.addAll(schemadetail.getTabledetails());
-				targetTableCombo.removeAll();
-				sourceTableCombo.removeAll();
-				for (Tabledetail tabledetail : tabledetails) {
-					targetTableCombo.add(tabledetail.getTableName());
-					targetTableCombo.setData(tabledetail.getTableName(), tabledetail);
-					sourceTableCombo.add(tabledetail.getTableName());
-					sourceTableCombo.setData(tabledetail.getTableName(), tabledetail);
-				}
+				assignSourceTableCombo();
 			}
 		});
 
@@ -119,14 +126,9 @@ public class RelationDialog extends Dialog {
 		sourceTableCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Tabledetail tabledetail = (Tabledetail) sourceTableCombo.getData(sourceTableCombo.getText());
-				sourceColumn.removeAll();
-				for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
-					sourceColumn.add(columnsdetail.getName());
-					sourceColumn.setData(columnsdetail.getName(), columnsdetail);
-
-				}
+				assignSourceColumn();
 			}
+
 		});
 
 		Label lblSourceColumn = new Label(container, SWT.NONE);
@@ -186,7 +188,50 @@ public class RelationDialog extends Dialog {
 
 		text = new Text(container, SWT.BORDER);
 		text.setBounds(87, 60, 439, 21);
+
+		assignColumnPreDefinedValues();
+		assignProjectPreDefinedValues();
+
 		return container;
+	}
+
+	private void assignColumnPreDefinedValues() {
+		if (columnsdetail != null) {
+			Projectdetails projectdetails = columnsdetail.getTabledetail().getSchemadetail()
+					.getAssociatedProjectDetail();
+			if (projectdetails != null) {
+				projectNameCombo.setText(projectdetails.getProjectName());
+				projectNameCombo.setEnabled(false);
+			}
+			assignSchemaValues();
+			if (projectdetails.getSchemadetail() != null) {
+				schemaNameCombo.setText(projectdetails.getSchemadetail().getName());
+				schemaNameCombo.setEnabled(false);
+			}
+			assignSourceTableCombo();
+			if (columnsdetail != null) {
+				sourceTableCombo.setText(columnsdetail.getTabledetail().getTableName());
+				sourceTableCombo.setEnabled(false);
+			}
+			assignSourceColumn();
+			if (columnsdetail != null) {
+				sourceColumn.setText(columnsdetail.getName());
+				sourceColumn.setEnabled(false);
+			}
+		}
+	}
+
+	private void assignProjectPreDefinedValues() {
+		if (projectdetails != null) {
+			if (projectdetails != null) {
+				projectNameCombo.setText(projectdetails.getProjectName());
+				projectNameCombo.setEnabled(false);
+			}
+			if (projectdetails.getSchemadetail() != null) {
+				schemaNameCombo.setText(relationsdetail.getProjectdetail().getSchemadetail().getName());
+				schemaNameCombo.setEnabled(false);
+			}
+		}
 	}
 
 	private void fillByEditOption() {
@@ -196,6 +241,7 @@ public class RelationDialog extends Dialog {
 			if (relationsdetail.getProjectdetail().getSchemadetail() != null) {
 				schemaNameCombo.setText(relationsdetail.getProjectdetail().getSchemadetail().getName());
 				schemaNameCombo.setEnabled(false);
+
 			}
 		}
 	}
@@ -212,6 +258,25 @@ public class RelationDialog extends Dialog {
 			projectNameCombo.add(projectdetails.getProjectName());
 			projectNameCombo.setData(projectdetails.getProjectName(), projectdetails);
 		}
+	}
+
+	public void assignSourceColumn() {
+		Tabledetail tabledetail = (Tabledetail) sourceTableCombo.getData(sourceTableCombo.getText());
+		sourceColumn.removeAll();
+		for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
+			sourceColumn.add(columnsdetail.getName());
+			sourceColumn.setData(columnsdetail.getName(), columnsdetail);
+
+		}
+	}
+
+	public void assignSchemaValues() {
+		Schemadetail schemadetail;
+		Projectdetails projectdetails = (Projectdetails) projectNameCombo.getData(projectNameCombo.getText());
+		schemadetail = projectdetails.getSchemadetail();
+		schemaNameCombo.removeAll();
+		schemaNameCombo.add(schemadetail.getName());
+		schemaNameCombo.setData(schemadetail.getName(), schemadetail);
 	}
 
 	@Override
@@ -237,6 +302,20 @@ public class RelationDialog extends Dialog {
 			super.okPressed();
 		} catch (PersistException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void assignSourceTableCombo() {
+		Schemadetail schemadetail = (Schemadetail) schemaNameCombo.getData(schemaNameCombo.getText());
+		List<Tabledetail> tabledetails = new ArrayList<>();
+		tabledetails.addAll(schemadetail.getTabledetails());
+		targetTableCombo.removeAll();
+		sourceTableCombo.removeAll();
+		for (Tabledetail tabledetail : tabledetails) {
+			targetTableCombo.add(tabledetail.getTableName());
+			targetTableCombo.setData(tabledetail.getTableName(), tabledetail);
+			sourceTableCombo.add(tabledetail.getTableName());
+			sourceTableCombo.setData(tabledetail.getTableName(), tabledetail);
 		}
 	}
 }
