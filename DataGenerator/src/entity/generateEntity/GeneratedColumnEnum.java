@@ -15,10 +15,11 @@ public class GeneratedColumnEnum extends GeneratedColumn {
 			int rowCount = this.numberOfRows;
 			String[] enumValuesList = enumValues.split("\\,");
 			while (rowCount > 0) {
-				bufferedWriter.write(enumValuesList[rowCount % enumValuesList.length]);
+				bufferedWriter.write(enumValuesList[rowCount % enumValuesList.length] + "\n");
 				if (rowCount % 50 == 0) {
 					bufferedWriter.flush();
 				}
+				rowCount--;
 			}
 			bufferedWriter.close();
 		} catch (IOException e) {

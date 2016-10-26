@@ -27,10 +27,8 @@ public class QueryFetchTask extends Task {
 	public void execute() throws BuildException {
 		InputStream inputStream;
 		Properties properties = new Properties();
-		String path = "D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\";
+		String path = "D:\\Bohr\\DataGenerator\\resources\\files\\";
 		File queryFile = new File(path + databasedetail.getType() + ".properties");
-		// File queryFile = new File
-		// ("D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\MYSQL.properties");
 		try {
 			// String path = "platform:/plugin/DataGenerator/resources/files/"+
 			// databasedetail.getType() + ".properties";

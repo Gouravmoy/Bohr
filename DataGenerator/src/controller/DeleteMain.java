@@ -24,7 +24,7 @@ public class DeleteMain {
 		try {
 			Master.INSTANCE.setEnvironment(Environment.TEST);
 			Master.INSTANCE.setClearAll(false);
-			Schemadetail schemadetail = dao.getSchemaByid(3);
+			Schemadetail schemadetail = dao.getSchemaByid(1);
 			List<Tabledetail> tableList = new ArrayList<>(schemadetail.getTabledetails());
 			SortTableTask sortTableTask = new SortTableTask(tableList);
 			sortTableTask.execute();
@@ -34,6 +34,9 @@ public class DeleteMain {
 			for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
 				System.out.println(generatedTable.getTableName()
 						+ "----Done----------------------------------------------------------");
+				if (generatedTable.getTableName().equalsIgnoreCase("film")) {
+					System.out.println("Bug");
+				}
 				generatedTable.setRowCount(10);
 				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
 					column.setNumberOfRows(10);

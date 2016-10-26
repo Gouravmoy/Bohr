@@ -3,7 +3,6 @@ package dao.impl;
 import java.util.List;
 
 import dao.PreDefinedModelDao;
-import entity.Patterndetail;
 import entity.PreDefinedModels;
 import exceptions.DAOException;
 import exceptions.EntityNotPresent;
