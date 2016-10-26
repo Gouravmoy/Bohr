@@ -13,16 +13,17 @@ import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
 
-public class GeneratedColumnUniqueForeignKey extends GeneratedColumn {
+public class RegenerateUKForFK {
 	BufferedWriter[] tempBufferedWriter;
 	List<GeneratedColumn> ukFkColumns = new ArrayList<>();
 	BufferedWriter uniqueKeyWriter;
 	String[][] ukArray;
 	static String combinationFilePath;
+	int numberOfRows;
 
 	static String tempFolder = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\DataGeneration\\";
 
-	public void generateColumn() {
+	public void regenerate() {
 		String[] tempFilePath = new String[ukFkColumns.size()];
 		BufferedReader reader = null;
 		numberOfRows = 5;// Remove this
@@ -167,6 +168,14 @@ public class GeneratedColumnUniqueForeignKey extends GeneratedColumn {
 
 	public void setUkFkColumns(List<GeneratedColumn> ukFkColumns) {
 		this.ukFkColumns = ukFkColumns;
+	}
+
+	public int getNumberOfRows() {
+		return numberOfRows;
+	}
+
+	public void setNumberOfRows(int numberOfRows) {
+		this.numberOfRows = numberOfRows;
 	}
 
 }

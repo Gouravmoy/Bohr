@@ -9,7 +9,7 @@ import dao.impl.SchemaDaoImpl;
 import entity.Schemadetail;
 import entity.Tabledetail;
 import entity.generateEntity.GeneratedColumn;
-import entity.generateEntity.GeneratedColumnUniqueForeignKey;
+import entity.generateEntity.RegenerateUKForFK;
 import entity.generateEntity.GeneratedTable;
 import enums.Environment;
 import enums.KeyType;
@@ -42,17 +42,19 @@ public class DeleteMain {
 						if (column.getKeyType() == KeyType.UK_FK)
 							ukFkColumns.add(column);
 					}
-					if (generatedTable.getTableName().equals("rental")) {
-						GeneratedColumnUniqueForeignKey columnUniqueForeignKey = new GeneratedColumnUniqueForeignKey();
-						columnUniqueForeignKey.setUkFkColumns(ukFkColumns);
-						columnUniqueForeignKey.generateColumn();
-					}
+					regenerateUKFKColumns(ukFkColumns);
 				}
 			}
 		} catch (ReadEntityException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void regenerateUKFKColumns(List<GeneratedColumn> ukFkColumns) {
+		RegenerateUKForFK regenerateUKForFK = new RegenerateUKForFK();
+		regenerateUKForFK.setUkFkColumns(ukFkColumns);
+		regenerateUKForFK.regenerate();
 	}
 
 }
