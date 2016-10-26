@@ -40,10 +40,10 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 		try {
 			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
 			bufferedWriter = new BufferedWriter(new FileWriter(
-					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".txt"));
+					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".sql"));
 			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 			bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
-					+ generatedTableData.getTableName() + QUOTE + " values");
+					+ generatedTableData.getTableName() + QUOTE + " values"+NEWLINE);
 			String rowString = null;
 			String completeString = "";
 			while ((rowString = bufferedReaders.readLine()) != null) {
@@ -57,7 +57,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 					bufferedWriter.write(COMMIT + NEWLINE);
 					bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 					bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
-							+ generatedTableData.getTableName() + QUOTE + " values");
+							+ generatedTableData.getTableName() + QUOTE + " values"+NEWLINE);
 					bufferedWriter.flush();
 				}
 				rowCount++;
