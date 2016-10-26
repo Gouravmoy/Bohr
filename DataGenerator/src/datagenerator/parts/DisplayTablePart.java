@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 import common.Master;
-import entity.GeneratedTableData;
 import entity.generateEntity.GeneratedTable;
 import jobs.tasks.AddPartTask;
 
@@ -55,8 +54,8 @@ public class DisplayTablePart {
 		columnOne.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				GeneratedTableData generatedTableData = (GeneratedTableData) element;
-				return generatedTableData.getTable().getTableName();
+				GeneratedTable generatedTableData = (GeneratedTable) element;
+				return generatedTableData.getTableName();
 			}
 		});
 		colSixthName.setLabelProvider(new CellLabelProvider() {

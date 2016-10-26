@@ -13,7 +13,7 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	long colLength;
 	ColumnType columnType;
 	String filePath;
-	int numberOfRows = 1;
+	int numberOfRows;
 	boolean fileReopen;
 
 	@Override

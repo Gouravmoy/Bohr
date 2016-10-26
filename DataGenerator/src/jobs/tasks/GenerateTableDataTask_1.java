@@ -32,7 +32,6 @@ public class GenerateTableDataTask_1 extends Task {
 		createFiles();
 		// generation logic per row
 		int rowCount = generatedTableData.getRowCount();
-		rowCount = 10;// remove this
 		try {
 			String rowString = null;
 			String colString;
@@ -63,7 +62,7 @@ public class GenerateTableDataTask_1 extends Task {
 					colDataIntCount++;
 				}
 				if (wirteToText) {
-					rowString = rowString.substring(0, rowString.length() - 1);
+					rowString = rowString.substring(0, rowString.length() - 1) + "\n";
 					bufferedWriter.write(rowString);
 				}
 				if (rowCount % 50 == 0 && wirteToText) {

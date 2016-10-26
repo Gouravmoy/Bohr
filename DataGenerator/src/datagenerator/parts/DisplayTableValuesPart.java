@@ -65,7 +65,7 @@ public class DisplayTableValuesPart {
 			propertyToLabelMap.put(columnsdetail.getColName(), columnsdetail.getColName().toUpperCase());
 			coluCount++;
 		}
-		IDataProvider bodyDataProvider = new TwoDimensionalArrayDataProvider(generatedTable.getTablePath());
+		IDataProvider bodyDataProvider = new TwoDimensionalArrayDataProvider(generatedTable);
 		DataLayer bodyDataLayer = new DataLayer(bodyDataProvider);
 		SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
 		ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
