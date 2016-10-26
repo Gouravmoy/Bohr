@@ -39,7 +39,7 @@ public class DeleteMain {
 				generatedTable.setRowCount(10);
 				System.out.println("Generating data for table " + generatedTable.getTableName());
 				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-					column.setNumberOfRows(100000);
+					column.setNumberOfRows(10);
 					column.generateColumn();
 					if (column.getKeyType() == KeyType.UK_FK)
 						ukFkColumns.add(column);
@@ -49,7 +49,7 @@ public class DeleteMain {
 				GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 				dataTask_12.execute();
 				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export", tableCount);
+						generatedTable, "C:\\Users\\M1026352\\Desktop\\OuyputGn", tableCount);
 				tableCount++;
 				dataWithInsertQueryTask.execute();
 			}
@@ -64,7 +64,7 @@ public class DeleteMain {
 	public static void regenerateUKFKColumns(List<GeneratedColumn> ukFkColumns) {
 		RegenerateUKForFK regenerateUKForFK = new RegenerateUKForFK();
 		regenerateUKForFK.setUkFkColumns(ukFkColumns);
-		regenerateUKForFK.setNumberOfRows(100000);
+		regenerateUKForFK.setNumberOfRows(10);
 		regenerateUKForFK.regenerate();
 	}
 
