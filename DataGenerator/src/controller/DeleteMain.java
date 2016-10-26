@@ -9,12 +9,14 @@ import dao.impl.SchemaDaoImpl;
 import entity.Schemadetail;
 import entity.Tabledetail;
 import entity.generateEntity.GeneratedColumn;
-import entity.generateEntity.RegenerateUKForFK;
 import entity.generateEntity.GeneratedTable;
+import entity.generateEntity.RegenerateUKForFK;
 import enums.Environment;
 import enums.KeyType;
 import exceptions.ReadEntityException;
 import jobs.tasks.GenerateColumnDataTask;
+import jobs.tasks.GenerateTableDataTask_1;
+import jobs.tasks.GenerateTableDataWithInsertQueryTask;
 import jobs.tasks.SortTableTask;
 
 public class DeleteMain {
@@ -31,21 +33,29 @@ public class DeleteMain {
 			sortTableTask.execute();
 			GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
 			dataTask_1.execute();
+			int tableCount = 1;
 			for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
-				if (generatedTable.getTableName().equals("rental") || generatedTable.getTableName().equals("film")
-						|| generatedTable.getTableName().equals("store")
-						|| generatedTable.getTableName().equals("inventory")
-						|| generatedTable.getTableName().equals("customer")) {
-					System.out.println("Generating data for table " + generatedTable.getTableName());
-					for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-						column.generateColumn();
-						if (column.getKeyType() == KeyType.UK_FK)
-							ukFkColumns.add(column);
-					}
-					regenerateUKFKColumns(ukFkColumns);
+				ukFkColumns = new ArrayList<>();
+				generatedTable.setRowCount(10);
+				System.out.println("Generating data for table " + generatedTable.getTableName());
+				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
+					column.setNumberOfRows(100000);
+					column.generateColumn();
+					if (column.getKeyType() == KeyType.UK_FK)
+						ukFkColumns.add(column);
 				}
+				if (!ukFkColumns.isEmpty())
+					regenerateUKFKColumns(ukFkColumns);
+				GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
+				dataTask_12.execute();
+				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
+						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export", tableCount);
+				tableCount++;
+				dataWithInsertQueryTask.execute();
 			}
-		} catch (ReadEntityException e) {
+		} catch (
+
+		ReadEntityException e) {
 			e.printStackTrace();
 		}
 
@@ -54,6 +64,7 @@ public class DeleteMain {
 	public static void regenerateUKFKColumns(List<GeneratedColumn> ukFkColumns) {
 		RegenerateUKForFK regenerateUKForFK = new RegenerateUKForFK();
 		regenerateUKForFK.setUkFkColumns(ukFkColumns);
+		regenerateUKForFK.setNumberOfRows(100000);
 		regenerateUKForFK.regenerate();
 	}
 

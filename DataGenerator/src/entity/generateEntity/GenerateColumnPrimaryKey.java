@@ -16,13 +16,14 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				fileWriter = new FileWriter(filePath);
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 				int count = 0;
-				while (numberOfRows > 0) {
+				int rowCount = numberOfRows;
+				while (rowCount > 0) {
 					startValue++;
 					bufferedWriter.write(startValue + "\n");
 					if (count % 100 == 0) {
 						bufferedWriter.flush();
 					}
-					numberOfRows--;
+					rowCount--;
 				}
 				bufferedWriter.flush();
 				bufferedWriter.close();

@@ -24,7 +24,6 @@ import entity.Projectdetails;
 import entity.Schemadetail;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
-import job.GenerateDataJob;
 import jobs.tasks.DefaultModelsToColumnsTask;
 import jobs.tasks.RefrehTreeTask;
 import service.SchemaService;
@@ -99,7 +98,6 @@ public class NewProjectDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		GenerateDataJob generateDataJob = new GenerateDataJob("My Job");
 		DefaultModelsToColumnsTask columnsTask = new DefaultModelsToColumnsTask();
 		Projectdetails projectdetails = new Projectdetails();
 		projectdetails.setProjectName(text.getText());
@@ -113,8 +111,6 @@ public class NewProjectDialog extends Dialog {
 		}
 		RefrehTreeTask refrehTreeTask = new RefrehTreeTask();
 		refrehTreeTask.execute();
-		generateDataJob.setProjectdetails(projectdetails);
-		generateDataJob.schedule();
 		super.okPressed();
 	}
 

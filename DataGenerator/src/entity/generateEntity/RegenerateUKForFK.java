@@ -26,7 +26,6 @@ public class RegenerateUKForFK {
 	public void regenerate() {
 		String[] tempFilePath = new String[ukFkColumns.size()];
 		BufferedReader reader = null;
-		numberOfRows = 5;// Remove this
 		ukArray = new String[ukFkColumns.size()][numberOfRows];
 
 		int rowCount = -1;
@@ -55,7 +54,7 @@ public class RegenerateUKForFK {
 				lineCount++;
 			}
 			reader.close();
-			int step = (int) (lineCount / ukFkColumns.size()) != 0 ? (int) (lineCount / ukFkColumns.size()) : 1;
+			int step = (int) (lineCount / numberOfRows) != 0 ? (int) (lineCount / numberOfRows) : 1;
 			lineCount = 0;
 
 			BufferedWriter[] bufferedWriter = new BufferedWriter[ukFkColumns.size()];
@@ -80,7 +79,9 @@ public class RegenerateUKForFK {
 			closeAllBufferedWriters(bufferedWriter);
 			for (int i = 0; i < ukFkColumns.size(); i++) {
 				File sourceTempFile = new File(tempFilePath[i]);
-				File targetFile = new File(ukFkColumns.get(i).filePath);
+				File targetFile = new File(ukFkColumns.get(i).filePath.replace(ukFkColumns.get(i).getColName(),
+						ukFkColumns.get(i).getColName() + "_UK_FK"));
+				ukFkColumns.get(i).setFilePath(targetFile.getPath());
 				FileUtils.copyFile(sourceTempFile, targetFile);
 				sourceTempFile.delete();
 			}
@@ -108,18 +109,6 @@ public class RegenerateUKForFK {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String args[]) throws IOException {
-		String[][] ukArray = new String[2][5];
-		ukArray[0][0] = "1";
-		ukArray[0][1] = "2";
-		ukArray[1][0] = "3";
-		ukArray[1][1] = "4";
-		List<String> allCombinations = new ArrayList<>();
-		allCombinations.addAll(combinations(ukArray));
-		for (String combination : allCombinations)
-			System.out.println("Combination - " + combination);
 	}
 
 	public static Set<String> combinations(String[][] twoDimStringArray) throws IOException {

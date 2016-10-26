@@ -21,12 +21,15 @@ import entity.generateEntity.GeneratedColumnEnum;
 import entity.generateEntity.GeneratedTable;
 import enums.ColumnType;
 import enums.KeyType;
+import service.ModelService;
+import service.impl.ModelServiceImpl;
 
 public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\DataGeneration";
+	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG";
+	ModelService modelService;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -35,6 +38,7 @@ public class GenerateColumnDataTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+		modelService = new ModelServiceImpl();
 		String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
 		mainFolderPath = mainFolderPath + timeStamp;
 		File mainFolder = new File(mainFolderPath);
@@ -52,9 +56,12 @@ public class GenerateColumnDataTask extends Task {
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
-				if (columnsdetail.getDatasamplemodel() != null) {
+				if (columnsdetail.getIsnullable() == 1) {
+					generateNullableColumn(textFilePath, columnsdetail);
+				} else if (columnsdetail.getDatasamplemodel() != null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
-					continue;
+				} else if (!columnsdetail.getPredefinedModels().isEmpty()) {
+					generatePredefinedValues(textFilePath, columnsdetail);
 				} else {
 					if (columnsdetail.getKeytype() == null) {
 						generateRandomColumn(textFilePath, columnsdetail);
@@ -87,14 +94,26 @@ public class GenerateColumnDataTask extends Task {
 			generatedTable.setGeneratedColumn(generatedColumnList);
 			generatedTableData.add(generatedTable);
 		}
+
+	}
+
+	private void generateNullableColumn(String textFilePath, Columnsdetail columnsdetail) {
+		GenerateColumnRandom generatedColumn = new GenerateColumnRandom();
+		generatedColumn.setColName(columnsdetail.getName());
+		generatedColumn.setColumnType(columnsdetail.getType());
+		generatedColumn.setColLength(columnsdetail.getLength());
+		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
+		generatedColumn.setNullable(true);
+		generatedColumnList.add(generatedColumn);
 	}
 
 	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail) {
 		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
-		generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
+		generatedColumn.setPreDefinedValues(
+				modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumnList.add(generatedColumn);
 	}

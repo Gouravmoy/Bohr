@@ -9,6 +9,7 @@ public class GeneratedTable {
 	String tablePath;
 	int rowCount;
 	String schemaName;
+	String tableOutPutPath;
 
 	void generateTableData() {
 
@@ -52,6 +53,14 @@ public class GeneratedTable {
 
 	public void setSchemaName(String schemaName) {
 		this.schemaName = schemaName;
+	}
+
+	public String getTableOutPutPath() {
+		return tableOutPutPath;
+	}
+
+	public void setTableOutPutPath(String tableOutPutPath) {
+		this.tableOutPutPath = tableOutPutPath;
 	}
 
 	@Override

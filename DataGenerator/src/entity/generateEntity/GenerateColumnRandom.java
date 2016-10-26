@@ -13,9 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-import entity.Interface.GenerateColumnInterface;
-
-public class GenerateColumnRandom extends GeneratedColumn implements GenerateColumnInterface {
+public class GenerateColumnRandom extends GeneratedColumn {
 	boolean isNullable = false;
 	boolean generateAllUnique = true;
 
@@ -23,20 +21,27 @@ public class GenerateColumnRandom extends GeneratedColumn implements GenerateCol
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath), true));
 			BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));
-			String randomValue = "";
-			int currentLineNumber = 0;
-			int newLineStartNumber = 0;
-			currentLineNumber = getLastLineNo();
-			newLineStartNumber = currentLineNumber + 1;
-			if (newLineStartNumber == 1) {
-				writer.write(generateRandomValue() + "\n");
-			} else if (newLineStartNumber % 5 == 0 && isNullable) {
-				writer.write("" + "\n");
-			} else {
-				if (!generateAllUnique)
+			int recordCount = this.numberOfRows;
+			while (recordCount > 0) {
+				String randomValue = "";
+				int currentLineNumber = 0;
+				int newLineStartNumber = 0;
+				currentLineNumber = getLastLineNo();
+				newLineStartNumber = currentLineNumber + 1;
+				if (newLineStartNumber == 1) {
 					writer.write(generateRandomValue() + "\n");
-				else {
-					generateRandomUnique(writer, reader, randomValue);
+				} else if (newLineStartNumber % 5 == 0 && isNullable) {
+					writer.write("" + "\n");
+				} else {
+					if (!generateAllUnique)
+						writer.write(generateRandomValue() + "\n");
+					else {
+						generateRandomUnique(writer, reader, randomValue);
+					}
+				}
+				recordCount--;
+				if (recordCount % 50 == 0) {
+					writer.flush();
 				}
 			}
 			reader.close();
