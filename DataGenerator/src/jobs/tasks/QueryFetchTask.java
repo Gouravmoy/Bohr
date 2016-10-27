@@ -29,8 +29,6 @@ public class QueryFetchTask extends Task {
 		Properties properties = new Properties();
 		String path = "D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\";
 		File queryFile = new File(path + databasedetail.getType() + ".properties");
-		// File queryFile = new File
-		// ("D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\MYSQL.properties");
 		try {
 			// String path = "platform:/plugin/DataGenerator/resources/files/"+
 			// databasedetail.getType() + ".properties";

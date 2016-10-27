@@ -30,8 +30,8 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				newLineStartNumber = currentLineNumber + 1;
 				if (newLineStartNumber == 1) {
 					writer.write(generateRandomValue() + "\n");
-				} else if (newLineStartNumber % 5 == 0 && isNullable) {
-					writer.write("" + "\n");
+				} else if (isNullable) {
+					writer.write(null + "\n");
 				} else {
 					if (!generateAllUnique)
 						writer.write(generateRandomValue() + "\n");
@@ -135,6 +135,12 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					builder.append("" + finalX);
 				}
 				break;
+			case DECIMAL:
+				int upperBound = (int) Math.pow(10, colLength - colDecLenght);
+				String finalXDec = getRandomValue(r, 0, upperBound, colDecLenght);
+				builder.append("" + finalXDec);
+				break;
+
 			case TINYINT:
 				builder.append("" + r.nextInt(128));
 				break;
@@ -174,6 +180,19 @@ public class GenerateColumnRandom extends GeneratedColumn {
 			err.printStackTrace();
 		}
 		return builder.toString();
+
+	}
+
+	public static String getRandomValue(final Random random, final int lowerBound, final int upperBound,
+			final int decimalPlaces) {
+
+		if (lowerBound < 0 || upperBound <= lowerBound || decimalPlaces < 0) {
+			throw new IllegalArgumentException("Put error message here");
+		}
+
+		final double dbl = ((random == null ? new Random() : random).nextDouble() //
+				* (upperBound - lowerBound)) + lowerBound;
+		return String.format("%." + decimalPlaces + "f", dbl);
 
 	}
 

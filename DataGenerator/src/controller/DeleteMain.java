@@ -26,7 +26,7 @@ public class DeleteMain {
 	public static void main(String[] args) {
 		SchemaDao dao = new SchemaDaoImpl();
 		try {
-			Master.INSTANCE.setEnvironment(Environment.STAGING);
+			Master.INSTANCE.setEnvironment(Environment.TEST);
 			Master.INSTANCE.setClearAll(false);
 			Schemadetail schemadetail = dao.getSchemaByid(1);
 			List<Tabledetail> tableList = new ArrayList<>(schemadetail.getTabledetails());
@@ -51,7 +51,9 @@ public class DeleteMain {
 				GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 				dataTask_12.execute();
 				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"+new SimpleDateFormat("yyyyMMddhhmm").format(new Date())+"\\", tableCount);
+						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
+								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\",
+						tableCount);
 				tableCount++;
 				dataWithInsertQueryTask.execute();
 			}

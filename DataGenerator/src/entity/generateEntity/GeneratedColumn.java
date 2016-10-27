@@ -12,6 +12,7 @@ import enums.KeyType;
 public abstract class GeneratedColumn implements GenerateColumnInterface {
 	String colName;
 	long colLength;
+	int colDecLenght;
 	ColumnType columnType;
 	KeyType keyType;
 	String filePath;
@@ -91,6 +92,14 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 		return "GeneratedColumn [colName=" + colName + ", colLength=" + colLength + ", columnType=" + columnType
 				+ ", keyType=" + keyType + ", filePath=" + filePath + ", numberOfRows=" + numberOfRows + ", fileReopen="
 				+ fileReopen + "]";
+	}
+
+	public int getColDecLenght() {
+		return colDecLenght;
+	}
+
+	public void setColDecLenght(int colDecLenght) {
+		this.colDecLenght = colDecLenght;
 	}
 
 }

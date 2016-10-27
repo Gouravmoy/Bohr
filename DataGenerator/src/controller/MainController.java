@@ -88,8 +88,9 @@ public class MainController {
 		}
 		if (preDefinedModels.isEmpty()) {
 			try {
-				File propFile = new File(
-						"D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\predefined.properties");
+				// File propFile = new File(
+				// "D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\predefined.properties");
+				File propFile = new File("D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\predefined.properties");
 				properties.load(new FileInputStream(propFile));
 				Enumeration<?> e = properties.propertyNames();
 				while (e.hasMoreElements()) {
