@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,6 +13,7 @@ import entity.Columnsdetail;
 import entity.Databasedetail;
 import entity.Tabledetail;
 import enums.ColumnType;
+import jobs.tasks.ConnectonCreateTask;
 
 public class CreateColumnTask extends Task {
 	Databasedetail databasedetail;

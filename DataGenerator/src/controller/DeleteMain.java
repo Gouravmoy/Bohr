@@ -16,10 +16,10 @@ import entity.generateEntity.RegenerateUKForFK;
 import enums.Environment;
 import enums.KeyType;
 import exceptions.ReadEntityException;
-import jobs.tasks.GenerateColumnDataTask;
-import jobs.tasks.GenerateTableDataTask_1;
-import jobs.tasks.GenerateTableDataWithInsertQueryTask;
 import jobs.tasks.SortTableTask;
+import jobs.tasks.generate.GenerateColumnDataTask;
+import jobs.tasks.generate.GenerateTableDataTask_1;
+import jobs.tasks.generate.GenerateTableDataWithInsertQueryTask;
 
 public class DeleteMain {
 
