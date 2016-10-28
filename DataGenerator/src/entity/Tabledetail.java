@@ -42,8 +42,8 @@ public class Tabledetail implements Serializable {
 	private Set<Changelog> changelogs;
 
 	// bi-directional many-to-one association to Columnsdetail
-	@Fetch (FetchMode.SELECT) 
 	@OneToMany(mappedBy = "tabledetail", fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<Columnsdetail> columnsdetails;
 
 	@OneToMany(mappedBy = "referenceTable", fetch = FetchType.EAGER)

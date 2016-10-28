@@ -11,16 +11,19 @@ public class Test {
 		GeneratedTable generatedTable = new GeneratedTable();
 		List<GeneratedColumn> generatedColumns = new ArrayList<GeneratedColumn>();
 
-		GeneratedColumnEnum generatedColumnEnum = new GeneratedColumnEnum();
+		for(int i=0;i<10000;i++){
+			GenerateColumnRandom generateColumnRandom = new GenerateColumnRandom();
 
-		generatedColumnEnum.setColName("ABC");
-		generatedColumnEnum.setColumnType(ColumnType.ENUM);
-		generatedColumnEnum.setColLength(5);
-		generatedColumnEnum.setFilePath("C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\ABC.txt");
-		generatedColumnEnum.setEnumValues("a,b,c,d");
-		generatedColumnEnum.generateColumn();
+			generateColumnRandom.setColName("ABC");
+			generateColumnRandom.setColumnType(ColumnType.INTEGER);
+			generateColumnRandom.setColLength(3);
+			generateColumnRandom.setFilePath("C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\ABC.txt");
+			generateColumnRandom.generateColumn();
+			generateColumnRandom.setNullable(false);
+			generateColumnRandom.setGenerateAllUnique(true);
 
-		generatedColumns.add(generatedColumnEnum);
+			generatedColumns.add(generateColumnRandom);
+		}
 		generatedTable.setGeneratedColumn(generatedColumns);
 	}
 

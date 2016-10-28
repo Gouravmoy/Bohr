@@ -1,5 +1,13 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -10,6 +18,11 @@ import ch.qos.logback.core.rolling.FixedWindowRollingPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import ch.qos.logback.core.util.StatusPrinter;
+import dao.PreDefinedModelDao;
+import dao.impl.PreDefinedModelsDaoImpl;
+import entity.PreDefinedModels;
+import exceptions.PersistException;
+import exceptions.ReadEntityException;
 
 public class MainController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -61,5 +74,38 @@ public class MainController {
 		// log something
 		logbackLogger.debug("hello");
 		return logbackLogger;
+	}
+
+	public static void loadPredefData() {
+		Properties properties = new Properties();
+		PreDefinedModels preDefinedModel = new PreDefinedModels();
+		PreDefinedModelDao preDefinedModelDao = new PreDefinedModelsDaoImpl();
+		List<PreDefinedModels> preDefinedModels = new ArrayList<>();
+		try {
+			preDefinedModels = preDefinedModelDao.getAllPreDefinedModelsinDB();
+		} catch (ReadEntityException e1) {
+			e1.printStackTrace();
+		}
+		if (preDefinedModels.isEmpty()) {
+			try {
+				// File propFile = new File(
+				// "D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\predefined.properties");
+				File propFile = new File("D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\predefined.properties");
+				properties.load(new FileInputStream(propFile));
+				Enumeration<?> e = properties.propertyNames();
+				while (e.hasMoreElements()) {
+					String key = (String) e.nextElement();
+					String value = properties.getProperty(key);
+					preDefinedModel = new PreDefinedModels();
+					preDefinedModel.setSampelValues(value);
+					preDefinedModel.setExpectedColumnName(key.replace("@", ","));
+					preDefinedModelDao.savePreDefinedModels(preDefinedModel);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (PersistException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 }

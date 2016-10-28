@@ -35,8 +35,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import common.Master;
 import dataProvider.TwoDimensionalArrayDataProvider;
-import entity.Columnsdetail;
-import entity.GeneratedTableData;
+import entity.generateEntity.GenerateColumnRandom;
+import entity.generateEntity.GeneratedColumn;
+import entity.generateEntity.GeneratedTable;
 
 public class DisplayTableValuesPart {
 	public static final String EDITABLE_LABEL = "editableLabel";
@@ -44,7 +45,7 @@ public class DisplayTableValuesPart {
 	public static final String SECURITY_ID_EDITOR = "SecurityIdEditor";
 	public static final String SECURITY_ID_CONFIG_LABEL = "SecurityIdConfigLabel";
 
-	GeneratedTableData generatedTableData;
+	GeneratedTable generatedTable;
 	String[] propertyNames;
 	Map<String, String> propertyToLabelMap;
 
@@ -55,16 +56,16 @@ public class DisplayTableValuesPart {
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-		generatedTableData = Master.INSTANCE.getCurrentGeneratedData();
+		generatedTable = Master.INSTANCE.getCurrentGeneratedTable();
 		int coluCount = 0;
-		propertyNames = new String[generatedTableData.getTable().getColumnsdetails().size()];
+		propertyNames = new String[generatedTable.getGeneratedColumn().size()];
 		propertyToLabelMap = new HashMap<>();
-		for (Columnsdetail columnsdetail : generatedTableData.getTable().getColumnsdetails()) {
-			propertyNames[coluCount] = columnsdetail.getName();
-			propertyToLabelMap.put(columnsdetail.getName(), columnsdetail.getName().toUpperCase());
+		for (GeneratedColumn columnsdetail : generatedTable.getGeneratedColumn()) {
+			propertyNames[coluCount] = columnsdetail.getColName();
+			propertyToLabelMap.put(columnsdetail.getColName(), columnsdetail.getColName().toUpperCase());
 			coluCount++;
 		}
-		IDataProvider bodyDataProvider = new TwoDimensionalArrayDataProvider(generatedTableData);
+		IDataProvider bodyDataProvider = new TwoDimensionalArrayDataProvider(generatedTable);
 		DataLayer bodyDataLayer = new DataLayer(bodyDataProvider);
 		SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
 		ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
@@ -94,15 +95,15 @@ public class DisplayTableValuesPart {
 
 		});
 		natTable.addConfiguration(editableGridConfiguration(columnLabelAccumulator, bodyDataProvider,
-				generatedTableData.getTable().getColumnsdetails()));
+				generatedTable.getGeneratedColumn()));
 		natTable.configure();
 	}
 
 	protected static void registerConfigLabelsOnColumns(ColumnOverrideLabelAccumulator columnLabelAccumulator,
-			List<Columnsdetail> list) {
+			List<GeneratedColumn> list) {
 		int i = 0;
-		for (Columnsdetail columnsdetail : list) {
-			if (columnsdetail.getConstraintsdetails1().size() == 0) {
+		for (GeneratedColumn columnsdetail : list) {
+			if (columnsdetail instanceof GenerateColumnRandom) {
 				columnLabelAccumulator.registerColumnOverrides(i++, EDITABLE_LABEL, SECURITY_ID_EDITOR,
 						SECURITY_ID_CONFIG_LABEL);
 			} else {
@@ -113,7 +114,7 @@ public class DisplayTableValuesPart {
 
 	public static AbstractRegistryConfiguration editableGridConfiguration(
 			final ColumnOverrideLabelAccumulator columnLabelAccumulator, final IDataProvider dataProvider,
-			List<Columnsdetail> list) {
+			List<GeneratedColumn> list) {
 
 		return new AbstractRegistryConfiguration() {
 

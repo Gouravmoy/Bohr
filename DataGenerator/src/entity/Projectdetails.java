@@ -38,6 +38,9 @@ public class Projectdetails implements Serializable {
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Relationsdetail> relationsdetails;
 
+	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
+	private Set<Datasamplemodel> datasamplemodels;
+
 	// bi-directional many-to-one association to Patterndetail
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Patterndetail> patterndetails;

@@ -1,12 +1,18 @@
 package dataProvider;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-import entity.GeneratedTableData;
+import entity.generateEntity.GeneratedTable;
 
 public class TwoDimensionalArrayDataProvider implements IDataProvider {
 	String[][] dataTable;
-	GeneratedTableData generatedData;
+	GeneratedTable generatedData;
+	BufferedReader buffredReader;
 
 	@Override
 	public Object getDataValue(int columnIndex, int rowIndex) {
@@ -22,27 +28,36 @@ public class TwoDimensionalArrayDataProvider implements IDataProvider {
 
 	@Override
 	public int getColumnCount() {
-		return generatedData.getTable().getColumnsdetails().size();
+		return generatedData.getGeneratedColumn().size();
 	}
 
 	@Override
 	public int getRowCount() {
-		return generatedData.getRows().size();
+		return 50;
 	}
 
-	public TwoDimensionalArrayDataProvider(GeneratedTableData generatedData) {
-		super();
-		this.generatedData = generatedData;
-		dataTable = new String[generatedData.getTable().getColumnsdetails().size()][generatedData.getRows().size()];
-		int rowCount = 0;
-		int colCount = 0;
-		for (String rowValue : generatedData.getRows()) {
-			colCount = 0;
-			for (String colValue : rowValue.split("\\,")) {
-				setDataValue(colCount, rowCount, colValue);
-				colCount++;
+	public TwoDimensionalArrayDataProvider(GeneratedTable generatedTable) {
+		this.generatedData = generatedTable;
+		dataTable = new String[getColumnCount()][getRowCount()];
+		try {
+			buffredReader = new BufferedReader(new FileReader(generatedData.getTablePath()));
+			String rowValue = "";
+			int rowCount = 0;
+			int colCount = 0;
+			while ((rowValue = buffredReader.readLine()) != null) {
+				colCount = 0;
+				for (String colValue : rowValue.split("\\,")) {
+					setDataValue(colCount, rowCount, colValue);
+					colCount++;
+				}
+				rowCount++;
 			}
-			rowCount++;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.generate;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +19,7 @@ public class GenerateTableDataTask_1 extends Task {
 	BufferedReader[] bufferedReaders;
 	HashMap<Integer, String> columnFilePath = new HashMap<>();
 	HashMap<Integer, Boolean> fileReopen = new HashMap<>();
+	boolean wirteToText = true;
 
 	public GenerateTableDataTask_1(GeneratedTable generatedTableData) {
 		this.generatedTableData = generatedTableData;
@@ -31,13 +32,12 @@ public class GenerateTableDataTask_1 extends Task {
 		createFiles();
 		// generation logic per row
 		int rowCount = generatedTableData.getRowCount();
-		rowCount = 10;// remove this
 		try {
 			String rowString = null;
 			String colString;
-			while (rowCount > 0) {
-				int colDataIntCount = 0;
+			while (rowCount > 0 && wirteToText) {
 				rowString = "";
+				int colDataIntCount = 0;
 				while (colDataIntCount < columnCount) {
 					colString = "";
 					colString = bufferedReaders[colDataIntCount].readLine();
@@ -51,19 +51,21 @@ public class GenerateTableDataTask_1 extends Task {
 							if (colString.length() > 0) {
 								rowString += colString;
 							} else {
-								rowCount = 0;
+								wirteToText = false;
 								break;
 							}
 						} else {
-							rowCount = 0;
+							wirteToText = false;
 							break;
 						}
 					}
 					colDataIntCount++;
 				}
-				if (rowCount > 0)
-					bufferedWriter.write(rowString.substring(0, rowString.length() - 1) + "\n");
-				if (rowCount % 50 == 0) {
+				if (wirteToText) {
+					rowString = rowString.substring(0, rowString.length() - 1) + "\n";
+					bufferedWriter.write(rowString);
+				}
+				if (rowCount % 50 == 0 && wirteToText) {
 					bufferedWriter.flush();
 				}
 				rowCount--;
@@ -111,5 +113,4 @@ public class GenerateTableDataTask_1 extends Task {
 		}
 
 	}
-
 }

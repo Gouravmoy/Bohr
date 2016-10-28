@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 import common.Master;
-import entity.GeneratedTableData;
+import entity.generateEntity.GeneratedTable;
 import jobs.tasks.AddPartTask;
 
 public class DisplayTablePart {
@@ -54,8 +54,8 @@ public class DisplayTablePart {
 		columnOne.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				GeneratedTableData generatedTableData = (GeneratedTableData) element;
-				return generatedTableData.getTable().getTableName();
+				GeneratedTable generatedTableData = (GeneratedTable) element;
+				return generatedTableData.getTableName();
 			}
 		});
 		colSixthName.setLabelProvider(new CellLabelProvider() {
@@ -63,7 +63,7 @@ public class DisplayTablePart {
 
 			@Override
 			public void update(ViewerCell cell) {
-				GeneratedTableData generatedTableData = (GeneratedTableData) cell.getViewerRow().getElement();
+				GeneratedTable generatedTableData = (GeneratedTable) cell.getViewerRow().getElement();
 				TableItem item = (TableItem) cell.getItem();
 				Button button;
 				if (buttons.containsKey(cell.getElement())) {
@@ -76,8 +76,9 @@ public class DisplayTablePart {
 					button.addSelectionListener(new SelectionListener() {
 						@Override
 						public void widgetSelected(SelectionEvent arg0) {
-							Master.INSTANCE.setCurrentGeneratedData((GeneratedTableData) button.getData());
-							AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTableValuesPart");
+							Master.INSTANCE.setCurrentGeneratedTable((GeneratedTable) button.getData());
+							AddPartTask addPartTask = new AddPartTask(
+									"bundleclass://DataGenerator/datagenerator.parts.DisplayTableValuesPart");
 							addPartTask.execute();
 						}
 
@@ -94,7 +95,7 @@ public class DisplayTablePart {
 			}
 		});
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setInput(Master.INSTANCE.getGeneratedTableData());
+		tableViewer.setInput(Master.INSTANCE.getGeneratedTables());
 
 	}
 

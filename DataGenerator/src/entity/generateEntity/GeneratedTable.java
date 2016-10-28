@@ -8,6 +8,8 @@ public class GeneratedTable {
 	List<GeneratedColumn> generatedColumn;
 	String tablePath;
 	int rowCount;
+	String schemaName;
+	String tableOutPutPath;
 
 	void generateTableData() {
 
@@ -43,6 +45,22 @@ public class GeneratedTable {
 
 	public void setRowCount(int rowCount) {
 		this.rowCount = rowCount;
+	}
+
+	public String getSchemaName() {
+		return schemaName;
+	}
+
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
+
+	public String getTableOutPutPath() {
+		return tableOutPutPath;
+	}
+
+	public void setTableOutPutPath(String tableOutPutPath) {
+		this.tableOutPutPath = tableOutPutPath;
 	}
 
 	@Override

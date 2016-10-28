@@ -34,7 +34,7 @@ import enums.SampleType;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 import jobs.tasks.ConnectonCreateTask;
-import jobs.tasks.QueryExecuteTask;
+import jobs.tasks.create.QueryExecuteTask;
 import jobs.tasks.RefrehTreeTask;
 
 public class DataModelDialog extends Dialog {
@@ -197,12 +197,12 @@ public class DataModelDialog extends Dialog {
 	protected void okPressed() {
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
 		RefrehTreeTask refrehTreeTask;
-		datasamplemodel.setSampleModelName(text.getText());
+		//datasamplemodel.setSampleModelName(text.getText());
 		StringBuilder sb = new StringBuilder();
 		for (String modelValue : modelValues) {
 			sb.append(modelValue + ",");
 		}
-		datasamplemodel.setSampelValues(sb.toString());
+		//datasamplemodel.setSampelValues(sb.toString());
 		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
 		try {
 			dataSampleDao.saveDatasamplemodel(datasamplemodel);

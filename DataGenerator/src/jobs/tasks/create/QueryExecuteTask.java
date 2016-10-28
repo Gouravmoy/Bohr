@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +24,7 @@ public class QueryExecuteTask extends Task {
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new BuildException();
 		}

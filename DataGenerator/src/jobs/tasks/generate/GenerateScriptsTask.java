@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.generate;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import common.Master;
 import entity.GeneratedTableData;
 
 public class GenerateScriptsTask extends Task {
@@ -22,7 +21,7 @@ public class GenerateScriptsTask extends Task {
 	public GenerateScriptsTask(String exportPath, List<GeneratedTableData> tableDatas) {
 		this.exportPath = exportPath;
 		this.tableDatas = tableDatas;
-		Master.INSTANCE.setGeneratedTableData(tableDatas);
+		//Master.INSTANCE.setGeneratedTableData(tableDatas);
 	}
 
 	@Override

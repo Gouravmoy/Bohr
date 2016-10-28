@@ -75,8 +75,8 @@ public class ImportDialog extends Dialog {
 		FirstJob firstJob = new FirstJob("My Job");
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		Databasedetail databasedetail = new Databasedetail();
-		databasedetail.setConnectionName("Nagios");
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/nagios");
+		databasedetail.setConnectionName(text.getText());
+		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila_test");
 		databasedetail.setUsername("root");
 		databasedetail.setPassword("root");
 		databasedetail.setType(DBType.MYSQL);

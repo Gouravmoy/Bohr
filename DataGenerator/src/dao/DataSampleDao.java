@@ -15,4 +15,6 @@ public interface DataSampleDao {
 	public List<Datasamplemodel> getAllDatasamplemodelinDB() throws ReadEntityException;
 
 	public void update(Datasamplemodel datasamplemodel) throws EntityNotPresent;
+	
+	public List<Datasamplemodel> getDatasamplemodelByQyery(String query, Object[] pars);
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,9 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.BatchSize;
 
 /**
  * The persistent class for the schemadetails database table.
@@ -39,21 +43,21 @@ public class Schemadetail implements Serializable {
 	@Column(length = 100)
 	private String name;
 
-	// bi-directional many-to-one association to Changelog
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "schemadetail", cascade = CascadeType.ALL)
+	private Projectdetails associatedProjectDetail;
+
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
 	private Set<Changelog> changelogs;
 
-	// bi-directional many-to-one association to Datasamplemodel
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
 
-	// bi-directional many-to-one association to Databasedetail
 	@ManyToOne
 	@JoinColumn(name = "db_id", nullable = false)
 	private Databasedetail databasedetail;
 
-	// bi-directional many-to-one association to Tabledetail
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
+	@BatchSize(size = 4) 
 	private Set<Tabledetail> tabledetails;
 
 	public Schemadetail() {
@@ -155,6 +159,14 @@ public class Schemadetail implements Serializable {
 		tabledetail.setSchemadetail(null);
 
 		return tabledetail;
+	}
+
+	public Projectdetails getAssociatedProjectDetail() {
+		return associatedProjectDetail;
+	}
+
+	public void setAssociatedProjectDetail(Projectdetails associatedProjectDetail) {
+		this.associatedProjectDetail = associatedProjectDetail;
 	}
 
 	@Override
