@@ -11,6 +11,7 @@ import datagenerator.parts.SamplePart;
 
 public class AddPartTask extends Task {
 	String linkedClass;
+	String partName;
 
 	public AddPartTask(String linkedClass) {
 		super();
@@ -28,7 +29,7 @@ public class AddPartTask extends Task {
 				MPartStack parent = (MPartStack) SamplePart.modelService.getContainer(oldPart);
 				partDy.setElementId("datagenerator.part.playground");
 				partDy.setContainerData("60");
-				partDy.setLabel("DATA RUNNER");
+				partDy.setLabel(partName);
 				partDy.setCloseable(true);
 				parent.getChildren().add(partDy);
 				parent.setSelectedElement(partDy);
@@ -36,6 +37,14 @@ public class AddPartTask extends Task {
 			}
 		});
 
+	}
+
+	public String getPartName() {
+		return partName;
+	}
+
+	public void setPartName(String partName) {
+		this.partName = partName;
 	}
 
 }

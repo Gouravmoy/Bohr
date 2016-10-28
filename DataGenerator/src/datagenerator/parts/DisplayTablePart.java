@@ -76,9 +76,11 @@ public class DisplayTablePart {
 					button.addSelectionListener(new SelectionListener() {
 						@Override
 						public void widgetSelected(SelectionEvent arg0) {
-							Master.INSTANCE.setCurrentGeneratedTable((GeneratedTable) button.getData());
+							GeneratedTable generatedTable = (GeneratedTable) button.getData();
+							Master.INSTANCE.setCurrentGeneratedTable(generatedTable);
 							AddPartTask addPartTask = new AddPartTask(
 									"bundleclass://DataGenerator/datagenerator.parts.DisplayTableValuesPart");
+							addPartTask.setPartName(generatedTable.getTableName());
 							addPartTask.execute();
 						}
 

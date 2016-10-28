@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -27,11 +28,12 @@ import dao.impl.ProjectDAOImpl;
 import entity.Projectdetails;
 import entity.Tabledetail;
 import exceptions.ReadEntityException;
-import org.eclipse.swt.widgets.Spinner;
+import job.GenerateDataJob2;
 
 public class ExecuteDialog extends Dialog {
 	private Text text;
 	private Text text_1;
+	private Spinner spinner;
 	private Table table;
 	public List<Tabledetail> tabledetails;
 	public List<Tabledetail> selectedTabledetails;
@@ -139,10 +141,11 @@ public class ExecuteDialog extends Dialog {
 		lblNoOfRows.setBounds(10, 124, 156, 15);
 		lblNoOfRows.setText("No of Rows to Generate");
 
-		Spinner spinner = new Spinner(grpUserInput, SWT.BORDER);
+		spinner = new Spinner(grpUserInput, SWT.BORDER);
 		spinner.setBounds(171, 119, 60, 22);
 		spinner.setMaximum(500);
-		spinner.setMinimum(1);
+		spinner.setMinimum(0);
+		spinner.setIncrement(10);
 
 		return container;
 	}
@@ -172,7 +175,6 @@ public class ExecuteDialog extends Dialog {
 			item.setText(0, tabledetail.getTableName());
 			item.setText(1, tabledetail.getTableName());
 			item.setData(tabledetail);
-			// }
 		}
 		for (int i = 0; i < COLUMN_NAMES.length; i++) {
 			table.getColumn(i).pack();
@@ -210,7 +212,13 @@ public class ExecuteDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-
+		GenerateDataJob2 generateDataJob2 = new GenerateDataJob2("Generate Job");
+		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
+		generateDataJob2.setNoOfRows(spinner.getSelection());
+		generateDataJob2.schedule();
+		StatusDialog dialog = new StatusDialog(getParentShell());
+		dialog.open();
+		super.okPressed();
 	}
 
 	@Override
