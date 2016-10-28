@@ -43,15 +43,13 @@ public class GenerateDataJob extends Job {
 		dataTask_1.execute();
 		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
 		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
-			if (generatedTable.getTableName().equals("country")) {
-				generatedTable.setRowCount(rowCount);
-				for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-					column.setNumberOfRows(rowCount);
-					column.generateColumn();
-				}
-				GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
-				dataTask_12.execute();
+			generatedTable.setRowCount(rowCount);
+			for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
+				column.setNumberOfRows(rowCount);
+				column.generateColumn();
 			}
+			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
+			dataTask_12.execute();
 		}
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();

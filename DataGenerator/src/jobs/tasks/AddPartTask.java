@@ -7,6 +7,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.swt.widgets.Display;
 
+import common.Master;
 import datagenerator.parts.SamplePart;
 
 public class AddPartTask extends Task {
@@ -28,8 +29,13 @@ public class AddPartTask extends Task {
 				MPartStack parent = (MPartStack) SamplePart.modelService.getContainer(oldPart);
 				partDy.setElementId("datagenerator.part.playground");
 				partDy.setContainerData("60");
-				partDy.setLabel("DATA RUNNER");
-				partDy.setCloseable(true);
+				if (linkedClass.contains("DisplayTableValuesPart")) {
+					partDy.setLabel(Master.INSTANCE.getCurrentGeneratedTable().getTableName());
+					partDy.setCloseable(true);
+				} else {
+					partDy.setLabel("Table List");
+					partDy.setCloseable(false);
+				}
 				parent.getChildren().add(partDy);
 				parent.setSelectedElement(partDy);
 

@@ -49,7 +49,7 @@ public class DisplayTablePart {
 
 		TableViewerColumn colSixthName = new TableViewerColumn(tableViewer, SWT.NONE);
 		colSixthName.getColumn().setWidth(221);
-		colSixthName.getColumn().setText("View/Edit values");
+		colSixthName.getColumn().setText("View values");
 
 		columnOne.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -70,7 +70,7 @@ public class DisplayTablePart {
 					button = buttons.get(cell.getElement());
 				} else {
 					button = new Button((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-					button.setText("Get Report");
+					button.setText("View/Edit Values");
 					button.setData(generatedTableData);
 					buttons.put(cell.getElement(), button);
 					button.addSelectionListener(new SelectionListener() {

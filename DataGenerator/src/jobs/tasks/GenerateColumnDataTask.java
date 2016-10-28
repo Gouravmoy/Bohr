@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
+import entity.Relationsdetail;
 import entity.Tabledetail;
 import entity.generateEntity.GenerateColumnPreDefined;
 import entity.generateEntity.GenerateColumnPrimaryKey;
@@ -28,7 +30,7 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG";
+	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Temp";
 	ModelService modelService;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
@@ -46,11 +48,10 @@ public class GenerateColumnDataTask extends Task {
 		mainFolder.mkdir();
 		generatedTableData = new ArrayList<>();
 		String textFilePath;
+		int tableRank = 1;
 		for (Tabledetail tabledetail : sortedTableList) {
-			if (tabledetail.getTableName().equalsIgnoreCase("film")) {
-				System.out.println("bug");
-			}
 			GeneratedTable generatedTable = new GeneratedTable();
+			generatedTable.setTableRank(tableRank++);
 			generatedTable.setTableName(tabledetail.getTableName());
 			tableFolder = new File(mainFolderPath + "\\" + tabledetail.getTableName());
 			tableFolder.mkdir();
@@ -63,6 +64,8 @@ public class GenerateColumnDataTask extends Task {
 					generatePredefinedValues(textFilePath, columnsdetail);
 				} else if (!columnsdetail.getPredefinedModels().isEmpty()) {
 					generatePredefinedValues(textFilePath, columnsdetail);
+				} else if (columnsdetail.getRelationsdetails().size() != 0) {
+					generateRelationColumn(textFilePath, columnsdetail.getRelationsdetails());
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
 				} else if (columnsdetail.getKeytype() != null) {
@@ -92,6 +95,11 @@ public class GenerateColumnDataTask extends Task {
 			generatedTable.setGeneratedColumn(generatedColumnList);
 			generatedTableData.add(generatedTable);
 		}
+	}
+
+	private void generateRelationColumn(String textFilePath, Set<Relationsdetail> set) {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void generateNullableColumn(String textFilePath, Columnsdetail columnsdetail) {

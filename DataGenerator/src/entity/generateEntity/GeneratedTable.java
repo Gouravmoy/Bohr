@@ -10,6 +10,7 @@ public class GeneratedTable {
 	int rowCount;
 	String schemaName;
 	String tableOutPutPath;
+	int tableRank;
 
 	void generateTableData() {
 
@@ -61,6 +62,14 @@ public class GeneratedTable {
 
 	public void setTableOutPutPath(String tableOutPutPath) {
 		this.tableOutPutPath = tableOutPutPath;
+	}
+
+	public int getTableRank() {
+		return tableRank;
+	}
+
+	public void setTableRank(int tableRank) {
+		this.tableRank = tableRank;
 	}
 
 	@Override

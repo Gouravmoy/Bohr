@@ -21,7 +21,7 @@ public class RegenerateUKForFK {
 	static String combinationFilePath;
 	int numberOfRows;
 
-	static String tempFolder = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\DataGeneration\\";
+	static String tempFolder = "C:\\Users\\M1026352\\Desktop\\DataGn";
 
 	public void regenerate() {
 		String[] tempFilePath = new String[ukFkColumns.size()];

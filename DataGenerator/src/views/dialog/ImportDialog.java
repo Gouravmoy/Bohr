@@ -64,7 +64,7 @@ public class ImportDialog extends Dialog {
 		lblPassword.setText("Password");
 		new Label(container, SWT.NONE);
 
-		text_2 = new Text(container, SWT.BORDER);
+		text_2 = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		return parent;
 
