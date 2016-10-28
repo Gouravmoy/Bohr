@@ -67,6 +67,8 @@ public class GenerateColumnDataTask extends Task {
 					generatePredefinedValues(textFilePath, columnsdetail);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
+				} else if (columnsdetail.getRelationsdetails().size() != 0) {
+					generateRelationColumnms(columnsdetail, textFilePath);
 				} else if (columnsdetail.getKeytype() != null) {
 					if (columnsdetail.getIsnullable() == 1 && !generatedTableList.contains(columnsdetail
 							.getConstraintsdetails1().iterator().next().getReferenceTable().getTableName())) {
@@ -95,6 +97,11 @@ public class GenerateColumnDataTask extends Task {
 			generatedTable.setGeneratedColumn(generatedColumnList);
 			generatedTableData.add(generatedTable);
 		}
+	}
+
+	private void generateRelationColumnms(Columnsdetail columnsdetail, String textFilePath) {
+		
+		
 	}
 
 	private void generateNullableColumn(String textFilePath, Columnsdetail columnsdetail) {
