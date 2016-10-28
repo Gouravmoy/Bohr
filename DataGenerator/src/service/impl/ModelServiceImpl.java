@@ -7,10 +7,8 @@ import dao.DataSampleDao;
 import dao.PreDefinedModelDao;
 import dao.impl.DataSampleDaoImpl;
 import dao.impl.PreDefinedModelsDaoImpl;
-import entity.Columnsdetail;
 import entity.Datasamplemodel;
 import entity.PreDefinedModels;
-import exceptions.ReadEntityException;
 import service.ModelService;
 
 public class ModelServiceImpl implements ModelService {

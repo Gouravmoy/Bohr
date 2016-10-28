@@ -12,6 +12,7 @@ import datagenerator.parts.SamplePart;
 
 public class AddPartTask extends Task {
 	String linkedClass;
+	String partName;
 
 	public AddPartTask(String linkedClass) {
 		super();
@@ -42,6 +43,14 @@ public class AddPartTask extends Task {
 			}
 		});
 
+	}
+
+	public String getPartName() {
+		return partName;
+	}
+
+	public void setPartName(String partName) {
+		this.partName = partName;
 	}
 
 }
