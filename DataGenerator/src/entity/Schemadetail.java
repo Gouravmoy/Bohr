@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.BatchSize;
+
 /**
  * The persistent class for the schemadetails database table.
  * 
@@ -55,6 +57,7 @@ public class Schemadetail implements Serializable {
 	private Databasedetail databasedetail;
 
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
+	@BatchSize(size = 4) 
 	private Set<Tabledetail> tabledetails;
 
 	public Schemadetail() {

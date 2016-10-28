@@ -97,9 +97,9 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	// Service
 
-	static RelationService relationService;
-	static PatternService patternService;
-	static ModelService modelService;
+	public static RelationService relationService;
+	public static PatternService patternService;
+	public static ModelService modelService;
 
 	// Menu
 	static JPopupMenu popup = new JPopupMenu();
@@ -112,7 +112,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 	JMenuItem createDataModel;
 
 	// Logger
-	Logger logger = MainController.getLogger(TreeView.class);
+	static Logger logger = MainController.getLogger(TreeView.class);
 
 	@Inject
 	public TreeView() {
@@ -139,8 +139,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		assignMenuItems();
 		popup.add(createRelations);
-		//popup.add(createPatterns);
-		//popup.add(createDataModel);
+		// popup.add(createPatterns);
+		// popup.add(createDataModel);
 		initilizeTrees(frame);
 
 		try {
@@ -225,7 +225,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			category.add(dataModels);
 			projectsTreeTop.add(category);
 			refreshProjectTree();
-			System.out.println("Exit Project");
+			logger.debug("Exit Tree");
 		}
 
 	}
@@ -287,9 +287,12 @@ public class TreeView extends DefaultTreeCellRenderer {
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
 		sortList(tabledetails);
+		//int count = 0;
 		for (Tabledetail tabledetail : tabledetails) {
+			//System.out.println(tabledetail.getTableName());
 			tableCategory = new DefaultMutableTreeNode(tabledetail);
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
+				//System.out.println((count++)+"->"+tabledetail.getTableName()+"->"+columnsdetail.getName());
 				columnCategory = new DefaultMutableTreeNode(columnsdetail);
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
@@ -306,7 +309,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void getModels(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail, int id) {
-		System.out.println("Inside getModels");
+		//System.out.println("Inside getModels");
 		DefaultMutableTreeNode modelCategory;
 		Datasamplemodel datasamplemodel = modelService
 				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
@@ -322,7 +325,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			dataModels.add(new DefaultMutableTreeNode(preDefinedModels));
 		}
 		columnCategory.add(modelCategory);
-		System.out.println("Exit getModels");
+		//System.out.println("Exit getModels");
 	}
 
 	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,

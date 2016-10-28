@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,6 +13,7 @@ import entity.Columnsdetail;
 import entity.Databasedetail;
 import entity.Tabledetail;
 import enums.ColumnType;
+import jobs.tasks.ConnectonCreateTask;
 
 public class CreateColumnTask extends Task {
 	Databasedetail databasedetail;
@@ -51,6 +52,9 @@ public class CreateColumnTask extends Task {
 					columnsdetail = new Columnsdetail();
 					columnsdetail.setTabledetail(tabledetail);
 					columnsdetail.setName(resultSet.getString("COLUMN_NAME"));
+					if(columnsdetail.getName().equals("rental_rate")){
+						System.out.println("Here");
+					}
 					if (resultSet.getString("IS_NULLABLE").equals("NO")) {
 						columnsdetail.setIsnullable((byte) 0);
 					} else {
@@ -82,7 +86,8 @@ public class CreateColumnTask extends Task {
 						String[] colTypeSplit = resultSet.getString("COLUMN_TYPE").split("\\(");
 						colTypeSplit[1] = colTypeSplit[1].replace(")", "");
 						columnsdetail.setEnumvalues(colTypeSplit[1]);
-					}
+
+					} 
 					columnsdetails.add(columnsdetail);
 				} catch (NumberFormatException exception) {
 					System.out.println("Leave this");
@@ -137,18 +142,19 @@ public class CreateColumnTask extends Task {
 		case "set":
 		case "SET":
 			return ColumnType.ENUM;
-		case "decimal":
-		case "DECIMAL":
 		case "double":
 		case "DOUBLE":
 			return ColumnType.INTEGER;
+		case "decimal":
+		case "DECIMAL":
+			return ColumnType.DECIMAL;
 		case "mediumint":
 		case "MEDIUMINT":
-		case "smallint":
-		case "SMALLINT":
 			return ColumnType.INTEGER;
 		case "tinyint":
 		case "TINYINT":
+		case "smallint":
+		case "SMALLINT":
 			return ColumnType.TINYINT;
 		case "blob":
 		case "BLOB":

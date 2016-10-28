@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,6 +17,7 @@ import entity.Databasedetail;
 import entity.Tabledetail;
 import enums.KeyType;
 import exceptions.ReadEntityException;
+import jobs.tasks.ConnectonCreateTask;
 
 public class CreateConstraintTask extends Task {
 	Databasedetail databasedetail;

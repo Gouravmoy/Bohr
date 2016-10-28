@@ -1,6 +1,8 @@
 package controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import common.Master;
@@ -14,17 +16,17 @@ import entity.generateEntity.RegenerateUKForFK;
 import enums.Environment;
 import enums.KeyType;
 import exceptions.ReadEntityException;
-import jobs.tasks.GenerateColumnDataTask;
-import jobs.tasks.GenerateTableDataTask_1;
-import jobs.tasks.GenerateTableDataWithInsertQueryTask;
 import jobs.tasks.SortTableTask;
+import jobs.tasks.generate.GenerateColumnDataTask;
+import jobs.tasks.generate.GenerateTableDataTask_1;
+import jobs.tasks.generate.GenerateTableDataWithInsertQueryTask;
 
 public class DeleteMain {
 
 	public static void main(String[] args) {
 		SchemaDao dao = new SchemaDaoImpl();
 		try {
-			Master.INSTANCE.setEnvironment(Environment.STAGING);
+			Master.INSTANCE.setEnvironment(Environment.TEST);
 			Master.INSTANCE.setClearAll(false);
 			Schemadetail schemadetail = dao.getSchemaByid(1);
 			List<Tabledetail> tableList = new ArrayList<>(schemadetail.getTabledetails());
@@ -49,7 +51,9 @@ public class DeleteMain {
 				GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 				dataTask_12.execute();
 				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-						generatedTable, "C:\\Users\\M1026352\\Desktop\\OuyputGn", tableCount);
+						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
+								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\",
+						tableCount);
 				tableCount++;
 				dataWithInsertQueryTask.execute();
 			}

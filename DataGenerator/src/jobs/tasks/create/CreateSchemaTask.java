@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,6 +11,7 @@ import org.apache.tools.ant.Task;
 
 import entity.Databasedetail;
 import entity.Schemadetail;
+import jobs.tasks.ConnectonCreateTask;
 
 public class CreateSchemaTask extends Task {
 	Databasedetail databasedetail;

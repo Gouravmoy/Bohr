@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.create;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

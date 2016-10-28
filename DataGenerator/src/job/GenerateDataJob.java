@@ -15,9 +15,9 @@ import entity.Tabledetail;
 import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
 import jobs.tasks.AddPartTask;
-import jobs.tasks.GenerateColumnDataTask;
-import jobs.tasks.GenerateTableDataTask_1;
 import jobs.tasks.SortTableTask;
+import jobs.tasks.generate.GenerateColumnDataTask;
+import jobs.tasks.generate.GenerateTableDataTask_1;
 
 public class GenerateDataJob extends Job {
 

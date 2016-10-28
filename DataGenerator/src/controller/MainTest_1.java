@@ -7,7 +7,7 @@ import dao.impl.TableDaoImpl;
 import entity.Databasedetail;
 import entity.Tabledetail;
 import exceptions.ReadEntityException;
-import jobs.tasks.CreateColumnTask;
+import jobs.tasks.create.CreateColumnTask;
 
 public class MainTest_1 {
 

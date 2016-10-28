@@ -32,17 +32,18 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public PreDefinedModels getPreDefinedmodelsByColumnId(Integer id) {
 		List<PreDefinedModels> preDefinedModels = new ArrayList<>();
-		try {
-			preDefinedModels = predefinedDao.getAllPreDefinedModelsinDB();
-			for (PreDefinedModels definedModels : preDefinedModels) {
-				for (Columnsdetail columnsdetail : definedModels.getColumnsdetails()) {
-					if (columnsdetail.getIdcolumnsdetails() == id)
-						return definedModels;
-				}
-			}
-		} catch (ReadEntityException e) {
-			e.printStackTrace();
-		}
+		String query = "select distinct p from PreDefinedModels p join p.columnsdetails c where c.idcolumnsdetails=:arg0";
+		Object[] pars = { id };
+		preDefinedModels = predefinedDao.getPreDefinedModelsByQyery(query, pars);
+		if (!preDefinedModels.isEmpty())
+			return preDefinedModels.get(0);
+		/*
+		 * try { preDefinedModels = predefinedDao.getAllPreDefinedModelsinDB();
+		 * for (PreDefinedModels definedModels : preDefinedModels) { for
+		 * (Columnsdetail columnsdetail : definedModels.getColumnsdetails()) {
+		 * if (columnsdetail.getIdcolumnsdetails() == id) return definedModels;
+		 * } } } catch (ReadEntityException e) { e.printStackTrace(); }
+		 */
 		return null;
 	}
 

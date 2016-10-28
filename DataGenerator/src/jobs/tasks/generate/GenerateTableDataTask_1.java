@@ -1,4 +1,4 @@
-package jobs.tasks;
+package jobs.tasks.generate;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
