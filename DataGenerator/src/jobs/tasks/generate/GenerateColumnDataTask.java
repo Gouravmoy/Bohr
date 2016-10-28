@@ -28,8 +28,9 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\Export";
+	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Temp";
 	ModelService modelService;
+	List<String> generatedTableList;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -45,13 +46,14 @@ public class GenerateColumnDataTask extends Task {
 		File tableFolder;
 		mainFolder.mkdir();
 		generatedTableData = new ArrayList<>();
+		generatedTableList = new ArrayList<>();
+		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			if (tabledetail.getTableName().equalsIgnoreCase("film")) {
-				System.out.println("bug");
-			}
+			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
+			generatedTable.setTableRank(rowRank++);
 			tableFolder = new File(mainFolderPath + "\\" + tabledetail.getTableName());
 			tableFolder.mkdir();
 			generatedTable.setTablePath(tableFolder.getPath() + "\\TableFile_" + tabledetail.getTableName() + ".txt");
@@ -66,7 +68,8 @@ public class GenerateColumnDataTask extends Task {
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
 				} else if (columnsdetail.getKeytype() != null) {
-					if (columnsdetail.getIsnullable() == 1 && columnsdetail.getKeytype() != null) {
+					if (columnsdetail.getIsnullable() == 1 && !generatedTableList.contains(columnsdetail
+							.getConstraintsdetails1().iterator().next().getReferenceTable().getTableName())) {
 						generateNullableColumn(textFilePath, columnsdetail);
 					} else if (columnsdetail.getKeytype().equals(KeyType.UK)) {
 						generateRandomColumnWithUnique(textFilePath, columnsdetail);
@@ -175,9 +178,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColLength(columnsdetail.getLength());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		if (columnsdetail.getIsnullable() == 1) {
-			generatedColumn.setNullable(true);
-		}
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumnList.add(generatedColumn);

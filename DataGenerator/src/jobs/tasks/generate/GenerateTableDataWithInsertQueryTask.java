@@ -30,13 +30,13 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 	static String OPENBRACKET = "(";
 	static String CLOSEBRACKET = ")";
 
-	public GenerateTableDataWithInsertQueryTask(GeneratedTable generatedTableData, String folderPath, int tableCount) {
+	public GenerateTableDataWithInsertQueryTask(GeneratedTable generatedTableData, String folderPath) {
 		this.generatedTableData = generatedTableData;
 		File floder = new File(folderPath);
-		if(!floder.exists()){
+		if (!floder.exists()) {
 			floder.mkdir();
 		}
-		this.generatedTableData.setTableOutPutPath(folderPath + "\\" + tableCount + "_");
+		this.generatedTableData.setTableOutPutPath(folderPath + "\\" + generatedTableData.getTableRank() + "_");
 	}
 
 	@Override
@@ -44,12 +44,12 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 		int rowCount = 1;
 		try {
 			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
-			
+
 			bufferedWriter = new BufferedWriter(new FileWriter(
 					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".sql"));
 			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 			bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
-					+ generatedTableData.getTableName() + QUOTE + " values"+NEWLINE);
+					+ generatedTableData.getTableName() + QUOTE + " values" + NEWLINE);
 			String rowString = null;
 			String completeString = "";
 			while ((rowString = bufferedReaders.readLine()) != null) {
@@ -63,7 +63,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 					bufferedWriter.write(COMMIT + NEWLINE);
 					bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 					bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
-							+ generatedTableData.getTableName() + QUOTE + " values"+NEWLINE);
+							+ generatedTableData.getTableName() + QUOTE + " values" + NEWLINE);
 					bufferedWriter.flush();
 				}
 				rowCount++;

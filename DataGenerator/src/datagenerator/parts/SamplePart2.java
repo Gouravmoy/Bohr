@@ -39,7 +39,7 @@ public class SamplePart2 {
 				GenerateDataJob dataJob = new GenerateDataJob("Generate Data");
 				Projectdetails projectdetails = null;
 				try {
-					projectdetails = dao.getProjectdetailsByid(1);
+					projectdetails = dao.getProjectdetailsByid(3);
 				} catch (ReadEntityException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

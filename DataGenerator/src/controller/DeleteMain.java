@@ -35,7 +35,6 @@ public class DeleteMain {
 			sortTableTask.execute();
 			GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
 			dataTask_1.execute();
-			int tableCount = 1;
 			for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
 				ukFkColumns = new ArrayList<>();
 				generatedTable.setRowCount(10);
@@ -52,9 +51,7 @@ public class DeleteMain {
 				dataTask_12.execute();
 				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
 						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
-								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\",
-						tableCount);
-				tableCount++;
+								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
 				dataWithInsertQueryTask.execute();
 			}
 		} catch (ReadEntityException e) {

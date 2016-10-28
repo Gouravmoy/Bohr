@@ -28,10 +28,10 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				int newLineStartNumber = 0;
 				currentLineNumber = getLastLineNo();
 				newLineStartNumber = currentLineNumber + 1;
-				if (newLineStartNumber == 1) {
-					writer.write(generateRandomValue() + "\n");
-				} else if (isNullable) {
+				if (isNullable) {
 					writer.write(null + "\n");
+				} else if (newLineStartNumber == 1) {
+					writer.write(generateRandomValue() + "\n");
 				} else {
 					if (!generateAllUnique)
 						writer.write(generateRandomValue() + "\n");

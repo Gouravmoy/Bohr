@@ -1,6 +1,8 @@
 package job;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -18,6 +20,7 @@ import jobs.tasks.AddPartTask;
 import jobs.tasks.SortTableTask;
 import jobs.tasks.generate.GenerateColumnDataTask;
 import jobs.tasks.generate.GenerateTableDataTask_1;
+import jobs.tasks.generate.GenerateTableDataWithInsertQueryTask;
 
 public class GenerateDataJob extends Job {
 
@@ -50,6 +53,11 @@ public class GenerateDataJob extends Job {
 			}
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
+			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
+					generatedTable, "C:\\Users\\M1026352\\Desktop\\OuyputGn\\OutPut"
+							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()));
+			dataWithInsertQueryTask.execute();
+
 		}
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
