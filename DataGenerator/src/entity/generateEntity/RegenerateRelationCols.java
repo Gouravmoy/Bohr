@@ -15,25 +15,28 @@ public class RegenerateRelationCols {
 
 		for (GeneratedColumn generatedColumn : generatedCol) {
 			if (generatedColumn.getRelationsdetail() != null) {
-				if (isTableChildOfRelatedTable(generatedColumn.getTabledetail(),
-						generatedColumn.getRelationsdetail().getTabledetail())) {
-					GeneratedColumn relatedCol = getRelatedGenerateCol(
-							generatedColumn.getRelationsdetail().getRelatedColumndetail(),
-							generatedColumn.getRelationsdetail().getTabledetail());
-					if (relatedCol != null)
-						generatedColumn.setFilePath(relatedCol.getFilePath());
-				}
+				/*
+				 * if
+				 * (isTableChildOfRelatedTable(generatedColumn.getTabledetail(),
+				 * generatedColumn.getRelationsdetail().getTabledetail())) {
+				 */
+				GeneratedColumn relatedCol = getRelatedGenerateCol(
+						generatedColumn.getRelationsdetail().getRelatedColumndetail(),
+						generatedColumn.getRelationsdetail().getTabledetail());
+				if (relatedCol != null)
+					generatedColumn.setFilePath(relatedCol.getFilePath());
 			}
-
 		}
+
+		// }
 
 	}
 
 	private GeneratedColumn getRelatedGenerateCol(Columnsdetail columnsdetail, Tabledetail tabledetail) {
-		for(GeneratedTable generatedTable:generatedTables){
-			if(generatedTable.getTableName().equals(tabledetail.getTableName())){
-				for(GeneratedColumn columnsdetail2:generatedTable.getGeneratedColumn()){
-					if(columnsdetail2.getColName().equals(columnsdetail.getName()))
+		for (GeneratedTable generatedTable : generatedTables) {
+			if (generatedTable.getTableName().equals(tabledetail.getTableName())) {
+				for (GeneratedColumn columnsdetail2 : generatedTable.getGeneratedColumn()) {
+					if (columnsdetail2.getColName().equals(columnsdetail.getName()))
 						return columnsdetail2;
 				}
 			}
@@ -72,7 +75,5 @@ public class RegenerateRelationCols {
 	public void setGeneratedTables(List<GeneratedTable> generatedTables) {
 		this.generatedTables = generatedTables;
 	}
-
-	
 
 }

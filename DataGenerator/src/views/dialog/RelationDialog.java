@@ -219,7 +219,7 @@ public class RelationDialog extends Dialog {
 				sourceColumn.setText(columnsdetail.getName());
 				sourceColumn.setEnabled(false);
 			}
-			assignRelationTargetTable();
+			//assignRelationTargetTable();
 		}
 	}
 
@@ -311,11 +311,13 @@ public class RelationDialog extends Dialog {
 		Schemadetail schemadetail = (Schemadetail) schemaNameCombo.getData(schemaNameCombo.getText());
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
-
+		targetTableCombo.removeAll();
 		sourceTableCombo.removeAll();
 		for (Tabledetail tabledetail : tabledetails) {
 			sourceTableCombo.add(tabledetail.getTableName());
 			sourceTableCombo.setData(tabledetail.getTableName(), tabledetail);
+			targetTableCombo.add(tabledetail.getTableName());
+			targetTableCombo.setData(tabledetail.getTableName(), tabledetail);
 		}
 	}
 
