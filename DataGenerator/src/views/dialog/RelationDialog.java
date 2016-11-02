@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import common.Master;
 import dao.ColumnsDao;
 import dao.ProjectDao;
 import dao.RealationsDao;
@@ -109,7 +110,7 @@ public class RelationDialog extends Dialog {
 		schemaNameCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				assignSourceTableCombo();
+				//assignSourceTableCombo();
 			}
 		});
 
@@ -218,6 +219,7 @@ public class RelationDialog extends Dialog {
 				sourceColumn.setText(columnsdetail.getName());
 				sourceColumn.setEnabled(false);
 			}
+			assignRelationTargetTable();
 		}
 	}
 
@@ -309,13 +311,23 @@ public class RelationDialog extends Dialog {
 		Schemadetail schemadetail = (Schemadetail) schemaNameCombo.getData(schemaNameCombo.getText());
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
-		targetTableCombo.removeAll();
+
 		sourceTableCombo.removeAll();
 		for (Tabledetail tabledetail : tabledetails) {
-			targetTableCombo.add(tabledetail.getTableName());
-			targetTableCombo.setData(tabledetail.getTableName(), tabledetail);
 			sourceTableCombo.add(tabledetail.getTableName());
 			sourceTableCombo.setData(tabledetail.getTableName(), tabledetail);
 		}
+	}
+
+	private void assignRelationTargetTable() {
+		targetTableCombo.removeAll();
+		for (Tabledetail tabledetail : Master.INSTANCE.getSortedTableInLoadOrder()) {
+			if(tabledetail.getTableName().equals(sourceTableCombo.getText())){
+				return;
+			}
+			targetTableCombo.add(tabledetail.getTableName());
+			targetTableCombo.setData(tabledetail.getTableName(), tabledetail);
+		}
+
 	}
 }

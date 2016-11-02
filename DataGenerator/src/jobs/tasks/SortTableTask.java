@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import common.Master;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Tabledetail;
@@ -31,6 +32,7 @@ public class SortTableTask extends Task {
 			System.out.println("-----------------------------------------------------------------------------");
 			System.out.println(validatedTabledetails);
 			System.out.println("-----------------------------------------------------------------------------");
+			Master.INSTANCE.setSortedTableInLoadOrder(tabledetailListSorted);
 		} catch (BuildException buildException) {
 			throw new BuildException(buildException.getMessage());
 		}
