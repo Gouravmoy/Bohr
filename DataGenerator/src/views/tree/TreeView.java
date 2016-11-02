@@ -6,6 +6,8 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -29,7 +31,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import ch.qos.logback.classic.Logger;
-import common.Master;
 import controller.MainController;
 import dao.DataSampleDao;
 import dao.DatabaseDao;
@@ -51,7 +52,6 @@ import entity.Tabledetail;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
-import jobs.tasks.SortTableTask;
 import service.ModelService;
 import service.PatternService;
 import service.RelationService;
@@ -339,6 +339,9 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 	private static void getModels(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail, int id) {
 		// System.out.println("Inside getModels");
+		if(columnsdetail.getName().equals("title")){
+			System.out.println("Debug");
+		}
 		DefaultMutableTreeNode modelCategory;
 		Datasamplemodel datasamplemodel = modelService
 				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
@@ -384,18 +387,18 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void sortList(List<Tabledetail> tabledetails) {
-		SortTableTask sortTableTask = new SortTableTask(tabledetails);
+		/*SortTableTask sortTableTask = new SortTableTask(tabledetails);
 		sortTableTask.execute();
 		tabledetails.clear();
-		tabledetails.addAll(Master.INSTANCE.getSortedTableInLoadOrder());
-		/*if (tabledetails.size() > 0) {
+		tabledetails.addAll(Master.INSTANCE.getSortedTableInLoadOrder());*/
+		if (tabledetails.size() > 0) {
 			Collections.sort(tabledetails, new Comparator<Tabledetail>() {
 				@Override
 				public int compare(final Tabledetail object1, final Tabledetail object2) {
 					return object1.getTableName().compareTo(object2.getTableName());
 				}
 			});
-		}*/
+		}
 	}
 
 	private void initilizeTrees(Frame frame) {

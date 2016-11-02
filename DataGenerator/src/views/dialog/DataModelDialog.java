@@ -230,17 +230,18 @@ public class DataModelDialog extends Dialog {
 	protected void okPressed() {
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
 		RefrehTreeTask refrehTreeTask;
-		//datasamplemodel.setSampleModelName(text.getText());
+		// datasamplemodel.setSampleModelName(text.getText());
 		StringBuilder sb = new StringBuilder();
 		for (String modelValue : modelValues) {
 			sb.append(modelValue + ",");
 		}
-		// datasamplemodel.setSampelValues(sb.toString());
+		datasamplemodel.setDatasamplemodelcol(sb.toString());
 		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
+		datasamplemodel.setColumnsdetail(columnsdetail);
 		try {
 			dataSampleDao.saveDatasamplemodel(datasamplemodel);
 		} catch (PersistException e) {
-			// showError("Unable to Save", parent);
+			showError("Unable to Save", getShell());
 			e.printStackTrace();
 		}
 		refrehTreeTask = new RefrehTreeTask();

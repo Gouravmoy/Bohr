@@ -15,11 +15,6 @@ public class RegenerateRelationCols {
 
 		for (GeneratedColumn generatedColumn : generatedCol) {
 			if (generatedColumn.getRelationsdetail() != null) {
-				/*
-				 * if
-				 * (isTableChildOfRelatedTable(generatedColumn.getTabledetail(),
-				 * generatedColumn.getRelationsdetail().getTabledetail())) {
-				 */
 				GeneratedColumn relatedCol = getRelatedGenerateCol(
 						generatedColumn.getRelationsdetail().getRelatedColumndetail(),
 						generatedColumn.getRelationsdetail().getTabledetail());
@@ -27,9 +22,6 @@ public class RegenerateRelationCols {
 					generatedColumn.setFilePath(relatedCol.getFilePath());
 			}
 		}
-
-		// }
-
 	}
 
 	private GeneratedColumn getRelatedGenerateCol(Columnsdetail columnsdetail, Tabledetail tabledetail) {
@@ -44,21 +36,17 @@ public class RegenerateRelationCols {
 		return null;
 	}
 
-	private boolean isTableChildOfRelatedTable(Tabledetail baseTable, Tabledetail relatedTable) {
-		int tablePos = 0;
-		int relatedTablePos = 0;
-		for (int i = 0; i < Master.INSTANCE.getSortedTableInLoadOrder().size(); i++) {
-			Tabledetail sortedTable = Master.INSTANCE.getSortedTableInLoadOrder().get(i);
-			if (sortedTable.getTableName().equals(baseTable.getTableName()))
-				tablePos = i;
-			if (sortedTable.getTableName().equals(relatedTable.getTableName()))
-				relatedTablePos = i;
-		}
-		if (tablePos > relatedTablePos)
-			return true;
-		else
-			return false;
-	}
+	/*
+	 * private boolean isTableChildOfRelatedTable(Tabledetail baseTable,
+	 * Tabledetail relatedTable) { int tablePos = 0; int relatedTablePos = 0;
+	 * for (int i = 0; i < Master.INSTANCE.getSortedTableInLoadOrder().size();
+	 * i++) { Tabledetail sortedTable =
+	 * Master.INSTANCE.getSortedTableInLoadOrder().get(i); if
+	 * (sortedTable.getTableName().equals(baseTable.getTableName())) tablePos =
+	 * i; if (sortedTable.getTableName().equals(relatedTable.getTableName()))
+	 * relatedTablePos = i; } if (tablePos > relatedTablePos) return true; else
+	 * return false; }
+	 */
 
 	public List<GeneratedColumn> getGeneratedCol() {
 		return generatedCol;

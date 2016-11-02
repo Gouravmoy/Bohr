@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import enums.ColumnType;
@@ -59,9 +60,8 @@ public class Columnsdetail implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private ColumnType type;
-
-	@ManyToOne
-	@JoinColumn(name = "datasampleid")
+	
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Datasamplemodel datasamplemodel;
 
 	@ManyToOne
@@ -75,8 +75,6 @@ public class Columnsdetail implements Serializable {
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
 
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
-	private Set<Datasamplemodel> datasamplemodels;
 
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(name = "column_predefinedmodels", joinColumns = {
@@ -218,13 +216,6 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-	public Set<Datasamplemodel> getDatasamplemodels() {
-		return datasamplemodels;
-	}
-
-	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
-		this.datasamplemodels = datasamplemodels;
-	}
 
 	public int getDecimalLength() {
 		return decimalLength;
@@ -234,19 +225,6 @@ public class Columnsdetail implements Serializable {
 		this.decimalLength = decimalLength;
 	}
 
-	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().add(datasamplemodel);
-		datasamplemodel.setColumnsdetail(this);
-
-		return datasamplemodel;
-	}
-
-	public Datasamplemodel removeDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().remove(datasamplemodel);
-		datasamplemodel.setColumnsdetail(null);
-
-		return datasamplemodel;
-	}
 
 	public Set<Relationsdetail> getRelationsdetails() {
 		return this.relationsdetails;

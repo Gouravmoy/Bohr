@@ -56,7 +56,7 @@ public class GenerateColumnDataTask extends Task {
 		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			if (tabledetail.getTableName().equals("actor")) {
+			if (tabledetail.getTableName().equals("film")) {
 				System.out.println("Debug");
 			}
 			projectId = tabledetail.getSchemadetail().getAssociatedProjectDetail().getIdproject();
@@ -124,9 +124,10 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		//Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
-			//	projectId);
-		//generatedColumn.setRelationsdetail(relationsdetail);
+		// Relationsdetail relationsdetail =
+		// relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
+		// projectId);
+		// generatedColumn.setRelationsdetail(relationsdetail);
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -141,8 +142,18 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		generatedColumn.setPreDefinedValues(
-				modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
+
+		if (columnsdetail.getDatasamplemodel()!=null) {
+			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+		} else {
+			try{
+			generatedColumn.setPreDefinedValues(
+					modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
+			}catch(Exception err){
+				err.printStackTrace();
+			}
+		}
+
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
@@ -257,6 +268,5 @@ public class GenerateColumnDataTask extends Task {
 	public void setGeneratedColumnList(List<GeneratedColumn> generatedColumnList) {
 		this.generatedColumnList = generatedColumnList;
 	}
-	
 
 }
