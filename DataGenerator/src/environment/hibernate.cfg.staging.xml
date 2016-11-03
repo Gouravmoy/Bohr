@@ -6,7 +6,7 @@
 <hibernate-configuration>
 
 	<session-factory>
-		<property name="hbm2ddl.auto">create</property>
+		<property name="hbm2ddl.auto">update</property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="connection.url">jdbc:mysql://localhost:3306/rdg_staging</property>
 		<property name="show_sql">false</property>

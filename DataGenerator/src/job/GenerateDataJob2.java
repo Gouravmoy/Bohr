@@ -61,12 +61,12 @@ public class GenerateDataJob2 extends Job {
 			if (!ukFkColumns.isEmpty())
 				regenerateUKFKColumns(ukFkColumns);
 		}
-		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData())		{
-			regenerateRelationColumns(generatedTable.getGeneratedColumn(),dataTask_1.getGeneratedTableData());
+		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
+			regenerateRelationColumns(generatedTable.getGeneratedColumn(), dataTask_1.getGeneratedTableData());
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
+					generatedTable, "C:\\Users\\M1026352\\Desktop\\DataGn\\Export"
 							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
 			dataWithInsertQueryTask.execute();
 		}
@@ -87,7 +87,7 @@ public class GenerateDataJob2 extends Job {
 		regenerateRelationCols.setGeneratedCol(generatedColumn);
 		regenerateRelationCols.setGeneratedTables(list);
 		regenerateRelationCols.regenerate();
-		
+
 	}
 
 	public static void regenerateUKFKColumns(List<GeneratedColumn> ukFkColumns) {

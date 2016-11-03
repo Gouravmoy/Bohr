@@ -6,6 +6,9 @@ import java.util.List;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -40,8 +43,8 @@ public class ExecuteDialog extends Dialog {
 	List<Projectdetails> projectdetails;
 	ProjectDao projectDao;
 	boolean createColumn = true;
-
-	private static String COLUMN_NAMES[] = { "Table Name", "Table Description" };
+	TableEditor editor;
+	private static String COLUMN_NAMES[] = { "Table Name", "Table Description", "No of Rows" };
 
 	public ExecuteDialog(Shell parentShell) {
 		super(parentShell);
@@ -88,6 +91,7 @@ public class ExecuteDialog extends Dialog {
 		lblSelectTables.setText("Select Tables");
 
 		table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		editor = new TableEditor(table);
 		table.setBounds(176, 205, 328, 210);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -152,9 +156,21 @@ public class ExecuteDialog extends Dialog {
 
 	private void createTable(Composite parent) {
 
+		Listener listener = new Listener() {
+
+			@Override
+			public void handleEvent(Event arg0) {
+				System.out.println("I am here");
+
+			}
+		};
+
 		if (createColumn) {
 			for (int i = 0; i < COLUMN_NAMES.length; i++) {
 				TableColumn column = new TableColumn(table, SWT.CENTER, i);
+				if (i == 2) {
+					column.addListener(SWT.CHANGED, listener);
+				}
 				column.setText(COLUMN_NAMES[i]);
 				column.setWidth(200);
 			}
@@ -162,24 +178,35 @@ public class ExecuteDialog extends Dialog {
 		}
 		for (int i = 0; i < tabledetails.size(); i++) {
 			Tabledetail tabledetail = tabledetails.get(i);
-			TableItem item = new TableItem(table, SWT.CENTER);
-			item.setText(tabledetail.getTableName());
+			TableItem items = new TableItem(table, SWT.NONE);
+			TableEditor editor = new TableEditor(table);
+			editor = new TableEditor(table);
+			Spinner spinner = new Spinner(table, SWT.NULL);
+			spinner.setIncrement(5);
+			text.setText(spinner.getText());
+			editor.grabHorizontal = true;
+			editor.setEditor(spinner, items, 2);
+			editor = new TableEditor(table);
+			items.setText(0, tabledetail.getTableName());
+			spinner.setData(tabledetail);
+			spinner.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent arg0) {
+					System.out.println("I am here");
+					Spinner spinner = (Spinner) arg0.getSource();
+					Tabledetail tabledetail = (Tabledetail) spinner.getData();
+					System.out.println(tabledetail);
 
-			for (Tabledetail tabledetail2 : selectedTabledetails) {
-				if (tabledetail2.getIdtabledetails() == (tabledetail.getIdtabledetails())) {
-					item.setChecked(true);
-					break;
 				}
+			});
+			if (selectedTabledetails.contains(tabledetail)) {
+				items.setChecked(true);
 			}
-
-			item.setText(0, tabledetail.getTableName());
-			item.setText(1, tabledetail.getTableName());
-			item.setData(tabledetail);
 		}
 		for (int i = 0; i < COLUMN_NAMES.length; i++) {
 			table.getColumn(i).pack();
 		}
-		table.addListener(SWT.Selection, new Listener() {
+		table.addListener(SWT.Selection | SWT.CHANGED, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				boolean isRemove = false;
@@ -188,7 +215,6 @@ public class ExecuteDialog extends Dialog {
 				if (event.detail == SWT.CHECK) {
 					Tabledetail tabledetail = (Tabledetail) event.item.getData();
 					for (Tabledetail tabledetail2 : selectedTabledetails) {
-
 						if (tabledetail2.getIdtabledetails() == (tabledetail.getIdtabledetails())) {
 							isRemove = true;
 							pos = count;

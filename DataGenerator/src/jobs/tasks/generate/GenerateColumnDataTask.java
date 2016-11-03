@@ -31,7 +31,7 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export";
+	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
 	ModelService modelService;
 	List<String> generatedTableList;
 	private RelationService relationService;
