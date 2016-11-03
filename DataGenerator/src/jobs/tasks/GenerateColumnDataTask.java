@@ -62,7 +62,7 @@ public class GenerateColumnDataTask extends Task {
 				textFilePath = tableFolder.getPath() + "\\";
 				if (columnsdetail.getDatasamplemodel() != null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
-				} else if (!columnsdetail.getPredefinedModels().isEmpty()) {
+				} else if (columnsdetail.getPredefinedModel()!=null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
 				} else if (columnsdetail.getRelationsdetails().size() != 0) {
 					generateRelationColumn(textFilePath, columnsdetail.getRelationsdetails());

@@ -15,6 +15,7 @@ public class RefrehTreeTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+		
 		try {
 			TreeView.queryAndRefresh();
 		} catch (DAOException | ServiceException e1) {

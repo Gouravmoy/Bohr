@@ -122,8 +122,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		try {
 			buildSession();
 			tx = session.beginTransaction();
-			T newEntityRef = (T) session.merge(t);
-			session.update(newEntityRef);
+			//T newEntityRef = (T) session.merge(t);
+			session.update(t);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);

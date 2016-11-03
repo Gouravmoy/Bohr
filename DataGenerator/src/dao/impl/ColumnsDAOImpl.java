@@ -57,9 +57,10 @@ public class ColumnsDAOImpl extends GenericDAOImpl<Columnsdetail, Integer> imple
 	@Override
 	public Columnsdetail update(Columnsdetail columnsdetail) throws EntityNotPresent {
 		try {
+			
 			return update(Columnsdetail.class, columnsdetail.getIdcolumnsdetails(), columnsdetail);
 		} catch (Exception err) {
-			throw new EntityNotPresent("Could not get Update Database Information");
+			throw new EntityNotPresent("Could not get Update Columnsdetail Information");
 		}
 
 	}
