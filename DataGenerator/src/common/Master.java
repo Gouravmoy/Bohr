@@ -2,6 +2,7 @@ package common;
 
 import java.util.List;
 
+import entity.Tabledetail;
 import entity.generateEntity.GeneratedTable;
 import enums.Environment;
 
@@ -10,6 +11,8 @@ public enum Master {
 
 	List<GeneratedTable> generatedTables;
 	GeneratedTable currentGeneratedTable;
+	
+	List<Tabledetail> sortedTableInLoadOrder;
 
 	private Environment environment;
 	public boolean clearAll;
@@ -45,5 +48,15 @@ public enum Master {
 	public void setCurrentGeneratedTable(GeneratedTable currentGeneratedTable) {
 		this.currentGeneratedTable = currentGeneratedTable;
 	}
+
+	public List<Tabledetail> getSortedTableInLoadOrder() {
+		return sortedTableInLoadOrder;
+	}
+
+	public void setSortedTableInLoadOrder(List<Tabledetail> sortedTableInLoadOrder) {
+		this.sortedTableInLoadOrder = sortedTableInLoadOrder;
+	}
+	
+	
 
 }

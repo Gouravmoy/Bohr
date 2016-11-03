@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import entity.Relationsdetail;
+import entity.Tabledetail;
 import entity.Interface.GenerateColumnInterface;
 import enums.ColumnType;
 import enums.KeyType;
+import enums.RelationType;
 
 public abstract class GeneratedColumn implements GenerateColumnInterface {
 	String colName;
@@ -18,6 +21,9 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	String filePath;
 	int numberOfRows;
 	boolean fileReopen;
+	Tabledetail tabledetail;
+	Relationsdetail relationsdetail;
+	RelationType relationType;
 
 	@Override
 	public void writeToFile(String value) {
@@ -101,5 +107,31 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	public void setColDecLenght(int colDecLenght) {
 		this.colDecLenght = colDecLenght;
 	}
+
+	public Relationsdetail getRelationsdetail() {
+		return relationsdetail;
+	}
+
+	public void setRelationsdetail(Relationsdetail relationsdetail) {
+		this.relationsdetail = relationsdetail;
+	}
+
+	public RelationType getRelationType() {
+		return relationType;
+	}
+
+	public void setRelationType(RelationType relationType) {
+		this.relationType = relationType;
+	}
+
+	public Tabledetail getTabledetail() {
+		return tabledetail;
+	}
+
+	public void setTabledetail(Tabledetail tabledetail) {
+		this.tabledetail = tabledetail;
+	}
+	
+	
 
 }

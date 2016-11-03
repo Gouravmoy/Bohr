@@ -58,6 +58,7 @@ import service.RelationService;
 import service.impl.ModelServiceImpl;
 import service.impl.PatternServiceImpl;
 import service.impl.RelationServiceImpl;
+import views.dialog.DataModelDialog;
 import views.dialog.RelationDialog;
 import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
@@ -140,7 +141,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		assignMenuItems();
 		popup.add(createRelations);
 		// popup.add(createPatterns);
-		// popup.add(createDataModel);
+		 popup.add(createDataModel);
 		initilizeTrees(frame);
 
 		try {
@@ -185,6 +186,34 @@ public class TreeView extends DefaultTreeCellRenderer {
 					}
 				});
 
+			}
+		});
+		createDataModel = new JMenuItem("Create a Data Model");
+		createDataModel.setActionCommand("createDataModel");
+		createDataModel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				System.out.println("Here");
+				Component selectedComponent = MousePopupListner.currentComponent;
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog dialog = new DataModelDialog(composite.getShell(), (Columnsdetail) node.getUserObject());
+						dialog.open();
+					}
+				});
 			}
 		});
 
@@ -287,12 +316,12 @@ public class TreeView extends DefaultTreeCellRenderer {
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
 		sortList(tabledetails);
-		//int count = 0;
+		// int count = 0;
 		for (Tabledetail tabledetail : tabledetails) {
-			//System.out.println(tabledetail.getTableName());
+			// System.out.println(tabledetail.getTableName());
 			tableCategory = new DefaultMutableTreeNode(tabledetail);
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
-				//System.out.println((count++)+"->"+tabledetail.getTableName()+"->"+columnsdetail.getName());
+				// System.out.println((count++)+"->"+tabledetail.getTableName()+"->"+columnsdetail.getName());
 				columnCategory = new DefaultMutableTreeNode(columnsdetail);
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
@@ -309,7 +338,10 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void getModels(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail, int id) {
-		//System.out.println("Inside getModels");
+		// System.out.println("Inside getModels");
+		if(columnsdetail.getName().equals("title")){
+			System.out.println("Debug");
+		}
 		DefaultMutableTreeNode modelCategory;
 		Datasamplemodel datasamplemodel = modelService
 				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
@@ -325,7 +357,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			dataModels.add(new DefaultMutableTreeNode(preDefinedModels));
 		}
 		columnCategory.add(modelCategory);
-		//System.out.println("Exit getModels");
+		// System.out.println("Exit getModels");
 	}
 
 	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,
@@ -355,6 +387,10 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void sortList(List<Tabledetail> tabledetails) {
+		/*SortTableTask sortTableTask = new SortTableTask(tabledetails);
+		sortTableTask.execute();
+		tabledetails.clear();
+		tabledetails.addAll(Master.INSTANCE.getSortedTableInLoadOrder());*/
 		if (tabledetails.size() > 0) {
 			Collections.sort(tabledetails, new Comparator<Tabledetail>() {
 				@Override

@@ -15,6 +15,7 @@ import common.Master;
 import entity.Tabledetail;
 import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
+import entity.generateEntity.RegenerateRelationCols;
 import entity.generateEntity.RegenerateUKForFK;
 import enums.KeyType;
 import jobs.tasks.AddPartTask;
@@ -39,6 +40,7 @@ public class GenerateDataJob2 extends Job {
 		List<GeneratedColumn> ukFkColumns = new ArrayList<>();
 		SortTableTask sortTableTask = new SortTableTask(selectedTableDetails);
 		sortTableTask.execute();
+		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
 		dataTask_1.execute();
 		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
@@ -58,10 +60,13 @@ public class GenerateDataJob2 extends Job {
 			}
 			if (!ukFkColumns.isEmpty())
 				regenerateUKFKColumns(ukFkColumns);
+		}
+		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData())		{
+			regenerateRelationColumns(generatedTable.getGeneratedColumn(),dataTask_1.getGeneratedTableData());
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, "C:\\Users\\M1026352\\Desktop\\OuyputGn\\"
+					generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
 							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
 			dataWithInsertQueryTask.execute();
 		}
@@ -71,11 +76,18 @@ public class GenerateDataJob2 extends Job {
 			}
 		});
 		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
-		AddPartTask addPartTask = new AddPartTask(
-				"bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
+		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;
 
+	}
+
+	private void regenerateRelationColumns(List<GeneratedColumn> generatedColumn, List<GeneratedTable> list) {
+		RegenerateRelationCols regenerateRelationCols = new RegenerateRelationCols();
+		regenerateRelationCols.setGeneratedCol(generatedColumn);
+		regenerateRelationCols.setGeneratedTables(list);
+		regenerateRelationCols.regenerate();
+		
 	}
 
 	public static void regenerateUKFKColumns(List<GeneratedColumn> ukFkColumns) {
