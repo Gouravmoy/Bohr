@@ -2,7 +2,6 @@ package views.dialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -29,13 +28,13 @@ public class StatusDialog extends Dialog {
 		lblNewLabel = new Label(container, SWT.NONE);
 		lblNewLabel.setBounds(137, 22, 213, 15);
 		lblNewLabel.setText("Starting..");
-		createButton(container);
 		return container;
 	}
 
-	protected Button createButton(Composite arg0) {
-		return null;
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
 	}
+	
 
 	public static void updateTableName(String tableName) {
 		lblNewLabel.setText(tableName);

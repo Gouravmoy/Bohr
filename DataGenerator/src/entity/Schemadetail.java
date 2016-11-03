@@ -117,19 +117,6 @@ public class Schemadetail implements Serializable {
 		this.datasamplemodels = datasamplemodels;
 	}
 
-	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().add(datasamplemodel);
-		datasamplemodel.setSchemadetail(this);
-
-		return datasamplemodel;
-	}
-
-	public Datasamplemodel removeDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().remove(datasamplemodel);
-		datasamplemodel.setSchemadetail(null);
-
-		return datasamplemodel;
-	}
 
 	public Databasedetail getDatabasedetail() {
 		return this.databasedetail;

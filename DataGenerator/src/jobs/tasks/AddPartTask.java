@@ -21,27 +21,31 @@ public class AddPartTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				MPart partDy = MBasicFactory.INSTANCE.createCompositePart();
-				partDy.setContributionURI(linkedClass);
-				MPart oldPart = SamplePart.partService.findPart("datagenerator.part.playground");
-				MPartStack parent = (MPartStack) SamplePart.modelService.getContainer(oldPart);
-				partDy.setElementId("datagenerator.part.playground");
-				partDy.setContainerData("60");
-				if (linkedClass.contains("DisplayTableValuesPart")) {
-					partDy.setLabel(Master.INSTANCE.getCurrentGeneratedTable().getTableName());
-					partDy.setCloseable(true);
-				} else {
-					partDy.setLabel("Table List");
-					partDy.setCloseable(false);
-				}
-				parent.getChildren().add(partDy);
-				parent.setSelectedElement(partDy);
+		try {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					MPart partDy = MBasicFactory.INSTANCE.createCompositePart();
+					partDy.setContributionURI(linkedClass);
+					MPart oldPart = SamplePart.partService.findPart("datagenerator.part.playground");
+					MPartStack parent = (MPartStack) SamplePart.modelService.getContainer(oldPart);
+					partDy.setElementId("datagenerator.part.playground");
+					partDy.setContainerData("60");
+					if (linkedClass.contains("DisplayTableValuesPart")) {
+						partDy.setLabel(Master.INSTANCE.getCurrentGeneratedTable().getTableName());
+						partDy.setCloseable(true);
+					} else {
+						partDy.setLabel("Table List");
+						partDy.setCloseable(false);
+					}
+					parent.getChildren().add(partDy);
+					parent.setSelectedElement(partDy);
 
-			}
-		});
+				}
+			});
+		} catch (Exception exception) {
+			log(exception.getMessage());
+		}
 
 	}
 

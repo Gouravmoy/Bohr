@@ -133,20 +133,6 @@ public class Tabledetail implements Serializable {
 		this.datasamplemodels = datasamplemodels;
 	}
 
-	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().add(datasamplemodel);
-		datasamplemodel.setTabledetail(this);
-
-		return datasamplemodel;
-	}
-
-	public Datasamplemodel removeDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().remove(datasamplemodel);
-		datasamplemodel.setTabledetail(null);
-
-		return datasamplemodel;
-	}
-
 	public Set<Relationsdetail> getRelationsdetails() {
 		return this.relationsdetails;
 	}
