@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -44,6 +46,10 @@ public class Datasamplemodel implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@PrimaryKeyJoinColumn
 	private Columnsdetail columnsdetail;
+	
+	@ManyToOne
+	@JoinColumn(name = "idproject")
+	private Projectdetails projectdetail;
 
 	public Datasamplemodel() {
 	}
@@ -84,5 +90,14 @@ public class Datasamplemodel implements Serializable {
 	public String toString() {
 		return datasamplemodelcol;
 	}
+
+	public Projectdetails getProjectdetail() {
+		return projectdetail;
+	}
+
+	public void setProjectdetail(Projectdetails projectdetail) {
+		this.projectdetail = projectdetail;
+	}
+	
 
 }

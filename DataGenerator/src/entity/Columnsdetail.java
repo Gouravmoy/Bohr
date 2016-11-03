@@ -14,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -60,7 +58,7 @@ public class Columnsdetail implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private ColumnType type;
-	
+
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Datasamplemodel datasamplemodel;
 
@@ -75,11 +73,9 @@ public class Columnsdetail implements Serializable {
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
 
-
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@JoinTable(name = "column_predefinedmodels", joinColumns = {
-			@JoinColumn(name = "idcolumnsdetails") }, inverseJoinColumns = { @JoinColumn(name = "idpredefinedDS") })
-	private Set<PreDefinedModels> predefinedModels;
+	@ManyToOne
+	@JoinColumn(name = "idpredefinedDS")
+	private PreDefinedModels predefinedModel;
 
 	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
@@ -216,7 +212,6 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-
 	public int getDecimalLength() {
 		return decimalLength;
 	}
@@ -224,7 +219,6 @@ public class Columnsdetail implements Serializable {
 	public void setDecimalLength(int decimalLength) {
 		this.decimalLength = decimalLength;
 	}
-
 
 	public Set<Relationsdetail> getRelationsdetails() {
 		return this.relationsdetails;
@@ -253,12 +247,12 @@ public class Columnsdetail implements Serializable {
 		return name;
 	}
 
-	public Set<PreDefinedModels> getPredefinedModels() {
-		return predefinedModels;
+	public PreDefinedModels getPredefinedModel() {
+		return predefinedModel;
 	}
 
-	public void setPredefinedModels(Set<PreDefinedModels> predefinedModels) {
-		this.predefinedModels = predefinedModels;
+	public void setPredefinedModel(PreDefinedModels predefinedModel) {
+		this.predefinedModel = predefinedModel;
 	}
 
 }

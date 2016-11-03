@@ -242,7 +242,7 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
 		generateDataJob2.setNoOfRows(spinner.getSelection());
 		generateDataJob2.schedule();
-		StatusDialog dialog = new StatusDialog(getParentShell());
+		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();
 		super.okPressed();
 	}

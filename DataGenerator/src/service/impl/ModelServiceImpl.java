@@ -17,10 +17,10 @@ public class ModelServiceImpl implements ModelService {
 	PreDefinedModelDao predefinedDao = new PreDefinedModelsDaoImpl();
 
 	@Override
-	public Datasamplemodel getDataSampleModelByColumnId(Integer id) {
+	public Datasamplemodel getDataSampleModelByColumnId(Integer id,Integer projectId) {
 		List<Datasamplemodel> datasamplemodels = new ArrayList<>();
-		String query = "from Datasamplemodel p where p.columnsdetail.idcolumnsdetails=:arg0";
-		Object[] pars = { id };
+		String query = "from Datasamplemodel p where p.columnsdetail.idcolumnsdetails=:arg0 and p.projectdetail.idproject=:arg1";
+		Object[] pars = { id,projectId };
 		datasamplemodels = dataSampleDao.getDatasamplemodelByQyery(query, pars);
 		if (!datasamplemodels.isEmpty())
 			return datasamplemodels.get(0);

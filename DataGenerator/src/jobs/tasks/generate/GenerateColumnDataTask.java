@@ -73,7 +73,7 @@ public class GenerateColumnDataTask extends Task {
 				textFilePath = tableFolder.getPath() + "\\";
 				if (columnsdetail.getDatasamplemodel() != null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
-				} else if (!columnsdetail.getPredefinedModels().isEmpty()) {
+				} else if (columnsdetail.getPredefinedModel() != null) {
 					generatePredefinedValues(textFilePath, columnsdetail);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
@@ -143,13 +143,13 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 
-		if (columnsdetail.getDatasamplemodel()!=null) {
+		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
 		} else {
-			try{
-			generatedColumn.setPreDefinedValues(
-					modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
-			}catch(Exception err){
+			try {
+				generatedColumn.setPreDefinedValues(modelService
+						.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
+			} catch (Exception err) {
 				err.printStackTrace();
 			}
 		}
