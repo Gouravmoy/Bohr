@@ -2,7 +2,6 @@ package entity.generateEntity;
 
 import java.util.List;
 
-import common.Master;
 import entity.Columnsdetail;
 import entity.Tabledetail;
 

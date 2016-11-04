@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -29,6 +30,7 @@ public class GenerateDataJob2 extends Job {
 
 	List<Tabledetail> selectedTableDetails;
 	static int noOfRows = 0;
+	Map<String, Integer> tableCount;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -36,7 +38,7 @@ public class GenerateDataJob2 extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor arg0) {
-
+		int rowCount;
 		List<GeneratedColumn> ukFkColumns = new ArrayList<>();
 		SortTableTask sortTableTask = new SortTableTask(selectedTableDetails);
 		sortTableTask.execute();
@@ -50,10 +52,15 @@ public class GenerateDataJob2 extends Job {
 				}
 			});
 			ukFkColumns = new ArrayList<>();
-			generatedTable.setRowCount(noOfRows);
+			if (tableCount.containsKey(generatedTable.getTableName())) {
+				rowCount = tableCount.get(generatedTable.getTableName());
+			} else {
+				rowCount = noOfRows;
+			}
+			generatedTable.setRowCount(rowCount);
 			System.out.println("Generating data for table " + generatedTable.getTableName());
 			for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
-				column.setNumberOfRows(noOfRows);
+				column.setNumberOfRows(rowCount);
 				column.generateColumn();
 				if (column.getKeyType() == KeyType.UK_FK)
 					ukFkColumns.add(column);
@@ -112,6 +119,14 @@ public class GenerateDataJob2 extends Job {
 	@SuppressWarnings("static-access")
 	public void setNoOfRows(int noOfRows) {
 		this.noOfRows = noOfRows;
+	}
+
+	public Map<String, Integer> getTableCount() {
+		return tableCount;
+	}
+
+	public void setTableCount(Map<String, Integer> tableCount) {
+		this.tableCount = tableCount;
 	}
 
 }

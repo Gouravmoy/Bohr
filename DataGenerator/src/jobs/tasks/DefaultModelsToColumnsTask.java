@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.eclipse.swt.widgets.Display;
 
 import dao.ColumnsDao;
 import dao.PreDefinedModelDao;
@@ -17,7 +16,6 @@ import entity.Projectdetails;
 import entity.Tabledetail;
 import enums.ColumnType;
 import exceptions.ReadEntityException;
-import views.dialog.StatusDialog;
 
 public class DefaultModelsToColumnsTask extends Task {
 

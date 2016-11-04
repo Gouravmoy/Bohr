@@ -1,7 +1,9 @@
 package views.dialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -45,6 +47,7 @@ public class ExecuteDialog extends Dialog {
 	boolean createColumn = true;
 	TableEditor editor;
 	private static String COLUMN_NAMES[] = { "Table Name", "Table Description", "No of Rows" };
+	Map<String, Integer> tableCount;
 
 	public ExecuteDialog(Shell parentShell) {
 		super(parentShell);
@@ -56,6 +59,7 @@ public class ExecuteDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		tableCount = new HashMap<String, Integer>();
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Import Connections");
 		container.setLayout(null);
@@ -156,21 +160,9 @@ public class ExecuteDialog extends Dialog {
 
 	private void createTable(Composite parent) {
 
-		Listener listener = new Listener() {
-
-			@Override
-			public void handleEvent(Event arg0) {
-				System.out.println("I am here");
-
-			}
-		};
-
 		if (createColumn) {
 			for (int i = 0; i < COLUMN_NAMES.length; i++) {
 				TableColumn column = new TableColumn(table, SWT.CENTER, i);
-				if (i == 2) {
-					column.addListener(SWT.CHANGED, listener);
-				}
 				column.setText(COLUMN_NAMES[i]);
 				column.setWidth(200);
 			}
@@ -188,14 +180,14 @@ public class ExecuteDialog extends Dialog {
 			editor.setEditor(spinner, items, 2);
 			editor = new TableEditor(table);
 			items.setText(0, tabledetail.getTableName());
+			spinner.setMinimum(Integer.parseInt(spinner.getText()));
 			spinner.setData(tabledetail);
 			spinner.addModifyListener(new ModifyListener() {
 				@Override
 				public void modifyText(ModifyEvent arg0) {
-					System.out.println("I am here");
 					Spinner spinner = (Spinner) arg0.getSource();
 					Tabledetail tabledetail = (Tabledetail) spinner.getData();
-					System.out.println(tabledetail);
+					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
 				}
 			});
@@ -241,6 +233,7 @@ public class ExecuteDialog extends Dialog {
 		GenerateDataJob2 generateDataJob2 = new GenerateDataJob2("Generate Job");
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
 		generateDataJob2.setNoOfRows(spinner.getSelection());
+		generateDataJob2.setTableCount(tableCount);
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();

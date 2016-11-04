@@ -56,9 +56,6 @@ public class GenerateColumnDataTask extends Task {
 		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			if (tabledetail.getTableName().equals("film")) {
-				System.out.println("Debug");
-			}
 			projectId = tabledetail.getSchemadetail().getAssociatedProjectDetail().getIdproject();
 			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();

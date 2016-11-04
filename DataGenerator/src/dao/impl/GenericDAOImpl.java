@@ -116,7 +116,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		return t;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public T update(Class clazz, ID id, T t) throws DAOException {
 		try {
