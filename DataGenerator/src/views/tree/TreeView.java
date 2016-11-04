@@ -57,7 +57,6 @@ import service.impl.ModelServiceImpl;
 import service.impl.RelationServiceImpl;
 import views.dialog.DataModelDialog;
 import views.dialog.RelationDialog;
-import views.dialog.StatusDialog;
 import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
 import views.renderer.TreeViewRenderer;

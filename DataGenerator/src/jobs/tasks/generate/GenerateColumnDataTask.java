@@ -23,9 +23,7 @@ import entity.generateEntity.GeneratedTable;
 import enums.ColumnType;
 import enums.KeyType;
 import service.ModelService;
-import service.RelationService;
 import service.impl.ModelServiceImpl;
-import service.impl.RelationServiceImpl;
 
 public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
@@ -34,13 +32,10 @@ public class GenerateColumnDataTask extends Task {
 	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
 	ModelService modelService;
 	List<String> generatedTableList;
-	private RelationService relationService;
-	private int projectId;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
 		this.sortedTableList = sortedTableList;
-		relationService = new RelationServiceImpl();
 	}
 
 	@Override
@@ -56,7 +51,6 @@ public class GenerateColumnDataTask extends Task {
 		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			projectId = tabledetail.getSchemadetail().getAssociatedProjectDetail().getIdproject();
 			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
@@ -74,11 +68,7 @@ public class GenerateColumnDataTask extends Task {
 					generatePredefinedValues(textFilePath, columnsdetail);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
-				} /*
-					 * else if (columnsdetail.getRelationsdetails().size() != 0)
-					 * { generateRelationColumnms(columnsdetail, textFilePath);
-					 * }
-					 */ else if (columnsdetail.getKeytype() != null) {
+				} else if (columnsdetail.getKeytype() != null) {
 					if (columnsdetail.getIsnullable() == 1 && !generatedTableList.contains(columnsdetail
 							.getConstraintsdetails1().iterator().next().getReferenceTable().getTableName())) {
 						generateNullableColumn(textFilePath, columnsdetail);
@@ -88,14 +78,14 @@ public class GenerateColumnDataTask extends Task {
 						generatePrimaryKeyColumn(textFilePath, columnsdetail);
 					} else if (columnsdetail.getKeytype().equals(KeyType.FK)) {
 						generatePrimaryColumnAsForeignKey(columnsdetail,
-								columnsdetail.getConstraintsdetails1().iterator().next());
+								columnsdetail.getConstraintsdetails1().iterator().next(), true);
 					} else if (columnsdetail.getKeytype().equals(KeyType.UK_FK)) {
 						Constraintsdetail constraintsdetail = new Constraintsdetail();
 						Iterator<Constraintsdetail> itr = columnsdetail.getConstraintsdetails1().iterator();
 						while (itr.hasNext()) {
 							constraintsdetail = itr.next();
 							if (constraintsdetail.getReferenceTable() != null) {
-								generatePrimaryColumnAsForeignKey(columnsdetail, constraintsdetail);
+								generatePrimaryColumnAsForeignKey(columnsdetail, constraintsdetail, false);
 							}
 						}
 					}
@@ -171,6 +161,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setGenerateAllUnique(true);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(false);
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -179,7 +170,8 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumnList.add(generatedColumn);
 	}
 
-	private void generatePrimaryColumnAsForeignKey(Columnsdetail columnsdetail, Constraintsdetail constraintsdetail) {
+	private void generatePrimaryColumnAsForeignKey(Columnsdetail columnsdetail, Constraintsdetail constraintsdetail,
+			boolean b) {
 		GenerateColumnPrimaryKey generatedColumn = new GenerateColumnPrimaryKey();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
@@ -190,6 +182,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setStartValue(1);
 		generatedColumn.setForeignKey(true);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setFileReopen(b);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
@@ -210,6 +203,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setForeignKey(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(true);
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -228,6 +222,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setEnumValues(columnsdetail.getEnumvalues());
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(true);
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());

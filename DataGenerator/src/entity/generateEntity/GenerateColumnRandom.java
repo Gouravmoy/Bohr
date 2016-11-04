@@ -124,7 +124,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				break;
 			case INTEGER:
 				int minimum = 1;
-				int maximum = (int) Math.pow(2, 31);
+				int maximum = 1000;
 				builder.append("" + minimum + (int) (Math.random() * maximum));
 				break;
 			case FLOAT:
@@ -142,7 +142,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				break;
 
 			case TINYINT:
-				builder.append("" + r.nextInt(128));
+				builder.append(0);
 				break;
 			case DATE:
 				String startDate = "2013-02-08 00:00:00";

@@ -44,15 +44,12 @@ public class CreateColumnTask extends Task {
 			ResultSet resultSet = executeTask.getResultSet();
 			Columnsdetail columnsdetail;
 			System.out.println(tabledetail.getTableName());
-			if (tabledetail.getTableName().equals("busrv_businfo")) {
-				System.out.println("delete");
-			}
 			while (resultSet.next()) {
 				try {
 					columnsdetail = new Columnsdetail();
 					columnsdetail.setTabledetail(tabledetail);
 					columnsdetail.setName(resultSet.getString("COLUMN_NAME"));
-					if(columnsdetail.getName().equals("rental_rate")){
+					if (columnsdetail.getName().equals("rental_rate")) {
 						System.out.println("Here");
 					}
 					if (resultSet.getString("IS_NULLABLE").equals("NO")) {
@@ -79,7 +76,11 @@ public class CreateColumnTask extends Task {
 							columnsdetail.setDecimalLength(0);
 						}
 					} else {
-						columnsdetail.setLength(Integer.valueOf(resultSet.getString("MAX_LENGTH")));
+						if (resultSet.getString("MAX_LENGTH").length() < 4) {
+							columnsdetail.setLength(Integer.valueOf(resultSet.getString("MAX_LENGTH")));
+						} else {
+							columnsdetail.setLength(100);
+						}
 					}
 					columnsdetail.setType(getColType(resultSet.getString("DATA_TYPE")));
 					if (columnsdetail.getType() == ColumnType.ENUM) {
@@ -87,7 +88,7 @@ public class CreateColumnTask extends Task {
 						colTypeSplit[1] = colTypeSplit[1].replace(")", "");
 						columnsdetail.setEnumvalues(colTypeSplit[1]);
 
-					} 
+					}
 					columnsdetails.add(columnsdetail);
 				} catch (NumberFormatException exception) {
 					System.out.println("Leave this");

@@ -38,6 +38,7 @@ public class GenerateDataJob2 extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor arg0) {
+		System.out.println(tableCount);
 		int rowCount;
 		List<GeneratedColumn> ukFkColumns = new ArrayList<>();
 		SortTableTask sortTableTask = new SortTableTask(selectedTableDetails);

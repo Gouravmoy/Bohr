@@ -49,7 +49,7 @@ public class GenerateTableDataTask_1 extends Task {
 									new FileReader(columnFilePath.get(colDataIntCount)));
 							colString = bufferedReaders[colDataIntCount].readLine();
 							if (colString.length() > 0) {
-								rowString += colString;
+								rowString += colString + ",";
 							} else {
 								wirteToText = false;
 								break;
