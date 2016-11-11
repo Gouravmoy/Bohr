@@ -57,6 +57,12 @@ public enum Master {
 		this.sortedTableInLoadOrder = sortedTableInLoadOrder;
 	}
 	
+	public void printTimeElapsed(long startTime, String model) {
+		long endTime = System.currentTimeMillis();
+		System.out.println("Time for " + model + " Execution - " + (endTime - startTime) / 1000);
+
+	}
+	
 	
 
 }

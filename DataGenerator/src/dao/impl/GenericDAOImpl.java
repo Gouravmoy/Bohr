@@ -25,7 +25,6 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		super();
 		if (configuration == null) {
 			startOpereation();
-			buildSession();
 		}
 	}
 

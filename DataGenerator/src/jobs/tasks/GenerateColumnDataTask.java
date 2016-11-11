@@ -30,8 +30,10 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Temp";
+	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
 	ModelService modelService;
+
+	long startTime = 0;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -61,9 +63,13 @@ public class GenerateColumnDataTask extends Task {
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
 				if (columnsdetail.getDatasamplemodel() != null) {
+					startTime = System.currentTimeMillis();
 					generatePredefinedValues(textFilePath, columnsdetail);
-				} else if (columnsdetail.getPredefinedModel()!=null) {
+					printTimeElapsed(startTime,"generatePredefinedValues with dataSampleModel");
+				} else if (columnsdetail.getPredefinedModel() != null) {
+					startTime = System.currentTimeMillis();
 					generatePredefinedValues(textFilePath, columnsdetail);
+					printTimeElapsed(startTime,"generatePredefinedValues");
 				} else if (columnsdetail.getRelationsdetails().size() != 0) {
 					generateRelationColumn(textFilePath, columnsdetail.getRelationsdetails());
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
@@ -182,6 +188,12 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumnList.add(generatedColumn);
+	}
+
+	public void printTimeElapsed(long startTime, String model) {
+		long endTime = System.currentTimeMillis();
+		System.out.println("Time for " + model + " Execution - " + (endTime - startTime) / 1000);
+
 	}
 
 	public List<GeneratedTable> getGeneratedTableData() {

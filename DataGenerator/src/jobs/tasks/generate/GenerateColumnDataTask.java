@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import common.Master;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Relationsdetail;
@@ -31,11 +32,13 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
+	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
 	ModelService modelService;
 	List<String> generatedTableList;
 	private RelationService relationService;
 	private int projectId;
+	
+	long startTime = 0;
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -140,12 +143,17 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 
+		startTime  = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+			Master.INSTANCE.printTimeElapsed(startTime, "getDatasamplemodel Models");
 		} else {
 			try {
-				generatedColumn.setPreDefinedValues(modelService
-						.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
+				
+				generatedColumn.setPreDefinedValues(columnsdetail.getPredefinedModel().getSampelValues());
+				/*generatedColumn.setPreDefinedValues(modelService
+						.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());*/
+				Master.INSTANCE.printTimeElapsed(startTime, "Predefined Models");
 			} catch (Exception err) {
 				err.printStackTrace();
 			}
