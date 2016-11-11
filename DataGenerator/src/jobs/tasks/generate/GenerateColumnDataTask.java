@@ -1,6 +1,7 @@
 package jobs.tasks.generate;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,7 @@ public class GenerateColumnDataTask extends Task {
 	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
 	ModelService modelService;
 	List<String> generatedTableList;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -111,10 +113,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		// Relationsdetail relationsdetail =
-		// relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
-		// projectId);
-		// generatedColumn.setRelationsdetail(relationsdetail);
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -129,7 +127,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-
 		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
 		} else {
