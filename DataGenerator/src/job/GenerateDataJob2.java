@@ -1,5 +1,6 @@
 package job;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +32,8 @@ public class GenerateDataJob2 extends Job {
 	List<Tabledetail> selectedTableDetails;
 	static int noOfRows = 0;
 	Map<String, Integer> tableCount;
-	
 	long startTime = 0;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -40,16 +41,19 @@ public class GenerateDataJob2 extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor arg0) {
+		System.out.println(tableCount);
 		int rowCount;
 		List<GeneratedColumn> ukFkColumns = new ArrayList<>();
 		SortTableTask sortTableTask = new SortTableTask(selectedTableDetails);
 		sortTableTask.execute();
+		System.out.println(sortTableTask.getTabledetailListSorted());
 		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
 		startTime = System.currentTimeMillis();
 		System.out.println("GenerateColumnDataTask started");
 		dataTask_1.execute();
 		Master.INSTANCE.printTimeElapsed(startTime, "GenerateColumnDataTask");
+		System.out.println(dataTask_1.getGeneratedTableData());
 		for (GeneratedTable generatedTable : dataTask_1.getGeneratedTableData()) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
@@ -63,7 +67,6 @@ public class GenerateDataJob2 extends Job {
 				rowCount = noOfRows;
 			}
 			generatedTable.setRowCount(rowCount);
-			System.out.println("Generating data for table " + generatedTable.getTableName());
 			for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
 				column.setNumberOfRows(rowCount);
 				column.generateColumn();
@@ -83,11 +86,13 @@ public class GenerateDataJob2 extends Job {
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
+
 			public void run() {
 				StatusDialog.updateTableName("Completed!");
 			}
 		});
 		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
+
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;

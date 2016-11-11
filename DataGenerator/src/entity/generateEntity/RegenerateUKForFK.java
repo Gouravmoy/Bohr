@@ -80,11 +80,6 @@ public class RegenerateUKForFK {
 			for (int i = 0; i < ukFkColumns.size(); i++) {
 				File sourceTempFile = new File(tempFilePath[i]);
                 File targetFile = new File(ukFkColumns.get(i).filePath.replace(".txt","_UK_FK.txt"));
-				/*
-				 * File targetFile = new
-				 * File(ukFkColumns.get(i).filePath.replace(ukFkColumns.get(i).
-				 * getColName(), ukFkColumns.get(i).getColName() + "_UK_FK"));
-				 */
 				ukFkColumns.get(i).setFilePath(targetFile.getPath());
 				FileUtils.copyFile(sourceTempFile, targetFile);
 				sourceTempFile.delete();

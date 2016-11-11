@@ -38,7 +38,7 @@ import job.GenerateDataJob2;
 public class ExecuteDialog extends Dialog {
 	private Text text;
 	private Text text_1;
-	private Spinner spinner;
+	private Spinner spinnerAll;
 	private Table table;
 	public List<Tabledetail> tabledetails;
 	public List<Tabledetail> selectedTabledetails;
@@ -46,7 +46,7 @@ public class ExecuteDialog extends Dialog {
 	ProjectDao projectDao;
 	boolean createColumn = true;
 	TableEditor editor;
-	private static String COLUMN_NAMES[] = { "Table Name", "Table Description", "No of Rows" };
+	private static String COLUMN_NAMES[] = { "Table Name", "No of Rows" };
 	Map<String, Integer> tableCount;
 
 	public ExecuteDialog(Shell parentShell) {
@@ -149,11 +149,11 @@ public class ExecuteDialog extends Dialog {
 		lblNoOfRows.setBounds(10, 124, 156, 15);
 		lblNoOfRows.setText("No of Rows to Generate");
 
-		spinner = new Spinner(grpUserInput, SWT.BORDER);
-		spinner.setBounds(171, 119, 60, 22);
-		spinner.setMaximum(500);
-		spinner.setMinimum(0);
-		spinner.setIncrement(10);
+		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
+		spinnerAll.setBounds(171, 119, 60, 22);
+		spinnerAll.setMaximum(500);
+		spinnerAll.setMinimum(0);
+		spinnerAll.setIncrement(10);
 
 		return container;
 	}
@@ -173,14 +173,14 @@ public class ExecuteDialog extends Dialog {
 			TableItem items = new TableItem(table, SWT.NONE);
 			TableEditor editor = new TableEditor(table);
 			editor = new TableEditor(table);
-			Spinner spinner = new Spinner(table, SWT.NULL);
+			Spinner spinner = new Spinner(table, SWT.NONE);
 			spinner.setIncrement(5);
 			text.setText(spinner.getText());
 			editor.grabHorizontal = true;
-			editor.setEditor(spinner, items, 2);
+			editor.setEditor(spinner, items, 1);
 			editor = new TableEditor(table);
 			items.setText(0, tabledetail.getTableName());
-			spinner.setMinimum(Integer.parseInt(spinner.getText()));
+			spinner.setSelection(Integer.parseInt(spinnerAll.getText()));
 			spinner.setData(tabledetail);
 			spinner.addModifyListener(new ModifyListener() {
 				@Override
@@ -232,7 +232,7 @@ public class ExecuteDialog extends Dialog {
 	protected void okPressed() {
 		GenerateDataJob2 generateDataJob2 = new GenerateDataJob2("Generate Job");
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
-		generateDataJob2.setNoOfRows(spinner.getSelection());
+		generateDataJob2.setNoOfRows(spinnerAll.getSelection());
 		generateDataJob2.setTableCount(tableCount);
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
