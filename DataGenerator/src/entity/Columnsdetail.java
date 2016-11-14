@@ -135,10 +135,6 @@ public class Columnsdetail implements Serializable {
 		this.keytype = keytype;
 	}
 
-	public void setLength(int length) {
-		this.length = length;
-	}
-
 	public String getName() {
 		return this.name;
 	}
