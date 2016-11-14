@@ -22,7 +22,7 @@ public class ConnectonCreateTask extends Task {
 	@Override
 	public void execute() throws BuildException {
 		switch (databasedetail.getType()) {
-		case IBM_DB2:
+		case DB2:
 			break;
 		case MYSQL:
 			try {
