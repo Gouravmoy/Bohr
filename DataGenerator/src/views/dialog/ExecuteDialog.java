@@ -76,6 +76,7 @@ public class ExecuteDialog extends Dialog {
 				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
+				selectedTabledetails.addAll(tabledetails);
 				createTable(parent);
 			}
 		});
@@ -106,9 +107,6 @@ public class ExecuteDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				selectedTabledetails.clear();
 				selectedTabledetails.addAll(tabledetails);
-				table.removeAll();
-
-				createTable(parent);
 			}
 		});
 		btnSelectAll.setBounds(174, 421, 75, 25);
@@ -187,18 +185,18 @@ public class ExecuteDialog extends Dialog {
 				public void modifyText(ModifyEvent arg0) {
 					Spinner spinner = (Spinner) arg0.getSource();
 					Tabledetail tabledetail = (Tabledetail) spinner.getData();
+					System.out.println(tabledetail);
+					System.out.println(tabledetail.getTableName() + "  :  " + Integer.parseInt(spinner.getText()));
 					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
 				}
 			});
 			if (selectedTabledetails.contains(tabledetail)) {
+				items.setData(tabledetail);
 				items.setChecked(true);
 			}
 		}
-		for (int i = 0; i < COLUMN_NAMES.length; i++) {
-			table.getColumn(i).pack();
-		}
-		table.addListener(SWT.Selection | SWT.CHANGED, new Listener() {
+		table.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				boolean isRemove = false;
@@ -207,6 +205,8 @@ public class ExecuteDialog extends Dialog {
 				if (event.detail == SWT.CHECK) {
 					Tabledetail tabledetail = (Tabledetail) event.item.getData();
 					for (Tabledetail tabledetail2 : selectedTabledetails) {
+						System.out.println(tabledetail2);
+						System.out.println(tabledetail + "Table details");
 						if (tabledetail2.getIdtabledetails() == (tabledetail.getIdtabledetails())) {
 							isRemove = true;
 							pos = count;

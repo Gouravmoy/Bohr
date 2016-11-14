@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import common.Master;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Relationsdetail;
@@ -31,11 +30,10 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
+	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
 	ModelService modelService;
 	List<String> generatedTableList;
-	private int projectId;
-	
+
 	long startTime = 0;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -69,9 +67,9 @@ public class GenerateColumnDataTask extends Task {
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
 				if (columnsdetail.getDatasamplemodel() != null) {
-					generatePredefinedValues(textFilePath, columnsdetail);
+					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getPredefinedModel() != null) {
-					generatePredefinedValues(textFilePath, columnsdetail);
+					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
 				} else if (columnsdetail.getKeytype() != null) {
@@ -125,26 +123,21 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumnList.add(generatedColumn);
 	}
 
-	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail) {
+	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail,
+			GeneratedTable generatedTable) {
 		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		startTime  = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
-			Master.INSTANCE.printTimeElapsed(startTime, "getDatasamplemodel Models");
+			generatedColumn.setFileReopen(false);
+			generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
 		} else {
-			try {
-				
-				generatedColumn.setPreDefinedValues(columnsdetail.getPredefinedModel().getSampelValues());
-				/*generatedColumn.setPreDefinedValues(modelService
-						.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());*/
-				Master.INSTANCE.printTimeElapsed(startTime, "Predefined Models");
-			} catch (Exception err) {
-				err.printStackTrace();
-			}
+			generatedColumn.setPreDefinedValues(columnsdetail.getPredefinedModel().getSampelValues());
+			generatedColumn.setFileReopen(false);
 		}
 
 		generatedColumn.setKeyType(columnsdetail.getKeytype());

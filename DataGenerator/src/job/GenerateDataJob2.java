@@ -64,7 +64,11 @@ public class GenerateDataJob2 extends Job {
 			if (tableCount.containsKey(generatedTable.getTableName())) {
 				rowCount = tableCount.get(generatedTable.getTableName());
 			} else {
-				rowCount = noOfRows;
+				if (generatedTable.getRowCount() == 0) {
+					rowCount = noOfRows;
+				} else {
+					rowCount = generatedTable.getRowCount();
+				}
 			}
 			generatedTable.setRowCount(rowCount);
 			for (GeneratedColumn column : generatedTable.getGeneratedColumn()) {
@@ -81,7 +85,7 @@ public class GenerateDataJob2 extends Job {
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
+					generatedTable, "C:\\Users\\M1026352\\Desktop\\DataGn\\Result"
 							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
 			dataWithInsertQueryTask.execute();
 		}

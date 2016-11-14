@@ -14,7 +14,6 @@
             <children xsi:type="basic:PartSashContainer" xmi:id="_WOt9IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.3" containerData="75">
               <children xsi:type="basic:PartStack" xmi:id="_i0t0UJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.1">
                 <children xsi:type="basic:Part" xmi:id="_r8_ncJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/transform_flip.png"/>
-                <children xsi:type="basic:Part" xmi:id="_HGloIJPBEeaPa-3-e5bw6w" elementId="datagenerator.part.samplepart2" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart2" label="Sample Part 2"/>
               </children>
             </children>
           </children>
