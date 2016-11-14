@@ -2,6 +2,8 @@ package jobs.tasks;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +12,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 
 import dao.ColumnsDao;
 import dao.ConstraintsDao;
@@ -21,42 +25,83 @@ import dao.impl.SchemaDaoImpl;
 import dao.impl.TableDaoImpl;
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
+import entity.Databasedetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
 import enums.ColumnType;
 import enums.KeyType;
+import exceptions.ExcelImportException;
+import exceptions.PersistException;
 import exceptions.ReadEntityException;
 
-public class ImportRepoExcelTask {
+public class ImportRepoExcelTask extends Task {
 	static Schemadetail schemadetail;
+	Databasedetail databasedetail;
+	String importFilePath;
 	private static SchemaDao schemaDao;
 	private static TableDao tableDao;
 	private static ColumnsDao columnsDao;
 	private static ConstraintsDao constraintsDao;
 
-	public static void main(String[] args) {
-
+	@Override
+	public void execute() throws BuildException {
+		System.out.println("Importing Excel Schema");
 		try {
 			schemaDao = new SchemaDaoImpl();
 			schemadetail = new Schemadetail();
-			schemadetail.setName("EXCEL_IMPORT");
+			schemadetail.setName(databasedetail.getConnectionName());
+			schemadetail.setDatabasedetail(databasedetail);
 			schemaDao.saveSchema(schemadetail);
 			tableDao = new TableDaoImpl();
 			columnsDao = new ColumnsDAOImpl();
 			constraintsDao = new ConstraintsDAOImpl();
-			FileInputStream file = new FileInputStream(
-					new File("C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Documents\\ODG Insert Sheet.xlsm"));
+			FileInputStream file = new FileInputStream(new File(importFilePath));
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			System.out.println("Importing All Tables");
 			List<Tabledetail> tabledetails = createTables(workbook, schemadetail);
 			tableDao.saveListOfTables(tabledetails);
+			System.out.println("Importing Columns");
 			List<Columnsdetail> columnsdetails = createColumns(workbook, tabledetails);
 			columnsDao.saveListOfColumns(columnsdetails);
+			System.out.println("Importing Constraints");
 			List<Constraintsdetail> constraintsdetailList = createConstraints(workbook, columnsdetails);
 			constraintsDao.saveListOfConstraint(constraintsdetailList);
-
 			file.close();
-		} catch (Exception e) {
+		} catch (BuildException e) {
 			e.printStackTrace();
+			try {
+				throw new ExcelImportException("Build Exception");
+			} catch (ExcelImportException e1) {
+				throw new BuildException(e1.getMessage(), e1);
+			}
+		} catch (PersistException e) {
+			e.printStackTrace();
+			try {
+				throw new ExcelImportException("Persist Exception");
+			} catch (ExcelImportException e1) {
+				throw new BuildException(e1.getMessage(), e1);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			try {
+				throw new ExcelImportException("File Not Found Exception");
+			} catch (ExcelImportException e1) {
+				throw new BuildException(e1.getMessage(), e1);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			try {
+				throw new ExcelImportException("I/O Exception");
+			} catch (ExcelImportException e1) {
+				throw new BuildException(e1.getMessage(), e1);
+			}
+		} catch (ReadEntityException e) {
+			e.printStackTrace();
+			try {
+				throw new ExcelImportException("Exception in Reading Database");
+			} catch (ExcelImportException e1) {
+				throw new BuildException(e1.getMessage(), e1);
+			}
 		}
 	}
 
@@ -93,6 +138,7 @@ public class ImportRepoExcelTask {
 									Cell refColumnCell = row.getCell(9);
 									if (refTableCell != null && refColumnCell != null) {
 										constraintsdetail = new Constraintsdetail();
+										constraintsdetail.setColumnsdetail1(columnsdetail);
 										constraintsdetail.setConstraintname("UDC");
 										constraintsdetail.setColumnsdetail1(columnsdetail);
 										constraintsdetail
@@ -104,7 +150,7 @@ public class ImportRepoExcelTask {
 													.equalsIgnoreCase(refColumnCell.getStringCellValue())) {
 												if (columnsdetail1.getTabledetail().getTableName()
 														.equals(constraintsdetail.getReferenceTable().getTableName())) {
-													constraintsdetail.setColumnsdetail1(columnsdetail1);
+													constraintsdetail.setReferenceColumnName(columnsdetail1.getName());
 													break;
 												}
 											}
@@ -232,4 +278,17 @@ public class ImportRepoExcelTask {
 		}
 		return tabledetails;
 	}
+
+	public Databasedetail getDatabasedetail() {
+		return databasedetail;
+	}
+
+	public void setDatabasedetail(Databasedetail databasedetail) {
+		this.databasedetail = databasedetail;
+	}
+
+	public void setImportFilePath(String importFilePath) {
+		this.importFilePath = importFilePath;
+	}
+
 }
