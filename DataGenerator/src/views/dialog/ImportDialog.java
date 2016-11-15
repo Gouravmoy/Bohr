@@ -16,6 +16,7 @@ import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;
 import enums.DBType;
+import enums.ImportType;
 import exceptions.PersistException;
 import job.FirstJob;
 
@@ -76,7 +77,7 @@ public class ImportDialog extends Dialog {
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		Databasedetail databasedetail = new Databasedetail();
 		databasedetail.setConnectionName(text.getText());
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/nagios");
+		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila_test");
 		databasedetail.setUsername("root");
 		databasedetail.setPassword("root");
 		databasedetail.setType(DBType.MYSQL);
@@ -86,6 +87,7 @@ public class ImportDialog extends Dialog {
 			W.printStackTrace();
 		}
 		firstJob.setDatabasedetail(databasedetail);
+		firstJob.setImportType(ImportType.DATABASE);
 		System.out.println(firstJob.getResult());
 		firstJob.schedule();
 		super.okPressed();
