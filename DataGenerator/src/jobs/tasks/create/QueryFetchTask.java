@@ -25,6 +25,7 @@ public class QueryFetchTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+		System.out.println(System.getProperty("user.dir"));
 		InputStream inputStream;
 		Properties properties = new Properties();
 		String path = "D:\\Bohr\\DataGenerator\\resources\\files\\";

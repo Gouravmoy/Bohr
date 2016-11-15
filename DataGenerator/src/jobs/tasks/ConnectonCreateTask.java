@@ -26,6 +26,7 @@ public class ConnectonCreateTask extends Task {
 			break;
 		case MYSQL:
 			try {
+				System.out.println(databasedetail);
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection(databasedetail.getDescription(), databasedetail.getUsername(),
 						databasedetail.getPassword());

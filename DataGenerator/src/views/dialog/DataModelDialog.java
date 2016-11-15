@@ -158,7 +158,7 @@ public class DataModelDialog extends Dialog {
 		databaseList.setBounds(103, 24, 357, 23);
 
 		Label lblIsUnique = new Label(grpUserInput, SWT.NONE);
-		lblIsUnique.setBounds(10, 78, 55, 15);
+		lblIsUnique.setBounds(10, 78, 86, 15);
 		lblIsUnique.setText("Is Repeateable");
 
 		buttonIsUnique = new Button(grpUserInput, SWT.CHECK);

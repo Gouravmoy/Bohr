@@ -76,7 +76,7 @@ public class ImportDialog extends Dialog {
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		Databasedetail databasedetail = new Databasedetail();
 		databasedetail.setConnectionName(text.getText());
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila_test");
+		databasedetail.setDescription("jdbc:mysql://localhost:3306/nagios");
 		databasedetail.setUsername("root");
 		databasedetail.setPassword("root");
 		databasedetail.setType(DBType.MYSQL);

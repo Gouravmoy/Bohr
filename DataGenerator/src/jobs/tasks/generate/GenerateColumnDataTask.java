@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -27,6 +28,7 @@ import service.ModelService;
 import service.impl.ModelServiceImpl;
 
 public class GenerateColumnDataTask extends Task {
+	static Logger log = Logger.getLogger(GenerateColumnDataTask.class.getName());
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
@@ -55,6 +57,7 @@ public class GenerateColumnDataTask extends Task {
 		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
+			log.debug(tabledetail);
 			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
