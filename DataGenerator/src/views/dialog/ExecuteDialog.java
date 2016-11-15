@@ -1,11 +1,16 @@
 package views.dialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +22,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -27,19 +33,21 @@ import dao.impl.ProjectDAOImpl;
 import entity.Projectdetails;
 import entity.Tabledetail;
 import exceptions.ReadEntityException;
-import org.eclipse.swt.widgets.Spinner;
+import job.GenerateDataJob2;
 
 public class ExecuteDialog extends Dialog {
 	private Text text;
 	private Text text_1;
+	private Spinner spinnerAll;
 	private Table table;
 	public List<Tabledetail> tabledetails;
 	public List<Tabledetail> selectedTabledetails;
 	List<Projectdetails> projectdetails;
 	ProjectDao projectDao;
 	boolean createColumn = true;
-
-	private static String COLUMN_NAMES[] = { "Table Name", "Table Description" };
+	TableEditor editor;
+	private static String COLUMN_NAMES[] = { "Table Name", "No of Rows" };
+	Map<String, Integer> tableCount;
 
 	public ExecuteDialog(Shell parentShell) {
 		super(parentShell);
@@ -51,6 +59,7 @@ public class ExecuteDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		tableCount = new HashMap<String, Integer>();
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Import Connections");
 		container.setLayout(null);
@@ -67,6 +76,7 @@ public class ExecuteDialog extends Dialog {
 				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
+				selectedTabledetails.addAll(tabledetails);
 				createTable(parent);
 			}
 		});
@@ -86,6 +96,7 @@ public class ExecuteDialog extends Dialog {
 		lblSelectTables.setText("Select Tables");
 
 		table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		editor = new TableEditor(table);
 		table.setBounds(176, 205, 328, 210);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -96,9 +107,6 @@ public class ExecuteDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				selectedTabledetails.clear();
 				selectedTabledetails.addAll(tabledetails);
-				table.removeAll();
-
-				createTable(parent);
 			}
 		});
 		btnSelectAll.setBounds(174, 421, 75, 25);
@@ -139,10 +147,11 @@ public class ExecuteDialog extends Dialog {
 		lblNoOfRows.setBounds(10, 124, 156, 15);
 		lblNoOfRows.setText("No of Rows to Generate");
 
-		Spinner spinner = new Spinner(grpUserInput, SWT.BORDER);
-		spinner.setBounds(171, 119, 60, 22);
-		spinner.setMaximum(500);
-		spinner.setMinimum(1);
+		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
+		spinnerAll.setBounds(171, 119, 60, 22);
+		spinnerAll.setMaximum(500);
+		spinnerAll.setMinimum(0);
+		spinnerAll.setIncrement(10);
 
 		return container;
 	}
@@ -159,23 +168,33 @@ public class ExecuteDialog extends Dialog {
 		}
 		for (int i = 0; i < tabledetails.size(); i++) {
 			Tabledetail tabledetail = tabledetails.get(i);
-			TableItem item = new TableItem(table, SWT.CENTER);
-			item.setText(tabledetail.getTableName());
+			TableItem items = new TableItem(table, SWT.NONE);
+			TableEditor editor = new TableEditor(table);
+			editor = new TableEditor(table);
+			Spinner spinner = new Spinner(table, SWT.NONE);
+			spinner.setIncrement(5);
+			text.setText(spinner.getText());
+			editor.grabHorizontal = true;
+			editor.setEditor(spinner, items, 1);
+			editor = new TableEditor(table);
+			items.setText(0, tabledetail.getTableName());
+			spinner.setSelection(Integer.parseInt(spinnerAll.getText()));
+			spinner.setData(tabledetail);
+			spinner.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent arg0) {
+					Spinner spinner = (Spinner) arg0.getSource();
+					Tabledetail tabledetail = (Tabledetail) spinner.getData();
+					System.out.println(tabledetail);
+					System.out.println(tabledetail.getTableName() + "  :  " + Integer.parseInt(spinner.getText()));
+					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
-			for (Tabledetail tabledetail2 : selectedTabledetails) {
-				if (tabledetail2.getIdtabledetails() == (tabledetail.getIdtabledetails())) {
-					item.setChecked(true);
-					break;
 				}
+			});
+			if (selectedTabledetails.contains(tabledetail)) {
+				items.setData(tabledetail);
+				items.setChecked(true);
 			}
-
-			item.setText(0, tabledetail.getTableName());
-			item.setText(1, tabledetail.getTableName());
-			item.setData(tabledetail);
-			// }
-		}
-		for (int i = 0; i < COLUMN_NAMES.length; i++) {
-			table.getColumn(i).pack();
 		}
 		table.addListener(SWT.Selection, new Listener() {
 			@Override
@@ -186,7 +205,8 @@ public class ExecuteDialog extends Dialog {
 				if (event.detail == SWT.CHECK) {
 					Tabledetail tabledetail = (Tabledetail) event.item.getData();
 					for (Tabledetail tabledetail2 : selectedTabledetails) {
-
+						System.out.println(tabledetail2);
+						System.out.println(tabledetail + "Table details");
 						if (tabledetail2.getIdtabledetails() == (tabledetail.getIdtabledetails())) {
 							isRemove = true;
 							pos = count;
@@ -210,7 +230,14 @@ public class ExecuteDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-
+		GenerateDataJob2 generateDataJob2 = new GenerateDataJob2("Generate Job");
+		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
+		generateDataJob2.setNoOfRows(spinnerAll.getSelection());
+		generateDataJob2.setTableCount(tableCount);
+		generateDataJob2.schedule();
+		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
+		dialog.open();
+		super.okPressed();
 	}
 
 	@Override

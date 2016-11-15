@@ -1,5 +1,8 @@
 package jobs.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -12,13 +15,7 @@ import entity.PreDefinedModels;
 import entity.Projectdetails;
 import entity.Tabledetail;
 import enums.ColumnType;
-import exceptions.EntityNotPresent;
 import exceptions.ReadEntityException;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class DefaultModelsToColumnsTask extends Task {
 
@@ -30,7 +27,6 @@ public class DefaultModelsToColumnsTask extends Task {
 		List<Tabledetail> tabledetails = null;
 		List<Columnsdetail> columnsdetails = null;
 		List<PreDefinedModels> preDefinedModels = null;
-		Set<PreDefinedModels> colPredefinedData = null;
 		ColumnsDao columnsDao = new ColumnsDAOImpl();
 		try {
 			preDefinedModels = preDefinedModelDao.getAllPreDefinedModelsinDB();
@@ -42,17 +38,21 @@ public class DefaultModelsToColumnsTask extends Task {
 				for (Columnsdetail columnsdetail : columnsdetails) {
 					if (columnsdetail.getType() != ColumnType.VARCHAR)
 						continue;
-					colPredefinedData = new HashSet<>();
 					for (PreDefinedModels preDefinedModel : preDefinedModels) {
 						String colName = columnsdetail.getName();
 						colName = colName.replace("_", "");
+						if(columnsdetail.getConstraintsdetails1().size()>0)
+							break;
 						for (String expectedColName : preDefinedModel.getExpectedColumnName().split(",")) {
 							String tablePlusCol = tabledetail.getTableName() + "" + colName;
 							if (colName.equalsIgnoreCase(expectedColName) || colName.endsWith(expectedColName)
 									|| tablePlusCol.contains(expectedColName)) {
-								colPredefinedData.add(preDefinedModel);
-								columnsdetail.setPredefinedModels(colPredefinedData);
-								columnsDao.update(columnsdetail);
+								columnsdetail.setPredefinedModel(preDefinedModel);
+								try {
+									columnsDao.update(columnsdetail);
+								} catch (Exception err) {
+									err.printStackTrace();
+								}
 								break;
 							}
 						}
@@ -60,7 +60,7 @@ public class DefaultModelsToColumnsTask extends Task {
 				}
 			}
 			preDefinedModelDao.getAllPreDefinedModelsinDB();
-		} catch (ReadEntityException | EntityNotPresent e) {
+		} catch (ReadEntityException e) {
 			e.printStackTrace();
 		}
 

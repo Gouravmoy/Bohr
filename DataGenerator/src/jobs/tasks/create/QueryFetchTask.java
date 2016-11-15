@@ -25,9 +25,10 @@ public class QueryFetchTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+		System.out.println(System.getProperty("user.dir"));
 		InputStream inputStream;
 		Properties properties = new Properties();
-		String path = "D:\\Workspaces\\RDGGitStaging\\DataGenerator\\resources\\files\\";
+		String path = "D:\\Bohr\\DataGenerator\\resources\\files\\";
 		File queryFile = new File(path + databasedetail.getType() + ".properties");
 		try {
 			// String path = "platform:/plugin/DataGenerator/resources/files/"+

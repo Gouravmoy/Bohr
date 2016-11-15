@@ -31,7 +31,7 @@ public class Test {
 	public void saveEmployees() {
 
 		Databasedetail databasedetail = new Databasedetail();
-		databasedetail = new Databasedetail("1", "", "", "", "0", DBType.IBM_DB2, "", "");
+		databasedetail = new Databasedetail("1", "", "", "", "0", DBType.DB2, "", "");
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		try {
 			databaseDao.saveDatabse(databasedetail);

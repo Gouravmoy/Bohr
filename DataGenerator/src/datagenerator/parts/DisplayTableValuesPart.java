@@ -56,6 +56,7 @@ public class DisplayTableValuesPart {
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
+
 		generatedTable = Master.INSTANCE.getCurrentGeneratedTable();
 		int coluCount = 0;
 		propertyNames = new String[generatedTable.getGeneratedColumn().size()];
@@ -153,36 +154,8 @@ public class DisplayTableValuesPart {
 
 	private static IDataValidator getSecurtityIdValidator() {
 		return new DataValidator() {
-
 			@Override
 			public boolean validate(int columnIndex, int rowIndex, Object newValue) {
-				if (newValue == null) {
-					return false;
-				}
-				String value = (String) newValue;
-				if (value.length() > 3) {
-					String alphabeticPart = value.substring(0, 2);
-					String numericPart = value.substring(3, value.length());
-					return isAlpha(alphabeticPart) && isNumeric(numericPart);
-				} else {
-					String alphabeticPart = value.substring(0, value.length());
-					return isAlpha(alphabeticPart);
-				}
-			}
-
-			private boolean isAlpha(String str) {
-				for (int i = 0; i < str.length(); i++) {
-					if (!Character.isLetter(str.charAt(i)))
-						return false;
-				}
-				return true;
-			}
-
-			private boolean isNumeric(String str) {
-				for (int i = 0; i < str.length(); i++) {
-					if (!Character.isDigit(str.charAt(i)))
-						return false;
-				}
 				return true;
 			}
 		};

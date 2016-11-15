@@ -1,17 +1,20 @@
 package jobs.tasks.generate;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
+import entity.Relationsdetail;
 import entity.Tabledetail;
 import entity.generateEntity.GenerateColumnPreDefined;
 import entity.generateEntity.GenerateColumnPrimaryKey;
@@ -25,11 +28,16 @@ import service.ModelService;
 import service.impl.ModelServiceImpl;
 
 public class GenerateColumnDataTask extends Task {
+	static Logger log = Logger.getLogger(GenerateColumnDataTask.class.getName());
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\Export";
+	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
 	ModelService modelService;
+	List<String> generatedTableList;
+
+	long startTime = 0;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 	public GenerateColumnDataTask(List<Tabledetail> sortedTableList) {
 		super();
@@ -45,13 +53,15 @@ public class GenerateColumnDataTask extends Task {
 		File tableFolder;
 		mainFolder.mkdir();
 		generatedTableData = new ArrayList<>();
+		generatedTableList = new ArrayList<>();
+		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			if (tabledetail.getTableName().equalsIgnoreCase("film")) {
-				System.out.println("bug");
-			}
+			log.debug(tabledetail);
+			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
+			generatedTable.setTableRank(rowRank++);
 			tableFolder = new File(mainFolderPath + "\\" + tabledetail.getTableName());
 			tableFolder.mkdir();
 			generatedTable.setTablePath(tableFolder.getPath() + "\\TableFile_" + tabledetail.getTableName() + ".txt");
@@ -60,13 +70,14 @@ public class GenerateColumnDataTask extends Task {
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
 				if (columnsdetail.getDatasamplemodel() != null) {
-					generatePredefinedValues(textFilePath, columnsdetail);
-				} else if (!columnsdetail.getPredefinedModels().isEmpty()) {
-					generatePredefinedValues(textFilePath, columnsdetail);
+					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
+				} else if (columnsdetail.getPredefinedModel() != null) {
+					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
 				} else if (columnsdetail.getKeytype() != null) {
-					if (columnsdetail.getIsnullable() == 1 && columnsdetail.getKeytype() != null) {
+					if (columnsdetail.getIsnullable() == 1 && !generatedTableList.contains(columnsdetail
+							.getConstraintsdetails1().iterator().next().getReferenceTable().getTableName())) {
 						generateNullableColumn(textFilePath, columnsdetail);
 					} else if (columnsdetail.getKeytype().equals(KeyType.UK)) {
 						generateRandomColumnWithUnique(textFilePath, columnsdetail);
@@ -74,14 +85,14 @@ public class GenerateColumnDataTask extends Task {
 						generatePrimaryKeyColumn(textFilePath, columnsdetail);
 					} else if (columnsdetail.getKeytype().equals(KeyType.FK)) {
 						generatePrimaryColumnAsForeignKey(columnsdetail,
-								columnsdetail.getConstraintsdetails1().iterator().next());
+								columnsdetail.getConstraintsdetails1().iterator().next(), true);
 					} else if (columnsdetail.getKeytype().equals(KeyType.UK_FK)) {
 						Constraintsdetail constraintsdetail = new Constraintsdetail();
 						Iterator<Constraintsdetail> itr = columnsdetail.getConstraintsdetails1().iterator();
 						while (itr.hasNext()) {
 							constraintsdetail = itr.next();
 							if (constraintsdetail.getReferenceTable() != null) {
-								generatePrimaryColumnAsForeignKey(columnsdetail, constraintsdetail);
+								generatePrimaryColumnAsForeignKey(columnsdetail, constraintsdetail, false);
 							}
 						}
 					}
@@ -94,6 +105,10 @@ public class GenerateColumnDataTask extends Task {
 		}
 	}
 
+	private void generateRelationColumnms(Columnsdetail columnsdetail, String textFilePath) {
+
+	}
+
 	private void generateNullableColumn(String textFilePath, Columnsdetail columnsdetail) {
 		GenerateColumnRandom generatedColumn = new GenerateColumnRandom();
 		generatedColumn.setColName(columnsdetail.getName());
@@ -102,18 +117,44 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
-	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail) {
+	private void generatePredefinedValues(String textFilePath, Columnsdetail columnsdetail,
+			GeneratedTable generatedTable) {
 		GenerateColumnPreDefined generatedColumn = new GenerateColumnPreDefined();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		generatedColumn.setPreDefinedValues(
-				modelService.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails()).getSampelValues());
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		startTime = System.currentTimeMillis();
+		if (columnsdetail.getDatasamplemodel() != null) {
+			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+			generatedColumn.setFileReopen(true);
+			if (!columnsdetail.getDatasamplemodel().isRepeteableIndex()) {
+				generatedColumn.setFileReopen(false);
+				generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
+			}
+		} else {
+			generatedColumn.setPreDefinedValues(columnsdetail.getPredefinedModel().getSampelValues());
+			generatedColumn.setFileReopen(true);
+		}
+
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
@@ -126,10 +167,19 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setGenerateAllUnique(true);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(false);
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
-	private void generatePrimaryColumnAsForeignKey(Columnsdetail columnsdetail, Constraintsdetail constraintsdetail) {
+	private void generatePrimaryColumnAsForeignKey(Columnsdetail columnsdetail, Constraintsdetail constraintsdetail,
+			boolean b) {
 		GenerateColumnPrimaryKey generatedColumn = new GenerateColumnPrimaryKey();
 		generatedColumn.setColName(columnsdetail.getName());
 		generatedColumn.setColumnType(columnsdetail.getType());
@@ -140,6 +190,14 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setStartValue(1);
 		generatedColumn.setForeignKey(true);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setFileReopen(b);
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
@@ -153,6 +211,14 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setStartValue(1);
 		generatedColumn.setForeignKey(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(true);
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
@@ -165,6 +231,13 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setEnumValues(columnsdetail.getEnumvalues());
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setFileReopen(true);
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
@@ -175,16 +248,28 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColLength(columnsdetail.getLength());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		if (columnsdetail.getIsnullable() == 1) {
-			generatedColumn.setNullable(true);
-		}
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		List<Relationsdetail> relationsdetails = new ArrayList<>();
+		if (!columnsdetail.getRelationsdetails().isEmpty()) {
+			relationsdetails.addAll(columnsdetail.getRelationsdetails());
+			generatedColumn.setRelationsdetail(relationsdetails.get(0));
+		}
 		generatedColumnList.add(generatedColumn);
 	}
 
 	public List<GeneratedTable> getGeneratedTableData() {
 		return generatedTableData;
+	}
+
+	public List<GeneratedColumn> getGeneratedColumnList() {
+		return generatedColumnList;
+	}
+
+	public void setGeneratedColumnList(List<GeneratedColumn> generatedColumnList) {
+		this.generatedColumnList = generatedColumnList;
 	}
 
 }

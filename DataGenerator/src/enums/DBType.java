@@ -2,6 +2,6 @@ package enums;
 
 public enum DBType {
 
-	IBM_DB2, MYSQL, ORACLE;
+	MYSQL,DB2,ORACLE,DENODO,SQL_SERVER,HADOOP_HIVE,DEFAULT,NETEZZA;
 
 }

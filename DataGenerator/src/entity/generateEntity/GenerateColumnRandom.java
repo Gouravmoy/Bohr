@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import enums.PatternType;
+
 public class GenerateColumnRandom extends GeneratedColumn {
 	boolean isNullable = false;
 	boolean generateAllUnique = true;
@@ -28,10 +30,10 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				int newLineStartNumber = 0;
 				currentLineNumber = getLastLineNo();
 				newLineStartNumber = currentLineNumber + 1;
-				if (newLineStartNumber == 1) {
-					writer.write(generateRandomValue() + "\n");
-				} else if (isNullable) {
+				if (isNullable) {
 					writer.write(null + "\n");
+				} else if (newLineStartNumber == 1) {
+					writer.write(generateRandomValue() + "\n");
 				} else {
 					if (!generateAllUnique)
 						writer.write(generateRandomValue() + "\n");
@@ -117,14 +119,20 @@ public class GenerateColumnRandom extends GeneratedColumn {
 			case VARCHAR:
 				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
 				builder.append("\"");
-				for (int i = 0; i < sizeVarchar; i++) {
-					builder.append(alphabet.charAt(r.nextInt(N)));
+				if (pattern == null) {
+					for (int i = 0; i < sizeVarchar; i++) {
+						builder.append(alphabet.charAt(r.nextInt(N)));
+					}
+				} else {
+					String patternString = pattern.getRegexpString();
+					generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
 				}
+
 				builder.append("\"");
 				break;
 			case INTEGER:
 				int minimum = 1;
-				int maximum = (int) Math.pow(2, 31);
+				int maximum = 1000;
 				builder.append("" + minimum + (int) (Math.random() * maximum));
 				break;
 			case FLOAT:
@@ -142,7 +150,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				break;
 
 			case TINYINT:
-				builder.append("" + r.nextInt(128));
+				builder.append(0);
 				break;
 			case DATE:
 				String startDate = "2013-02-08 00:00:00";
@@ -181,6 +189,31 @@ public class GenerateColumnRandom extends GeneratedColumn {
 		}
 		return builder.toString();
 
+	}
+
+	public void generateVarcharWithPattern(final String alphabet, final int N, Random r, StringBuilder builder,
+			int sizeVarchar, String patternString) {
+		if (pattern.getPatternType() == PatternType.PREFIX) {
+			builder.append(patternString);
+			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
+				builder.append(alphabet.charAt(r.nextInt(N)));
+			}
+			if (sizeVarchar < builder.length()) {
+				String truncatedValue = builder.substring(0, sizeVarchar);
+				builder.setLength(0);
+				builder.append(truncatedValue);
+			}
+		} else {
+			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
+				builder.append(alphabet.charAt(r.nextInt(N)));
+			}
+			builder.append(patternString);
+			if (sizeVarchar < builder.length()) {
+				String truncatedValue = builder.substring(builder.length() - sizeVarchar, builder.length());
+				builder.setLength(0);
+				builder.append(truncatedValue);
+			}
+		}
 	}
 
 	public static String getRandomValue(final Random random, final int lowerBound, final int upperBound,

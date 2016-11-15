@@ -44,7 +44,6 @@ import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Patterndetail;
-import entity.PreDefinedModels;
 import entity.Projectdetails;
 import entity.Relationsdetail;
 import entity.Schemadetail;
@@ -56,8 +55,9 @@ import service.ModelService;
 import service.PatternService;
 import service.RelationService;
 import service.impl.ModelServiceImpl;
-import service.impl.PatternServiceImpl;
 import service.impl.RelationServiceImpl;
+import views.dialog.DataModelDialog;
+import views.dialog.PatternDialog;
 import views.dialog.RelationDialog;
 import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
@@ -139,8 +139,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		assignMenuItems();
 		popup.add(createRelations);
-		// popup.add(createPatterns);
-		// popup.add(createDataModel);
+		popup.add(createPatterns);
+		popup.add(createDataModel);
 		initilizeTrees(frame);
 
 		try {
@@ -185,6 +185,69 @@ public class TreeView extends DefaultTreeCellRenderer {
 					}
 				});
 
+			}
+		});
+
+		createPatterns = new JMenuItem("Create a Pattern");
+		createPatterns.setActionCommand("createPattern");
+		createPatterns.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				System.out.println("Here");
+				Component selectedComponent = MousePopupListner.currentComponent;
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+						Dialog dialog = new PatternDialog(composite.getShell(), columnsdetail,
+								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						dialog.open();
+					}
+				});
+
+			}
+		});
+
+		createDataModel = new JMenuItem("Create a Data Model");
+		createDataModel.setActionCommand("createDataModel");
+		createDataModel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				System.out.println("Here");
+				Component selectedComponent = MousePopupListner.currentComponent;
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail,
+								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						dialog.open();
+					}
+				});
 			}
 		});
 
@@ -281,22 +344,23 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode columnCategory;
 		DefaultMutableTreeNode constraintsCategory;
 		relationService = new RelationServiceImpl();
-		patternService = new PatternServiceImpl();
+		// patternService = new PatternServiceImpl();
 		modelService = new ModelServiceImpl();
 
 		List<Tabledetail> tabledetails = new ArrayList<>();
 		tabledetails.addAll(schemadetail.getTabledetails());
 		sortList(tabledetails);
-		//int count = 0;
+		// int count = 0;
 		for (Tabledetail tabledetail : tabledetails) {
-			//System.out.println(tabledetail.getTableName());
+			// System.out.println(tabledetail.getTableName());
 			tableCategory = new DefaultMutableTreeNode(tabledetail);
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
-				//System.out.println((count++)+"->"+tabledetail.getTableName()+"->"+columnsdetail.getName());
+				// System.out.println((count++)+"->"+tabledetail.getTableName()+"->"+columnsdetail.getName());
 				columnCategory = new DefaultMutableTreeNode(columnsdetail);
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
 					getModels(columnCategory, columnsdetail, Id);
+					//getPatterns(columnCategory, columnsdetail, Id);
 				}
 				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
 					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);
@@ -309,23 +373,26 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void getModels(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail, int id) {
-		//System.out.println("Inside getModels");
+		// System.out.println("Inside getModels");
+		if (columnsdetail.getName().equals("title")) {
+			System.out.println("Debug");
+		}
 		DefaultMutableTreeNode modelCategory;
-		Datasamplemodel datasamplemodel = modelService
-				.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails());
-		PreDefinedModels preDefinedModels = modelService
-				.getPreDefinedmodelsByColumnId(columnsdetail.getIdcolumnsdetails());
+		Datasamplemodel datasamplemodel = modelService.getDataSampleModelByColumnId(columnsdetail.getIdcolumnsdetails(),
+				id);
+		// Datasamplemodel datasamplemodel = columnsdetail.getDatasamplemodel();
 		modelCategory = new DefaultMutableTreeNode("DATA MODELS");
 		if (datasamplemodel != null) {
 			modelCategory.add(new DefaultMutableTreeNode(datasamplemodel));
 			dataModels.add(new DefaultMutableTreeNode(datasamplemodel));
 		}
-		if (preDefinedModels != null) {
-			modelCategory.add(new DefaultMutableTreeNode(preDefinedModels));
-			dataModels.add(new DefaultMutableTreeNode(preDefinedModels));
+
+		if (columnsdetail.getPredefinedModel() != null) {
+			modelCategory.add(new DefaultMutableTreeNode(columnsdetail.getPredefinedModel()));
+			dataModels.add(new DefaultMutableTreeNode(columnsdetail.getPredefinedModel()));
 		}
 		columnCategory.add(modelCategory);
-		//System.out.println("Exit getModels");
+		// System.out.println("Exit getModels");
 	}
 
 	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,
@@ -333,6 +400,10 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode relationCategory;
 		DefaultMutableTreeNode patternCategory;
 		Patterndetail patterndetail = null;
+
+		// List<Relationsdetail> relationsdetails = new ArrayList<>();
+		// relationsdetails.addAll(columnsdetail.getRelationsdetails());
+
 		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
 				projectId);
 
@@ -355,6 +426,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 	}
 
 	private static void sortList(List<Tabledetail> tabledetails) {
+		/*
+		 * SortTableTask sortTableTask = new SortTableTask(tabledetails);
+		 * sortTableTask.execute(); tabledetails.clear();
+		 * tabledetails.addAll(Master.INSTANCE.getSortedTableInLoadOrder());
+		 */
 		if (tabledetails.size() > 0) {
 			Collections.sort(tabledetails, new Comparator<Tabledetail>() {
 				@Override

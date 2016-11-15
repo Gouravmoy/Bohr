@@ -37,9 +37,10 @@ public class Projectdetails implements Serializable {
 	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Relationsdetail> relationsdetails;
-
+	
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
+
 
 	// bi-directional many-to-one association to Patterndetail
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
@@ -73,5 +74,15 @@ public class Projectdetails implements Serializable {
 	public String toString() {
 		return projectName;
 	}
+
+	public Set<Datasamplemodel> getDatasamplemodels() {
+		return datasamplemodels;
+	}
+
+	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
+		this.datasamplemodels = datasamplemodels;
+	}
+	
+	
 
 }

@@ -49,11 +49,9 @@ public class Schemadetail implements Serializable {
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
 	private Set<Changelog> changelogs;
 
-	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
-	private Set<Datasamplemodel> datasamplemodels;
 
 	@ManyToOne
-	@JoinColumn(name = "db_id", nullable = false)
+	@JoinColumn(name = "db_id", nullable = true)
 	private Databasedetail databasedetail;
 
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)
@@ -109,27 +107,6 @@ public class Schemadetail implements Serializable {
 		return changelog;
 	}
 
-	public Set<Datasamplemodel> getDatasamplemodels() {
-		return datasamplemodels;
-	}
-
-	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
-		this.datasamplemodels = datasamplemodels;
-	}
-
-	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().add(datasamplemodel);
-		datasamplemodel.setSchemadetail(this);
-
-		return datasamplemodel;
-	}
-
-	public Datasamplemodel removeDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().remove(datasamplemodel);
-		datasamplemodel.setSchemadetail(null);
-
-		return datasamplemodel;
-	}
 
 	public Databasedetail getDatabasedetail() {
 		return this.databasedetail;

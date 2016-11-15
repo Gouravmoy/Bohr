@@ -14,7 +14,6 @@
             <children xsi:type="basic:PartSashContainer" xmi:id="_WOt9IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.3" containerData="75">
               <children xsi:type="basic:PartStack" xmi:id="_i0t0UJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.1">
                 <children xsi:type="basic:Part" xmi:id="_r8_ncJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.playground" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart" label="Play Ground" iconURI="platform:/plugin/DataGenerator/resources/images/transform_flip.png"/>
-                <children xsi:type="basic:Part" xmi:id="_HGloIJPBEeaPa-3-e5bw6w" elementId="datagenerator.part.samplepart2" contributionURI="bundleclass://DataGenerator/datagenerator.parts.SamplePart2" label="Sample Part 2"/>
               </children>
             </children>
           </children>
@@ -44,8 +43,8 @@
       <children xsi:type="menu:Menu" xmi:id="_Etn2IJHTEeaUVcSqx7g-yA" elementId="datagenerator.menu.functions" label="Functions">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_IXyawJHTEeaUVcSqx7g-yA" elementId="datagenerator.handledmenuitem.importdatabase" label="Import Database" iconURI="platform:/plugin/DataGenerator/resources/images/connect-icon.png" command="_UCE60JHXEeaUVcSqx7g-yA"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_u7Le4JIREeaUVcSqx7g-yA" elementId="datagenerator.handledmenuitem.createproject" label="Create Project" iconURI="platform:/plugin/DataGenerator/resources/images/addd.png" command="_w7ph0JIREeaUVcSqx7g-yA"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_xyV9MJUaEeac6K5g0-aivQ" elementId="datagenerator.handledmenuitem.addrelation" label="Add Relation" iconURI="platform:/plugin/DataGenerator/resources/images/relation.png" command="_G3nt0JUbEeac6K5g0-aivQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_xHuqMJx-Eea7vb3OPNTVBw" elementId="datagenerator.handledmenuitem.generatedata" label="Generate Data" iconURI="platform:/plugin/DataGenerator/resources/images/lightning.png" command="_0s8dYJx-Eea7vb3OPNTVBw"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_lEdUwKqkEeauH9r2ZeeszA" elementId="datagenerator.handledmenuitem.import" label="Import Excel Schema" iconURI="platform:/plugin/DataGenerator/resources/images/Exit.png" command="_GDoEgKqlEeauH9r2ZeeszA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_6wlLjsgZEeSyMNYR5xypkQ" elementId="help" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_6wlLj8gZEeSyMNYR5xypkQ" elementId="DataGenerator.handleditem.about" label="About" command="_6wlLhsgZEeSyMNYR5xypkQ"/>
@@ -66,6 +65,7 @@
   <handlers xmi:id="_GoqA0JISEeaUVcSqx7g-yA" elementId="datagenerator.handler.1" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.CreateProjectHandler" command="_w7ph0JIREeaUVcSqx7g-yA"/>
   <handlers xmi:id="_ISSVAJUbEeac6K5g0-aivQ" elementId="datagenerator.handler.2" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.AddRelationHandler" command="_G3nt0JUbEeac6K5g0-aivQ"/>
   <handlers xmi:id="_24VW4Jx-Eea7vb3OPNTVBw" elementId="datagenerator.handler.3" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.ExecuteMainHandler" command="_0s8dYJx-Eea7vb3OPNTVBw"/>
+  <handlers xmi:id="_EL68AKqlEeauH9r2ZeeszA" elementId="datagenerator.handler.4" contributionURI="bundleclass://DataGenerator/datagenerator.handlers.ImportSchemaExcelHandler" command="_GDoEgKqlEeauH9r2ZeeszA"/>
   <bindingTables xmi:id="_6wlLfsgZEeSyMNYR5xypkQ" elementId="DataGenerator.bindingtable" bindingContext="_6wlLecgZEeSyMNYR5xypkQ">
     <bindings xmi:id="_6wlLf8gZEeSyMNYR5xypkQ" elementId="DataGenerator.keybinding.m1q" keySequence="M1+Q" command="_6wlLfMgZEeSyMNYR5xypkQ"/>
     <bindings xmi:id="_6wlLgsgZEeSyMNYR5xypkQ" elementId="DataGenerator.keybinding.m1o" keySequence="M1+O" command="_6wlLgMgZEeSyMNYR5xypkQ"/>
@@ -84,6 +84,7 @@
   <commands xmi:id="_w7ph0JIREeaUVcSqx7g-yA" elementId="datagenerator.command.createproject" commandName="Create Project"/>
   <commands xmi:id="_G3nt0JUbEeac6K5g0-aivQ" elementId="datagenerator.command.addrelation" commandName="Add Relation"/>
   <commands xmi:id="_0s8dYJx-Eea7vb3OPNTVBw" elementId="datagenerator.command.generatedata" commandName="Generate Data"/>
+  <commands xmi:id="_GDoEgKqlEeauH9r2ZeeszA" elementId="datagenerator.command.importhandlerexcel" commandName="ImportHandlerExcel"/>
   <addons xmi:id="_6wlLcsgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_6wlLc8gZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_6wlLdMgZEeSyMNYR5xypkQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

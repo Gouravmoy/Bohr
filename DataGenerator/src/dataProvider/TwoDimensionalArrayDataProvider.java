@@ -44,7 +44,7 @@ public class TwoDimensionalArrayDataProvider implements IDataProvider {
 			String rowValue = "";
 			int rowCount = 0;
 			int colCount = 0;
-			while ((rowValue = buffredReader.readLine()) != null) {
+			while ((rowValue = buffredReader.readLine()) != null && rowCount < 50) {
 				colCount = 0;
 				for (String colValue : rowValue.split("\\,")) {
 					setDataValue(colCount, rowCount, colValue);

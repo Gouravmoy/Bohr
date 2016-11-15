@@ -25,7 +25,6 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		super();
 		if (configuration == null) {
 			startOpereation();
-			buildSession();
 		}
 	}
 
@@ -116,14 +115,14 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		return t;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public T update(Class clazz, ID id, T t) throws DAOException {
 		try {
 			buildSession();
 			tx = session.beginTransaction();
-			T newEntityRef = (T) session.merge(t);
-			session.update(newEntityRef);
+			// T newEntityRef = (T) session.merge(t);
+			session.update(t);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(e);
@@ -209,11 +208,11 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 			for (T tSingle : t) {
 				i++;
 				try {
-					session.saveOrUpdate(tSingle);
+					session.update(tSingle);
 				} catch (Exception err) {
 					throw new DAOException();
 				}
-				if (i % 20 == 0) { // 20, same as the JDBC batch size
+				if (i % 5 == 0) { // 20, same as the JDBC batch size
 					// flush a batch of inserts and release memory
 					session.flush();
 				}
@@ -302,13 +301,13 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 
 	private void startOpereation() {
 		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		} else {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.testing.xml");
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		}
 		if (Master.INSTANCE.isClearAll())
 			configuration.setProperty("hibernate.hbm2ddl.auto", "create");

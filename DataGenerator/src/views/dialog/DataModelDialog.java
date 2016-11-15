@@ -28,14 +28,16 @@ import dao.DataSampleDao;
 import dao.DatabaseDao;
 import dao.impl.DataSampleDaoImpl;
 import dao.impl.DatabaseDAOImpl;
+import entity.Columnsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
+import entity.Projectdetails;
 import enums.SampleType;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 import jobs.tasks.ConnectonCreateTask;
-import jobs.tasks.create.QueryExecuteTask;
 import jobs.tasks.RefrehTreeTask;
+import jobs.tasks.create.QueryExecuteTask;
 
 public class DataModelDialog extends Dialog {
 	private Text text;
@@ -44,6 +46,11 @@ public class DataModelDialog extends Dialog {
 	private Table table;
 	private Button previewButton;
 	private Combo databaseList;
+	private Combo modelType;
+	Columnsdetail columnsdetail;
+	Button buttonIsUnique;
+
+	Projectdetails projectdetails;
 
 	List<String> modelValues;
 
@@ -51,9 +58,14 @@ public class DataModelDialog extends Dialog {
 
 	DatabaseDao databaseDao = new DatabaseDAOImpl();
 	DataSampleDao dataSampleDao = new DataSampleDaoImpl();
+	private Text tableNameText;
+	private Text columnNameText;
+	private Text projectName;
 
-	public DataModelDialog(Shell parentShell) {
+	public DataModelDialog(Shell parentShell, Columnsdetail sourceColumn, Projectdetails projectdetails) {
 		super(parentShell);
+		this.columnsdetail = sourceColumn;
+		this.projectdetails = projectdetails;
 	}
 
 	@Override
@@ -62,44 +74,8 @@ public class DataModelDialog extends Dialog {
 		container.getShell().setText("Create Data Model");
 		container.setLayout(null);
 
-		Label lblDataModelName = new Label(container, SWT.NONE);
-		lblDataModelName.setBounds(5, 8, 96, 15);
-		lblDataModelName.setText("Data Model Name");
-
-		text = new Text(container, SWT.BORDER);
-		text.setBounds(106, 5, 357, 21);
-
-		Label lblDataModelType = new Label(container, SWT.NONE);
-		lblDataModelType.setBounds(5, 35, 90, 15);
-		lblDataModelType.setText("Data Model Type");
-
-		Combo modelType = new Combo(container, SWT.NONE);
-		modelType.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SampleType sampleType = (SampleType) modelType.getData(modelType.getText());
-				if (sampleType == SampleType.USER_DEFINED) {
-					seedQuery.setEnabled(false);
-					databaseList.setEnabled(false);
-					seedList.setEnabled(true);
-				} else {
-					seedList.setEnabled(false);
-					seedQuery.setEnabled(true);
-					databaseList.setEnabled(true);
-				}
-				previewButton.setEnabled(true);
-			}
-		});
-		modelType.setBounds(106, 31, 357, 23);
-		for (SampleType sampleType : SampleType.values()) {
-			if (sampleType != SampleType.PRE_DEFINED) {
-				modelType.setData(sampleType.toString(), sampleType);
-				modelType.add(sampleType.toString());
-			}
-		}
-
 		table = new Table(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
-		table.setBounds(106, 310, 357, 147);
+		table.setBounds(111, 426, 357, 147);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -147,13 +123,13 @@ public class DataModelDialog extends Dialog {
 			}
 
 		});
-		previewButton.setBounds(106, 271, 75, 25);
+		previewButton.setBounds(111, 387, 75, 25);
 		previewButton.setText("Preview");
 		previewButton.setEnabled(false);
 
 		Group grpUserInput = new Group(container, SWT.NONE);
 		grpUserInput.setText("USER INPUT");
-		grpUserInput.setBounds(5, 70, 470, 82);
+		grpUserInput.setBounds(10, 186, 470, 103);
 
 		Label lblNewLabel = new Label(grpUserInput, SWT.NONE);
 		lblNewLabel.setBounds(10, 22, 62, 15);
@@ -163,9 +139,9 @@ public class DataModelDialog extends Dialog {
 		seedList.setBounds(102, 19, 358, 50);
 		seedList.setToolTipText("Provide a list of values separated by comma (,).");
 
-		Group grpQueryFromDatabase = new Group(container, SWT.NONE);
+		Group grpQueryFromDatabase = new Group(grpUserInput, SWT.NONE);
+		grpQueryFromDatabase.setBounds(0, 103, 470, 107);
 		grpQueryFromDatabase.setText("QUERY FROM DATABASE");
-		grpQueryFromDatabase.setBounds(5, 158, 470, 107);
 
 		seedQuery = new Text(grpQueryFromDatabase, SWT.BORDER);
 		seedQuery.setBounds(103, 53, 357, 45);
@@ -180,6 +156,87 @@ public class DataModelDialog extends Dialog {
 
 		databaseList = new Combo(grpQueryFromDatabase, SWT.NONE);
 		databaseList.setBounds(103, 24, 357, 23);
+
+		Label lblIsUnique = new Label(grpUserInput, SWT.NONE);
+		lblIsUnique.setBounds(10, 78, 86, 15);
+		lblIsUnique.setText("Is Repeateable");
+
+		buttonIsUnique = new Button(grpUserInput, SWT.CHECK);
+		buttonIsUnique.setBounds(102, 81, 13, 16);
+
+		Group grpColumnInfo = new Group(container, SWT.NONE);
+		grpColumnInfo.setText("Column Info");
+		grpColumnInfo.setBounds(10, 0, 458, 170);
+
+		Label lblDataModelName = new Label(grpColumnInfo, SWT.NONE);
+		lblDataModelName.setBounds(10, 114, 96, 15);
+		lblDataModelName.setText("Data Model Name");
+
+		Label lblDataModelType = new Label(grpColumnInfo, SWT.NONE);
+		lblDataModelType.setBounds(10, 141, 90, 15);
+		lblDataModelType.setText("Data Model Type");
+
+		modelType = new Combo(grpColumnInfo, SWT.NONE);
+		modelType.setBounds(111, 137, 337, 23);
+
+		for (SampleType sampleType : SampleType.values()) {
+			if (sampleType != SampleType.PRE_DEFINED) {
+				modelType.setData(sampleType.toString(), sampleType);
+				modelType.add(sampleType.toString());
+			}
+		}
+
+		text = new Text(grpColumnInfo, SWT.BORDER);
+		text.setBounds(111, 111, 337, 21);
+
+		Label lblTableName = new Label(grpColumnInfo, SWT.NONE);
+		lblTableName.setBounds(10, 58, 78, 15);
+		lblTableName.setText("Table Name");
+
+		Label lblClumnName = new Label(grpColumnInfo, SWT.NONE);
+		lblClumnName.setBounds(10, 82, 96, 15);
+		lblClumnName.setText("Column Name ");
+
+		tableNameText = new Text(grpColumnInfo, SWT.BORDER);
+		tableNameText.setBounds(111, 55, 337, 21);
+
+		columnNameText = new Text(grpColumnInfo, SWT.BORDER);
+		columnNameText.setBounds(111, 79, 337, 21);
+
+		Label lblProjectname = new Label(grpColumnInfo, SWT.NONE);
+		lblProjectname.setBounds(10, 30, 78, 15);
+		lblProjectname.setText("ProjectName");
+
+		projectName = new Text(grpColumnInfo, SWT.BORDER);
+		projectName.setBounds(111, 27, 337, 21);
+		if (projectdetails != null) {
+			projectName.setData(projectdetails.getProjectName(), projectdetails);
+			projectName.setText(projectdetails.getProjectName());
+		}
+
+		if (columnsdetail != null) {
+			tableNameText.setText(columnsdetail.getTabledetail().getTableName());
+			columnNameText.setText(columnsdetail.getName());
+			tableNameText.setEnabled(false);
+			columnNameText.setEnabled(false);
+		}
+
+		modelType.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SampleType sampleType = (SampleType) modelType.getData(modelType.getText());
+				if (sampleType == SampleType.USER_DEFINED) {
+					seedQuery.setEnabled(false);
+					databaseList.setEnabled(false);
+					seedList.setEnabled(true);
+				} else {
+					seedList.setEnabled(false);
+					seedQuery.setEnabled(true);
+					databaseList.setEnabled(true);
+				}
+				previewButton.setEnabled(true);
+			}
+		});
 		try {
 			List<Databasedetail> databasedetails = databaseDao.getAllDatabaseinDB();
 			for (Databasedetail databasedetail : databasedetails) {
@@ -197,17 +254,21 @@ public class DataModelDialog extends Dialog {
 	protected void okPressed() {
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
 		RefrehTreeTask refrehTreeTask;
-		//datasamplemodel.setSampleModelName(text.getText());
+		// datasamplemodel.setSampleModelName(text.getText());
 		StringBuilder sb = new StringBuilder();
 		for (String modelValue : modelValues) {
 			sb.append(modelValue + ",");
 		}
-		//datasamplemodel.setSampelValues(sb.toString());
+		datasamplemodel.setDatasamplemodelcol(sb.toString());
 		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
+		projectName.getData(projectName.getText());
+		datasamplemodel.setProjectdetail((Projectdetails) projectName.getData(projectName.getText()));
+		datasamplemodel.setColumnsdetail(columnsdetail);
+		datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
 		try {
 			dataSampleDao.saveDatasamplemodel(datasamplemodel);
 		} catch (PersistException e) {
-			// showError("Unable to Save", parent);
+			showError("Unable to Save", getShell());
 			e.printStackTrace();
 		}
 		refrehTreeTask = new RefrehTreeTask();

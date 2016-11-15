@@ -45,11 +45,12 @@ public class GenerateTableDataTask_1 extends Task {
 						rowString += colString + ",";
 					} else {
 						if (fileReopen.get(colDataIntCount)) {
+							System.out.println(columnFilePath.get(colDataIntCount) + "Error");
 							bufferedReaders[colDataIntCount] = new BufferedReader(
 									new FileReader(columnFilePath.get(colDataIntCount)));
 							colString = bufferedReaders[colDataIntCount].readLine();
 							if (colString.length() > 0) {
-								rowString += colString;
+								rowString += colString + ",";
 							} else {
 								wirteToText = false;
 								break;
@@ -109,7 +110,7 @@ public class GenerateTableDataTask_1 extends Task {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new BuildException("Something went wrong for Table:" + generatedTableData.getTableName());
+			throw new BuildException("Invalid path:" + generatedTableData.getTableName());
 		}
 
 	}

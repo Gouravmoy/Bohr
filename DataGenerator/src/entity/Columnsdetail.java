@@ -14,11 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import enums.ColumnType;
@@ -60,12 +59,10 @@ public class Columnsdetail implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private ColumnType type;
 
-	@ManyToOne
-	@JoinColumn(name = "datasampleid")
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Datasamplemodel datasamplemodel;
 
-	@ManyToOne
-	@JoinColumn(name = "patternId", nullable = true)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Patterndetail patterndetail;
 
 	@ManyToOne
@@ -75,13 +72,9 @@ public class Columnsdetail implements Serializable {
 	@OneToMany(mappedBy = "columnsdetail1", fetch = FetchType.EAGER)
 	private Set<Constraintsdetail> constraintsdetails1;
 
-	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
-	private Set<Datasamplemodel> datasamplemodels;
-
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	@JoinTable(name = "column_predefinedmodels", joinColumns = {
-			@JoinColumn(name = "idcolumnsdetails") }, inverseJoinColumns = { @JoinColumn(name = "idpredefinedDS") })
-	private Set<PreDefinedModels> predefinedModels;
+	@ManyToOne
+	@JoinColumn(name = "idpredefinedDS")
+	private PreDefinedModels predefinedModel;
 
 	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "columnsdetail", fetch = FetchType.EAGER)
@@ -139,10 +132,6 @@ public class Columnsdetail implements Serializable {
 
 	public void setKeytype(KeyType keytype) {
 		this.keytype = keytype;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
 	}
 
 	public String getName() {
@@ -218,34 +207,12 @@ public class Columnsdetail implements Serializable {
 		return constraintsdetails1;
 	}
 
-	public Set<Datasamplemodel> getDatasamplemodels() {
-		return datasamplemodels;
-	}
-
-	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
-		this.datasamplemodels = datasamplemodels;
-	}
-
 	public int getDecimalLength() {
 		return decimalLength;
 	}
 
 	public void setDecimalLength(int decimalLength) {
 		this.decimalLength = decimalLength;
-	}
-
-	public Datasamplemodel addDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().add(datasamplemodel);
-		datasamplemodel.setColumnsdetail(this);
-
-		return datasamplemodel;
-	}
-
-	public Datasamplemodel removeDatasamplemodel(Datasamplemodel datasamplemodel) {
-		getDatasamplemodels().remove(datasamplemodel);
-		datasamplemodel.setColumnsdetail(null);
-
-		return datasamplemodel;
 	}
 
 	public Set<Relationsdetail> getRelationsdetails() {
@@ -275,12 +242,12 @@ public class Columnsdetail implements Serializable {
 		return name;
 	}
 
-	public Set<PreDefinedModels> getPredefinedModels() {
-		return predefinedModels;
+	public PreDefinedModels getPredefinedModel() {
+		return predefinedModel;
 	}
 
-	public void setPredefinedModels(Set<PreDefinedModels> predefinedModels) {
-		this.predefinedModels = predefinedModels;
+	public void setPredefinedModel(PreDefinedModels predefinedModel) {
+		this.predefinedModel = predefinedModel;
 	}
 
 }

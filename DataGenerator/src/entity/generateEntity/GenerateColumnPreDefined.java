@@ -2,7 +2,6 @@ package entity.generateEntity;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.util.Random;
 
 import entity.Interface.GenerateColumnInterface;
 
@@ -11,22 +10,38 @@ public class GenerateColumnPreDefined extends GeneratedColumn implements Generat
 
 	public void generateColumn() {
 		StringBuilder builder;
-		Random random = new Random();
 		try {
 			int rowCount = this.numberOfRows;
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
-			while (rowCount > 0) {
-				builder = new StringBuilder();
+			if (this.fileReopen) {
 				String[] preDfValue = preDefinedValues.split("\\,");
-				int index = random.nextInt(preDfValue.length);
-				builder.append("\'");
-				builder.append(preDfValue[index]);
-				builder.append("\'\n");
-				bufferedWriter.write(builder.toString());
-				if (rowCount % 50 == 0) {
-					bufferedWriter.flush();
+				while (rowCount > 0) {
+					builder = new StringBuilder();
+					builder.append("\'");
+					builder.append(preDfValue[rowCount % preDfValue.length]);
+					builder.append("\'\n");
+					bufferedWriter.write(builder.toString());
+					if (rowCount % 50 == 0) {
+						bufferedWriter.flush();
+					}
+					rowCount--;
+
 				}
-				rowCount--;
+			} else {
+				String[] preDfValue = preDefinedValues.split("\\,");
+				int index = preDfValue.length;
+				while (index > 0) {
+					index--;
+					builder = new StringBuilder();
+					builder.append("\'");
+					builder.append(preDfValue[index]);
+					builder.append("\'\n");
+					bufferedWriter.write(builder.toString());
+					if (rowCount % 50 == 0) {
+						bufferedWriter.flush();
+					}
+					rowCount--;
+				}
 			}
 			bufferedWriter.flush();
 			bufferedWriter.close();

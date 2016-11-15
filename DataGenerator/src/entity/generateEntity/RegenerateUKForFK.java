@@ -21,7 +21,7 @@ public class RegenerateUKForFK {
 	static String combinationFilePath;
 	int numberOfRows;
 
-	static String tempFolder = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\DataGeneration\\";
+	static String tempFolder = "C:\\Users\\M1026352\\Desktop\\DataGn\\";
 
 	public void regenerate() {
 		String[] tempFilePath = new String[ukFkColumns.size()];
@@ -79,8 +79,7 @@ public class RegenerateUKForFK {
 			closeAllBufferedWriters(bufferedWriter);
 			for (int i = 0; i < ukFkColumns.size(); i++) {
 				File sourceTempFile = new File(tempFilePath[i]);
-				File targetFile = new File(ukFkColumns.get(i).filePath.replace(ukFkColumns.get(i).getColName(),
-						ukFkColumns.get(i).getColName() + "_UK_FK"));
+				File targetFile = new File(ukFkColumns.get(i).filePath.replace(".txt", "_UK_FK.txt"));
 				ukFkColumns.get(i).setFilePath(targetFile.getPath());
 				FileUtils.copyFile(sourceTempFile, targetFile);
 				sourceTempFile.delete();
