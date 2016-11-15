@@ -48,6 +48,7 @@ public class DataModelDialog extends Dialog {
 	private Combo databaseList;
 	private Combo modelType;
 	Columnsdetail columnsdetail;
+	Button buttonIsUnique;
 
 	Projectdetails projectdetails;
 
@@ -128,7 +129,7 @@ public class DataModelDialog extends Dialog {
 
 		Group grpUserInput = new Group(container, SWT.NONE);
 		grpUserInput.setText("USER INPUT");
-		grpUserInput.setBounds(10, 186, 470, 82);
+		grpUserInput.setBounds(10, 186, 470, 103);
 
 		Label lblNewLabel = new Label(grpUserInput, SWT.NONE);
 		lblNewLabel.setBounds(10, 22, 62, 15);
@@ -138,9 +139,9 @@ public class DataModelDialog extends Dialog {
 		seedList.setBounds(102, 19, 358, 50);
 		seedList.setToolTipText("Provide a list of values separated by comma (,).");
 
-		Group grpQueryFromDatabase = new Group(container, SWT.NONE);
+		Group grpQueryFromDatabase = new Group(grpUserInput, SWT.NONE);
+		grpQueryFromDatabase.setBounds(0, 103, 470, 107);
 		grpQueryFromDatabase.setText("QUERY FROM DATABASE");
-		grpQueryFromDatabase.setBounds(10, 274, 470, 107);
 
 		seedQuery = new Text(grpQueryFromDatabase, SWT.BORDER);
 		seedQuery.setBounds(103, 53, 357, 45);
@@ -155,6 +156,13 @@ public class DataModelDialog extends Dialog {
 
 		databaseList = new Combo(grpQueryFromDatabase, SWT.NONE);
 		databaseList.setBounds(103, 24, 357, 23);
+
+		Label lblIsUnique = new Label(grpUserInput, SWT.NONE);
+		lblIsUnique.setBounds(10, 78, 55, 15);
+		lblIsUnique.setText("Is Repeateable");
+
+		buttonIsUnique = new Button(grpUserInput, SWT.CHECK);
+		buttonIsUnique.setBounds(102, 81, 13, 16);
 
 		Group grpColumnInfo = new Group(container, SWT.NONE);
 		grpColumnInfo.setText("Column Info");
@@ -256,6 +264,7 @@ public class DataModelDialog extends Dialog {
 		projectName.getData(projectName.getText());
 		datasamplemodel.setProjectdetail((Projectdetails) projectName.getData(projectName.getText()));
 		datasamplemodel.setColumnsdetail(columnsdetail);
+		datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
 		try {
 			dataSampleDao.saveDatasamplemodel(datasamplemodel);
 		} catch (PersistException e) {

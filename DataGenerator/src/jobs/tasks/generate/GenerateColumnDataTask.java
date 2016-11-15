@@ -133,11 +133,14 @@ public class GenerateColumnDataTask extends Task {
 		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
-			generatedColumn.setFileReopen(false);
-			generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
+			generatedColumn.setFileReopen(true);
+			if (!columnsdetail.getDatasamplemodel().isRepeteableIndex()) {
+				generatedColumn.setFileReopen(false);
+				generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
+			}
 		} else {
 			generatedColumn.setPreDefinedValues(columnsdetail.getPredefinedModel().getSampelValues());
-			generatedColumn.setFileReopen(false);
+			generatedColumn.setFileReopen(true);
 		}
 
 		generatedColumn.setKeyType(columnsdetail.getKeytype());

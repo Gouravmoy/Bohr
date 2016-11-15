@@ -13,18 +13,35 @@ public class GenerateColumnPreDefined extends GeneratedColumn implements Generat
 		try {
 			int rowCount = this.numberOfRows;
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
-			while (rowCount > 0) {
-				builder = new StringBuilder();
+			if (this.fileReopen) {
+				String[] preDfValue = preDefinedValues.split("\\,");
+				while (rowCount > 0) {
+					builder = new StringBuilder();
+					builder.append("\'");
+					builder.append(preDfValue[rowCount % preDfValue.length]);
+					builder.append("\'\n");
+					bufferedWriter.write(builder.toString());
+					if (rowCount % 50 == 0) {
+						bufferedWriter.flush();
+					}
+					rowCount--;
+
+				}
+			} else {
 				String[] preDfValue = preDefinedValues.split("\\,");
 				int index = preDfValue.length;
-				builder.append("\'");
-				builder.append(preDfValue[index--]);
-				builder.append("\'\n");
-				bufferedWriter.write(builder.toString());
-				if (rowCount % 50 == 0) {
-					bufferedWriter.flush();
+				while (index > 0) {
+					index--;
+					builder = new StringBuilder();
+					builder.append("\'");
+					builder.append(preDfValue[index]);
+					builder.append("\'\n");
+					bufferedWriter.write(builder.toString());
+					if (rowCount % 50 == 0) {
+						bufferedWriter.flush();
+					}
+					rowCount--;
 				}
-				rowCount--;
 			}
 			bufferedWriter.flush();
 			bufferedWriter.close();

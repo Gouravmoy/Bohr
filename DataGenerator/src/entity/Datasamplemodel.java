@@ -46,10 +46,13 @@ public class Datasamplemodel implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@PrimaryKeyJoinColumn
 	private Columnsdetail columnsdetail;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "idproject")
 	private Projectdetails projectdetail;
+
+	@Column
+	boolean repeteableIndex;
 
 	public Datasamplemodel() {
 	}
@@ -98,6 +101,13 @@ public class Datasamplemodel implements Serializable {
 	public void setProjectdetail(Projectdetails projectdetail) {
 		this.projectdetail = projectdetail;
 	}
-	
+
+	public boolean isRepeteableIndex() {
+		return repeteableIndex;
+	}
+
+	public void setRepeteableIndex(boolean repeteableIndex) {
+		this.repeteableIndex = repeteableIndex;
+	}
 
 }
