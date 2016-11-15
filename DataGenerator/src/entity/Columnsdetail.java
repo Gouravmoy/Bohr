@@ -62,8 +62,7 @@ public class Columnsdetail implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Datasamplemodel datasamplemodel;
 
-	@ManyToOne
-	@JoinColumn(name = "patternId", nullable = true)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Patterndetail patterndetail;
 
 	@ManyToOne

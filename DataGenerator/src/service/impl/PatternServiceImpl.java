@@ -22,10 +22,10 @@ public class PatternServiceImpl implements PatternService {
 	}
 
 	@Override
-	public Patterndetail getPatternForColumnId(Integer id) {
+	public Patterndetail getPatternForColumnId(Integer id,Integer columnId) {
 		List<Patterndetail> patterndetails = new ArrayList<>();
-		String query = "from Patterndetail p where p.columnsdetail.idcolumnsdetails=:arg0";
-		Object[] pars = { id };
+		String query = "from Patterndetail p where p.columnsdetail.idcolumnsdetails=:arg0 and p.projectdetail.idproject=:arg1";
+		Object[] pars = { id ,columnId};
 		patterndetails = patternDao.getSchemaByQyery(query, pars);
 		if (patterndetails != null)
 			return patterndetails.get(0);
