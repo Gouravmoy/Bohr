@@ -39,7 +39,15 @@ Bundle-ClassPath: Jars/Hibernate Derby Jars/derby-10.12.1.1.jar,
  Jars/Hibernate Derby Jars/xml-apis-1.0.b2.jar,
  Jars/Others Supporting/slf4j-api-1.6.1.jar,
  Jars/Others Supporting/slf4j-api-1.7.21.jar,
- Jars/Hibernate Derby Jars/hibernate-jpa-2.0-api-1.0.0.Final.jar
+ Jars/Hibernate Derby Jars/hibernate-jpa-2.0-api-1.0.0.Final.jar,
+ Jars/POI Jars/commons-codec-1.5.jar,
+ Jars/POI Jars/dom4j-1.6.1.jar,
+ Jars/POI Jars/poi-3.9.jar,
+ Jars/POI Jars/poi-ooxml-3.9.jar,
+ Jars/POI Jars/poi-ooxml-schemas-3.9.jar,
+ Jars/POI Jars/stax-api-1.0.1.jar,
+ Jars/POI Jars/xml-apis-1.0.b2.jar,
+ Jars/POI Jars/xmlbeans-2.3.0.jar
 Bundle-Activator: datagenerator.Activator
 Require-Bundle: javax.inject;bundle-version="0.0.0",
  org.eclipse.swt;bundle-version="0.0.0",

@@ -45,6 +45,7 @@ public class GenerateTableDataTask_1 extends Task {
 						rowString += colString + ",";
 					} else {
 						if (fileReopen.get(colDataIntCount)) {
+							System.out.println(columnFilePath.get(colDataIntCount) + "Error");
 							bufferedReaders[colDataIntCount] = new BufferedReader(
 									new FileReader(columnFilePath.get(colDataIntCount)));
 							colString = bufferedReaders[colDataIntCount].readLine();

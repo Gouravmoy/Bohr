@@ -52,10 +52,12 @@ import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
 import service.ModelService;
+import service.PatternService;
 import service.RelationService;
 import service.impl.ModelServiceImpl;
 import service.impl.RelationServiceImpl;
 import views.dialog.DataModelDialog;
+import views.dialog.PatternDialog;
 import views.dialog.RelationDialog;
 import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
@@ -96,7 +98,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 	// Service
 
 	public static RelationService relationService;
-	// public static PatternService patternService;
+	public static PatternService patternService;
 	public static ModelService modelService;
 
 	// Menu
@@ -137,7 +139,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		assignMenuItems();
 		popup.add(createRelations);
-		// popup.add(createPatterns);
+		popup.add(createPatterns);
 		popup.add(createDataModel);
 		initilizeTrees(frame);
 
@@ -185,6 +187,39 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 			}
 		});
+
+		createPatterns = new JMenuItem("Create a Pattern");
+		createPatterns.setActionCommand("createPattern");
+		createPatterns.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				System.out.println("Here");
+				Component selectedComponent = MousePopupListner.currentComponent;
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+						Dialog dialog = new PatternDialog(composite.getShell(), columnsdetail,
+								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						dialog.open();
+					}
+				});
+
+			}
+		});
+
 		createDataModel = new JMenuItem("Create a Data Model");
 		createDataModel.setActionCommand("createDataModel");
 		createDataModel.addActionListener(new ActionListener() {
@@ -325,6 +360,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
 					getModels(columnCategory, columnsdetail, Id);
+					//getPatterns(columnCategory, columnsdetail, Id);
 				}
 				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
 					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);

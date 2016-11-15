@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import entity.Patterndetail;
 import entity.Relationsdetail;
 import entity.Tabledetail;
 import entity.Interface.GenerateColumnInterface;
@@ -24,6 +25,7 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	Tabledetail tabledetail;
 	Relationsdetail relationsdetail;
 	RelationType relationType;
+	Patterndetail pattern;
 
 	@Override
 	public void writeToFile(String value) {
@@ -131,6 +133,16 @@ public abstract class GeneratedColumn implements GenerateColumnInterface {
 	public void setTabledetail(Tabledetail tabledetail) {
 		this.tabledetail = tabledetail;
 	}
+
+	public Patterndetail getPattern() {
+		return pattern;
+	}
+
+	public void setPattern(Patterndetail pattern) {
+		this.pattern = pattern;
+	}
+	
+	
 	
 	
 

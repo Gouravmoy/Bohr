@@ -7,6 +7,6 @@ import entity.Patterndetail;
 public interface PatternService {
 	public List<Patterndetail> getAllPatternForProjectId(Integer id);
 
-	public Patterndetail getPatternForColumnId(Integer id);
+	public Patterndetail getPatternForColumnId(Integer id,Integer columnId);
 
 }

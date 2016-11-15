@@ -118,6 +118,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -133,6 +134,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
 			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
@@ -167,6 +169,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(false);
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -189,6 +192,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setFileReopen(b);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -209,6 +213,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(true);
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -245,6 +250,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
+		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {

@@ -51,7 +51,7 @@ public class Schemadetail implements Serializable {
 
 
 	@ManyToOne
-	@JoinColumn(name = "db_id", nullable = false)
+	@JoinColumn(name = "db_id", nullable = true)
 	private Databasedetail databasedetail;
 
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)

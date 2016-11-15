@@ -16,6 +16,7 @@ import dao.DatabaseDao;
 import dao.impl.DatabaseDAOImpl;
 import entity.Databasedetail;
 import enums.DBType;
+import enums.ImportType;
 import exceptions.PersistException;
 import job.FirstJob;
 
@@ -86,6 +87,7 @@ public class ImportDialog extends Dialog {
 			W.printStackTrace();
 		}
 		firstJob.setDatabasedetail(databasedetail);
+		firstJob.setImportType(ImportType.DATABASE);
 		System.out.println(firstJob.getResult());
 		firstJob.schedule();
 		super.okPressed();

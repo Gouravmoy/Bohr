@@ -9,16 +9,17 @@ import java.util.Date;
 import java.util.Random;
 
 import enums.ColumnType;
+import enums.PatternType;
 
 public class GenerateColumnPrimaryKey extends GeneratedColumn {
 	int startValue;
-	String startValueString = "";
 	boolean foreignKey;
 
 	public void generateColumn() {
 		if (columnType == ColumnType.DATE)
 			generateDate();
-		else if (columnType == ColumnType.INTEGER)
+		else if (columnType == ColumnType.INTEGER || columnType == ColumnType.TINYINT
+				|| columnType == ColumnType.DECIMAL || columnType == ColumnType.FLOAT)
 			generateInteger();
 		else
 			generateVarchar();
@@ -73,14 +74,21 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				Random r = new Random();
 				int rowCount = numberOfRows;
 				StringBuilder builder = new StringBuilder();
-				colLength = colLength + startValueString.length();
 				while (rowCount > 0) {
 					int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
+					builder = new StringBuilder();
 					builder.append("\"");
-					for (int i = 0; i < sizeVarchar; i++) {
-						builder.append(startValueString + alphabet.charAt(r.nextInt(N)));
+					if (pattern == null) {
+						for (int i = 0; i < sizeVarchar; i++) {
+							builder.append(alphabet.charAt(r.nextInt(N)));
+						}
+					}else{
+						String patternString = pattern.getRegexpString();
+						generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
 					}
 					builder.append("\"");
+					builder.append("\n");
+					bufferedWriter.write(builder.toString());
 					if (rowCount % 100 == 0) {
 						bufferedWriter.flush();
 					}
@@ -120,6 +128,31 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 
 		}
 	}
+	
+	public void generateVarcharWithPattern(final String alphabet, final int N, Random r, StringBuilder builder,
+			int sizeVarchar, String patternString) {
+		if (pattern.getPatternType() == PatternType.PREFIX) {
+			builder.append(patternString);
+			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
+				builder.append(alphabet.charAt(r.nextInt(N)));
+			}
+			if (sizeVarchar < builder.length()) {
+				String truncatedValue = builder.substring(0, sizeVarchar);
+				builder.setLength(0);
+				builder.append(truncatedValue);
+			}
+		} else {
+			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
+				builder.append(alphabet.charAt(r.nextInt(N)));
+			}
+			builder.append(patternString);
+			if (sizeVarchar < builder.length()) {
+				String truncatedValue = builder.substring(builder.length() - sizeVarchar, builder.length());
+				builder.setLength(0);
+				builder.append(truncatedValue);
+			}
+		}
+	}
 
 	public int getStartValue() {
 		return startValue;
@@ -127,14 +160,6 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 
 	public void setStartValue(int startValue) {
 		this.startValue = startValue;
-	}
-
-	public String getStartValueString() {
-		return startValueString;
-	}
-
-	public void setStartValueString(String startValueString) {
-		this.startValueString = startValueString;
 	}
 
 	public boolean isForeignKey() {
@@ -147,8 +172,9 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 
 	@Override
 	public String toString() {
-		return "GenerateColumnPrimaryKey [startValue=" + startValue + ", startValueString=" + startValueString
-				+ ", foreignKey=" + foreignKey + "]" + super.toString();
+		return "GenerateColumnPrimaryKey [startValue=" + startValue + ", foreignKey=" + foreignKey + "]";
 	}
+
+	
 
 }
