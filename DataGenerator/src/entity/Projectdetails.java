@@ -24,7 +24,6 @@ public class Projectdetails implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idproject;
 
 	@Column(length = 200, unique = true)

@@ -7,11 +7,29 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-clearPersistedState</programArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <programArgs>-clearPersistedState
+      </programArgs>
+      <vmArgs>-Ddatabase_url=localhost -Dlog_file_loc=C:\Omega -Dswt.autoScale=true -Dswt.autoScale=200 -Dswt.autoScale.method=nearest
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages/>
+
+   <splash
+      location="DataGenerator" />
+   <launcher>
+      <solaris/>
+      <win useIco="true">
+         <ico path="/DataGenerator/icon.ico"/>
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
+   </vm>
 
    <plugins>
       <plugin id="DataGenerator"/>
@@ -22,8 +40,8 @@
       <plugin id="org.apache.batik.css"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.batik.util.gui"/>
-      <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.commons.jxpath"/>
+      <plugin id="org.apache.commons.logging"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>

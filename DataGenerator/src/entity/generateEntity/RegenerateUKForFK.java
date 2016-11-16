@@ -21,9 +21,10 @@ public class RegenerateUKForFK {
 	static String combinationFilePath;
 	int numberOfRows;
 
-	static String tempFolder = "C:\\Users\\M1026352\\Desktop\\DataGn\\";
+	static String tempFolder = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
 
 	public void regenerate() {
+		tempFolder = System.getProperty("log_file_loc");
 		String[] tempFilePath = new String[ukFkColumns.size()];
 		BufferedReader reader = null;
 		ukArray = new String[ukFkColumns.size()][numberOfRows];
