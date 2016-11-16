@@ -32,7 +32,7 @@ public class GenerateColumnDataTask extends Task {
 	List<Tabledetail> sortedTableList;
 	List<GeneratedTable> generatedTableData;
 	List<GeneratedColumn> generatedColumnList;
-	String mainFolderPath = "C:\\Users\\M1026352\\Desktop\\DataGn\\Export";
+	String mainFolderPath = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
 	ModelService modelService;
 	List<String> generatedTableList;
 
@@ -48,7 +48,8 @@ public class GenerateColumnDataTask extends Task {
 	public void execute() throws BuildException {
 		modelService = new ModelServiceImpl();
 		String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-		mainFolderPath = mainFolderPath + timeStamp;
+		mainFolderPath = System.getProperty("log_file_loc");
+		mainFolderPath = mainFolderPath + "\\" + timeStamp;
 		File mainFolder = new File(mainFolderPath);
 		File tableFolder;
 		mainFolder.mkdir();

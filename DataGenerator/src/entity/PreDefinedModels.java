@@ -22,12 +22,10 @@ public class PreDefinedModels implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idpredefinedDS;
 
-	@Column(length = 200)
 	private String expectedColumnName;
-
+	
 	@Column(length = 30000)
 	private String sampelValues;
 	

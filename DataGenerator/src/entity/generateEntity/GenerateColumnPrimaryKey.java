@@ -44,9 +44,12 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				fileWriter = new FileWriter(filePath);
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 				while (rowCount > 0) {
+					builder = new StringBuilder();
 					builder.append("\"");
 					builder.append("" + dateFormat.format(date));
 					builder.append("\"");
+					builder.append("\n");
+					bufferedWriter.write(builder.toString());
 					if (rowCount % 100 == 0) {
 						bufferedWriter.flush();
 					}

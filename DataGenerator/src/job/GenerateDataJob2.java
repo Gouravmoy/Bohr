@@ -1,5 +1,6 @@
 package job;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class GenerateDataJob2 extends Job {
 	Map<String, Integer> tableCount;
 	long startTime = 0;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	String exportPath;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -84,9 +86,13 @@ public class GenerateDataJob2 extends Job {
 			regenerateRelationColumns(generatedTable.getGeneratedColumn(), dataTask_1.getGeneratedTableData());
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
+			File file = new File(exportPath + "//Result" + new SimpleDateFormat("yyyyMMddhhmm").format(new Date()));
+			if (!file.exists()) {
+				file.mkdirs();
+			}
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, "C:\\Users\\M1026352\\Desktop\\DataGn\\Result"
-							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
+					generatedTable,
+					file.getPath());
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -142,5 +148,15 @@ public class GenerateDataJob2 extends Job {
 	public void setTableCount(Map<String, Integer> tableCount) {
 		this.tableCount = tableCount;
 	}
+
+	public String getExportPath() {
+		return exportPath;
+	}
+
+	public void setExportPath(String exportPath) {
+		this.exportPath = exportPath;
+	}
+	
+	
 
 }

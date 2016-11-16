@@ -34,9 +34,9 @@ public class Datasamplemodel implements Serializable {
 	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "columnsdetail"))
 	@Id
 	@GeneratedValue(generator = "generator")
-	@Column(name = "iddatasamplemodel", unique = true, nullable = false)
+	@Column(name = "iddatasamplemodel", nullable = false)
 	private int iddatasamplemodel;
-
+	
 	@Column(length = 30000)
 	private String datasamplemodelcol;
 

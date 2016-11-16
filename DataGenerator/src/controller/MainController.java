@@ -88,12 +88,14 @@ public class MainController {
 		}
 		if (preDefinedModels.isEmpty()) {
 			try {
-				File propFile = new File("D:\\Bohr\\DataGenerator\\resources\\files\\predefined.properties");
+				File propFile = new File("resources\\files\\predefined.properties");
 				properties.load(new FileInputStream(propFile));
 				Enumeration<?> e = properties.propertyNames();
 				while (e.hasMoreElements()) {
 					String key = (String) e.nextElement();
 					String value = properties.getProperty(key);
+					if(value.length()>30000)
+						value = value.substring(0, 29999);
 					preDefinedModel = new PreDefinedModels();
 					preDefinedModel.setSampelValues(value);
 					preDefinedModel.setExpectedColumnName(key.replace("@", ","));

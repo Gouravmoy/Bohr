@@ -35,7 +35,6 @@ public class Columnsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idcolumnsdetails;
 
 	@Column(length = 45)
