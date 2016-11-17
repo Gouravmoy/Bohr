@@ -1,5 +1,6 @@
 package job;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,23 +87,25 @@ public class GenerateDataJob2 extends Job {
 			regenerateRelationColumns(generatedTable.getGeneratedColumn(), dataTask_1.getGeneratedTableData());
 			GenerateTableDataTask_1 dataTask_12 = new GenerateTableDataTask_1(generatedTable);
 			dataTask_12.execute();
+			File file = new File(exportPath + "//Result" + new SimpleDateFormat("yyyyMMddhhmm").format(new Date()));
+			if (!file.exists()) {
+				file.mkdirs();
+			}
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, "C:\\Users\\M1026352\\Desktop\\DataGn\\Result"
-							+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
+					generatedTable, file.getPath());
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 
+			@Override
 			public void run() {
 				StatusDialog.updateTableName("Completed!");
+
 			}
 		});
-		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
-
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;
-
 	}
 
 	private void regenerateRelationColumns(List<GeneratedColumn> generatedColumn, List<GeneratedTable> list) {
@@ -145,14 +148,19 @@ public class GenerateDataJob2 extends Job {
 		this.tableCount = tableCount;
 	}
 
-	public void setProjectId(int idproject) {
-		this.projectId = idproject;
-
+	public String getExportPath() {
+		return exportPath;
 	}
 
-	public void setExportPath(String text) {
-		this.exportPath = text;
-
+	public void setExportPath(String exportPath) {
+		this.exportPath = exportPath;
 	}
 
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
 }

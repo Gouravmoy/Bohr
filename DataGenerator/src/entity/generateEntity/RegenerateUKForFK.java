@@ -21,7 +21,7 @@ public class RegenerateUKForFK {
 	static String combinationFilePath;
 	int numberOfRows;
 
-	static String tempFolder = "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\";
+	static String tempFolder = "";
 
 	public void regenerate() {
 		tempFolder = System.getProperty("log_file_loc");

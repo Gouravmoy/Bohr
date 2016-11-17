@@ -30,10 +30,6 @@ public class QueryFetchTask extends Task {
 		String path = "resources\\files\\";
 		File queryFile = new File(path + databasedetail.getType() + ".properties");
 		try {
-			// String path = "platform:/plugin/DataGenerator/resources/files/"+
-			// databasedetail.getType() + ".properties";
-			// resultTemplateURL = new URL(path);
-			// FileUtils.copyURLToFile(resultTemplateURL, queryFile);
 			inputStream = new FileInputStream(queryFile);
 			properties.load(inputStream);
 			query = properties.getProperty(propertyName);
