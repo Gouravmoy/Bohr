@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
 
 import dao.ColumnsDao;
 import dao.ConstraintsDao;
@@ -28,11 +29,13 @@ import jobs.tasks.create.CreateColumnTask;
 import jobs.tasks.create.CreateConstraintTask;
 import jobs.tasks.create.CreateSchemaTask;
 import jobs.tasks.create.CreateTableTask;
+import views.dialog.ImportDialog;
 
 public class FirstJob extends Job {
 	Databasedetail databasedetail;
 	ImportType importType;
 	String importFileLocation;
+	ImportDialog importDialog;
 
 	public FirstJob(String name) {
 		super(name);
@@ -65,6 +68,12 @@ public class FirstJob extends Job {
 					List<Tabledetail> tabledetailList = createTableTask.getTabledetails();
 					tableDao.saveListOfTables(tabledetailList);
 					for (Tabledetail tabledetail : tabledetailList) {
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								importDialog.getShell().setText("Importing Table " + tabledetail.getTableName());
+							}
+						});
 						createColumnTask = new CreateColumnTask(databasedetail, tabledetail);
 						createColumnTask.execute();
 						List<Columnsdetail> columnsdetailList = createColumnTask.getColumnsdetails();
@@ -77,6 +86,12 @@ public class FirstJob extends Job {
 					}
 					refrehTreeTask = new RefrehTreeTask();
 					refrehTreeTask.execute();
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							importDialog.close();
+						}
+					});
 				} catch (PersistException e) {
 					e.printStackTrace();
 				}
@@ -102,6 +117,10 @@ public class FirstJob extends Job {
 
 	public void setImportFileLocation(String importFileLocation) {
 		this.importFileLocation = importFileLocation;
+	}
+
+	public void setImportDialog(ImportDialog importDialog) {
+		this.importDialog = importDialog;
 	}
 
 }
