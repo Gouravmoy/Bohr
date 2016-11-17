@@ -88,9 +88,8 @@ public class ImportDialog extends Dialog {
 		}
 		firstJob.setDatabasedetail(databasedetail);
 		firstJob.setImportType(ImportType.DATABASE);
-		System.out.println(firstJob.getResult());
+		firstJob.setImportDialog(this);
 		firstJob.schedule();
-		super.okPressed();
 	}
 
 	@Override
