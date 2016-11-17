@@ -77,6 +77,8 @@ public class ExecuteDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
+				selectedTabledetails.clear();
+				table.removeAll();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
 				selectedTabledetails.addAll(tabledetails);
 				createTable(parent);
