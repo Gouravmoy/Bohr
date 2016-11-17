@@ -103,7 +103,7 @@ public class NewProjectDialog extends Dialog {
 		projectdetails.setSchemadetail((Schemadetail) schemaCombo.getData(schemaCombo.getText()));
 		createProjectJob.setProjectdetails(projectdetails);
 		createProjectJob.setProjectDialog(this);
-		container.getShell().setText("Please Wait");
+		container.getShell().setText("Please Wait !!");
 		createProjectJob.schedule();
 	}
 
