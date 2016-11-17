@@ -22,10 +22,8 @@ import dao.impl.ProjectDAOImpl;
 import entity.Databasedetail;
 import entity.Projectdetails;
 import entity.Schemadetail;
-import exceptions.PersistException;
 import exceptions.ReadEntityException;
-import jobs.tasks.DefaultModelsToColumnsTask;
-import jobs.tasks.RefrehTreeTask;
+import job.CreateProjectJob;
 import service.SchemaService;
 import service.impl.SchemaServiceImpl;
 
@@ -36,6 +34,7 @@ public class NewProjectDialog extends Dialog {
 	SchemaService schemaService;
 	Combo schemaCombo;
 	Combo databaseListCombo;
+	Composite container;
 
 	public NewProjectDialog(Shell parentShell) {
 		super(parentShell);
@@ -43,7 +42,7 @@ public class NewProjectDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite container = (Composite) super.createDialogArea(parent);
+		container = (Composite) super.createDialogArea(parent);
 		container.getShell().setText("Create Project");
 		container.setLayout(new GridLayout(3, false));
 
@@ -98,20 +97,14 @@ public class NewProjectDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		DefaultModelsToColumnsTask columnsTask = new DefaultModelsToColumnsTask();
+		CreateProjectJob createProjectJob = new CreateProjectJob(text.getText());
 		Projectdetails projectdetails = new Projectdetails();
 		projectdetails.setProjectName(text.getText());
 		projectdetails.setSchemadetail((Schemadetail) schemaCombo.getData(schemaCombo.getText()));
-		try {
-			projectDao.saveProjectdetails(projectdetails);
-			columnsTask.setProject(projectdetails);
-			columnsTask.execute();
-		} catch (PersistException e) {
-			e.printStackTrace();
-		}
-		RefrehTreeTask refrehTreeTask = new RefrehTreeTask();
-		refrehTreeTask.execute();
-		super.okPressed();
+		createProjectJob.setProjectdetails(projectdetails);
+		createProjectJob.setProjectDialog(this);
+		container.getShell().setText("Please Wait");
+		createProjectJob.schedule();
 	}
 
 }

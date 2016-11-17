@@ -22,7 +22,6 @@ public class PreDefinedModels implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idpredefinedDS;
 
 	@Column(length = 200)
@@ -30,10 +29,9 @@ public class PreDefinedModels implements Serializable {
 
 	@Column(length = 30000)
 	private String sampelValues;
-	
+
 	@OneToMany(mappedBy = "predefinedModel", fetch = FetchType.EAGER)
 	private Set<Columnsdetail> columnsdetails;
-
 
 	public int getIdpredefinedDS() {
 		return idpredefinedDS;
@@ -71,6 +69,5 @@ public class PreDefinedModels implements Serializable {
 	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
 		this.columnsdetails = columnsdetails;
 	}
-	
 
 }

@@ -34,6 +34,7 @@ public class GenerateDataJob2 extends Job {
 	Map<String, Integer> tableCount;
 	long startTime = 0;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	int projectId;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -49,8 +50,7 @@ public class GenerateDataJob2 extends Job {
 		System.out.println(sortTableTask.getTabledetailListSorted());
 		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
-		startTime = System.currentTimeMillis();
-		System.out.println("GenerateColumnDataTask started");
+		dataTask_1.setProjectId(projectId);
 		dataTask_1.execute();
 		Master.INSTANCE.printTimeElapsed(startTime, "GenerateColumnDataTask");
 		System.out.println(dataTask_1.getGeneratedTableData());
@@ -141,6 +141,14 @@ public class GenerateDataJob2 extends Job {
 
 	public void setTableCount(Map<String, Integer> tableCount) {
 		this.tableCount = tableCount;
+	}
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
 	}
 
 }

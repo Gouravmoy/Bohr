@@ -48,6 +48,7 @@ public class ExecuteDialog extends Dialog {
 	TableEditor editor;
 	private static String COLUMN_NAMES[] = { "Table Name", "No of Rows" };
 	Map<String, Integer> tableCount;
+	Projectdetails projectdetail;
 
 	public ExecuteDialog(Shell parentShell) {
 		super(parentShell);
@@ -73,7 +74,7 @@ public class ExecuteDialog extends Dialog {
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
+				projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
 				selectedTabledetails.addAll(tabledetails);
@@ -149,7 +150,7 @@ public class ExecuteDialog extends Dialog {
 
 		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
 		spinnerAll.setBounds(171, 119, 60, 22);
-		spinnerAll.setMaximum(500);
+		spinnerAll.setMaximum(1000);
 		spinnerAll.setMinimum(0);
 		spinnerAll.setIncrement(10);
 
@@ -185,8 +186,6 @@ public class ExecuteDialog extends Dialog {
 				public void modifyText(ModifyEvent arg0) {
 					Spinner spinner = (Spinner) arg0.getSource();
 					Tabledetail tabledetail = (Tabledetail) spinner.getData();
-					System.out.println(tabledetail);
-					System.out.println(tabledetail.getTableName() + "  :  " + Integer.parseInt(spinner.getText()));
 					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
 				}
@@ -234,6 +233,7 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
 		generateDataJob2.setNoOfRows(spinnerAll.getSelection());
 		generateDataJob2.setTableCount(tableCount);
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();

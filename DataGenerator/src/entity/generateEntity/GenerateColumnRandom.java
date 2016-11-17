@@ -18,33 +18,33 @@ import enums.PatternType;
 public class GenerateColumnRandom extends GeneratedColumn {
 	boolean isNullable = false;
 	boolean generateAllUnique = true;
+	BufferedWriter writer;
+	
 
 	public void generateColumn() {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath), true));
+			writer = new BufferedWriter(new FileWriter(new File(filePath), true));
 			BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));
 			int recordCount = this.numberOfRows;
-			while (recordCount > 0) {
-				String randomValue = "";
-				int currentLineNumber = 0;
-				int newLineStartNumber = 0;
-				currentLineNumber = getLastLineNo();
-				newLineStartNumber = currentLineNumber + 1;
-				if (isNullable) {
-					writer.write(null + "\n");
-				} else if (newLineStartNumber == 1) {
-					writer.write(generateRandomValue() + "\n");
-				} else {
-					if (!generateAllUnique)
-						writer.write(generateRandomValue() + "\n");
-					else {
-						generateRandomUnique(writer, reader, randomValue);
-					}
+			String randomValue = "";
+			int currentLineNumber = 0;
+			int newLineStartNumber = 0;
+			currentLineNumber = getLastLineNo();
+			newLineStartNumber = currentLineNumber + 1;
+			if (isNullable) {
+				writer.write(null + "\n");
+			} else if (newLineStartNumber == 1) {
+				writer.write(generateRandomValue(recordCount) + "\n");
+			} else {
+				if (!generateAllUnique)
+					writer.write(generateRandomValue(recordCount) + "\n");
+				else {
+					generateRandomUnique(writer, reader, randomValue, recordCount);
 				}
-				recordCount--;
-				if (recordCount % 50 == 0) {
-					writer.flush();
-				}
+			}
+			recordCount--;
+			if (recordCount % 50 == 0) {
+				writer.flush();
 			}
 			reader.close();
 			writer.flush();
@@ -55,7 +55,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 
 	}
 
-	private void generateRandomUnique(BufferedWriter writer, BufferedReader reader, String randomValue)
+	private void generateRandomUnique(BufferedWriter writer, BufferedReader reader, String randomValue, int recordCount)
 			throws IOException {
 		String line;
 		boolean matched;
@@ -69,7 +69,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				System.out.println("500 attempts exceeded");
 				break;
 			}
-			randomValue = generateRandomValue();
+			randomValue = generateRandomValue(recordCount);
 			while ((line = reader.readLine()) != null) {
 				line = line.replace(",", "");
 				if (randomValue.equals(line)) {
@@ -98,59 +98,109 @@ public class GenerateColumnRandom extends GeneratedColumn {
 		return currentLineNumber;
 	}
 
-	private String generateRandomValue() {
+	private String generateRandomValue(int recordCount) {
 
 		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		final int N = alphabet.length();
 		Random r = new Random();
 		StringBuilder builder = new StringBuilder();
-		boolean usePreviousKey = false;
 
 		try {
 			switch (columnType) {
 			case CHAR:
-				int size = (int) (colLength <= 10 ? colLength : 10);
-				builder.append("\"");
-				for (int i = 0; i < size; i++) {
-					builder.append(alphabet.charAt(r.nextInt(N)));
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					int size = (int) (colLength <= 10 ? colLength : 10);
+					builder.append("\"");
+					for (int i = 0; i < size; i++) {
+						builder.append(alphabet.charAt(r.nextInt(N)));
+					}
+					builder.append("\"");
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
 				}
-				builder.append("\"");
 				break;
 			case VARCHAR:
 				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
-				builder.append("\"");
-				if (pattern == null) {
-					for (int i = 0; i < sizeVarchar; i++) {
-						builder.append(alphabet.charAt(r.nextInt(N)));
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					builder.append("\"");
+					if (pattern == null) {
+						for (int i = 0; i < sizeVarchar; i++) {
+							builder.append(alphabet.charAt(r.nextInt(N)));
+						}
+					} else {
+						String patternString = pattern.getRegexpString();
+						generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
 					}
-				} else {
-					String patternString = pattern.getRegexpString();
-					generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
+					builder.append("\"");
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
 				}
-
-				builder.append("\"");
 				break;
 			case INTEGER:
 				int minimum = 1;
 				int maximum = 1000;
-				builder.append("" + minimum + (int) (Math.random() * maximum));
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					builder.append("" + minimum + (int) (Math.random() * maximum));
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
+				}
 				break;
 			case FLOAT:
 				float minX = 50.0f;
 				float maxX = 100.0f;
-				float finalX = r.nextFloat() * (maxX - minX) + minX;
-				if (!usePreviousKey) {
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					float finalX = r.nextFloat() * (maxX - minX) + minX;
 					builder.append("" + finalX);
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
 				}
 				break;
 			case DECIMAL:
 				int upperBound = (int) Math.pow(10, colLength - colDecLenght);
-				String finalXDec = getRandomValue(r, 0, upperBound, colDecLenght);
-				builder.append("" + finalXDec);
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					String finalXDec = getRandomValue(r, 0, upperBound, colDecLenght);
+					builder.append("" + finalXDec);
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
+				}
 				break;
 
 			case TINYINT:
-				builder.append(0);
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					builder.append(0);
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
+				}
 				break;
 			case DATE:
 				String startDate = "2013-02-08 00:00:00";
@@ -159,12 +209,21 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				long rangebegin = Timestamp.valueOf(startDate).getTime();
 				long rangeend = Timestamp.valueOf(endDate).getTime();
 				long diff = rangeend - rangebegin + 1;
-				Timestamp rand = new Timestamp(rangebegin + (long) (Math.random() * diff));
-				Date date = new Date(rand.getTime());
-				SimpleDateFormat dateFormat = new SimpleDateFormat(finalDateFormat);
-				builder.append("\"");
-				builder.append("" + dateFormat.format(date));
-				builder.append("\"");
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					Timestamp rand = new Timestamp(rangebegin + (long) (Math.random() * diff));
+					Date date = new Date(rand.getTime());
+					SimpleDateFormat dateFormat = new SimpleDateFormat(finalDateFormat);
+					builder.append("\"");
+					builder.append("" + dateFormat.format(date));
+					builder.append("\"");
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
+				}
 				break;
 			case YEAR:
 				String startDate1 = "1900-02-08 00:00:00";
@@ -173,12 +232,21 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				long rangebegin1 = Timestamp.valueOf(startDate1).getTime();
 				long rangeend1 = Timestamp.valueOf(endDate1).getTime();
 				long diff1 = rangeend1 - rangebegin1 + 1;
-				Timestamp rand1 = new Timestamp(rangebegin1 + (long) (Math.random() * diff1));
-				Date date1 = new Date(rand1.getTime());
-				SimpleDateFormat dateFormat1 = new SimpleDateFormat(finalDateFormat1);
-				builder.append("\"");
-				builder.append("" + dateFormat1.format(date1));
-				builder.append("\"");
+				while (recordCount > 0) {
+					builder = new StringBuilder();
+					Timestamp rand1 = new Timestamp(rangebegin1 + (long) (Math.random() * diff1));
+					Date date1 = new Date(rand1.getTime());
+					SimpleDateFormat dateFormat1 = new SimpleDateFormat(finalDateFormat1);
+					builder.append("\"");
+					builder.append("" + dateFormat1.format(date1));
+					builder.append("\"");
+					builder.append("\n");
+					writer.write(builder.toString());
+					recordCount--;
+					if (recordCount % 50 == 0) {
+						writer.flush();
+					}
+				}
 				break;
 			default:
 				System.out.println("Incorrect Data Type");

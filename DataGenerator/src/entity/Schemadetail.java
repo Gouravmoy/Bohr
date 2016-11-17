@@ -34,7 +34,6 @@ public class Schemadetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idschema;
 
 	@Temporal(TemporalType.TIMESTAMP)

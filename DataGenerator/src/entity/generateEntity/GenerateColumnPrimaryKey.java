@@ -44,9 +44,12 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				fileWriter = new FileWriter(filePath);
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 				while (rowCount > 0) {
+					builder = new StringBuilder();
 					builder.append("\"");
 					builder.append("" + dateFormat.format(date));
 					builder.append("\"");
+					builder.append("\n");
+					bufferedWriter.write(builder.toString());
 					if (rowCount % 100 == 0) {
 						bufferedWriter.flush();
 					}
@@ -82,7 +85,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 						for (int i = 0; i < sizeVarchar; i++) {
 							builder.append(alphabet.charAt(r.nextInt(N)));
 						}
-					}else{
+					} else {
 						String patternString = pattern.getRegexpString();
 						generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
 					}
@@ -128,7 +131,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 
 		}
 	}
-	
+
 	public void generateVarcharWithPattern(final String alphabet, final int N, Random r, StringBuilder builder,
 			int sizeVarchar, String patternString) {
 		if (pattern.getPatternType() == PatternType.PREFIX) {
@@ -174,7 +177,5 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 	public String toString() {
 		return "GenerateColumnPrimaryKey [startValue=" + startValue + ", foreignKey=" + foreignKey + "]";
 	}
-
-	
 
 }
