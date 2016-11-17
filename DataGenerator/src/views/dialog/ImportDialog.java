@@ -3,6 +3,7 @@ package views.dialog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -69,6 +70,17 @@ public class ImportDialog extends Dialog {
 		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		return parent;
 
+	}
+
+	@Override
+	protected Point getInitialSize() {
+		return new Point(450, 300);
+	}
+
+	@Override
+	protected Point getInitialLocation(Point initialSize) {
+		// TODO Auto-generated method stub
+		return super.getInitialLocation(initialSize);
 	}
 
 	@Override

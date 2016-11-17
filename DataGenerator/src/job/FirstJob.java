@@ -71,7 +71,7 @@ public class FirstJob extends Job {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								importDialog.getShell().setText("Importing " + tabledetail.getTableName());
+								importDialog.getShell().setText("Importing Table " + tabledetail.getTableName());
 							}
 						});
 						createColumnTask = new CreateColumnTask(databasedetail, tabledetail);
