@@ -36,14 +36,16 @@ public class Projectdetails implements Serializable {
 	// bi-directional many-to-one association to Relationsdetail
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Relationsdetail> relationsdetails;
-	
+
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Datasamplemodel> datasamplemodels;
-
 
 	// bi-directional many-to-one association to Patterndetail
 	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
 	private Set<Patterndetail> patterndetails;
+
+	@OneToMany(mappedBy = "projectdetail", fetch = FetchType.EAGER)
+	private Set<Conditions> conditions;
 
 	public int getIdproject() {
 		return idproject;
@@ -81,7 +83,29 @@ public class Projectdetails implements Serializable {
 	public void setDatasamplemodels(Set<Datasamplemodel> datasamplemodels) {
 		this.datasamplemodels = datasamplemodels;
 	}
-	
-	
+
+	public Set<Relationsdetail> getRelationsdetails() {
+		return relationsdetails;
+	}
+
+	public void setRelationsdetails(Set<Relationsdetail> relationsdetails) {
+		this.relationsdetails = relationsdetails;
+	}
+
+	public Set<Patterndetail> getPatterndetails() {
+		return patterndetails;
+	}
+
+	public void setPatterndetails(Set<Patterndetail> patterndetails) {
+		this.patterndetails = patterndetails;
+	}
+
+	public Set<Conditions> getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Set<Conditions> conditions) {
+		this.conditions = conditions;
+	}
 
 }

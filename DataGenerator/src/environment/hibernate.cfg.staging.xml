@@ -33,6 +33,9 @@
 		<mapping class="entity.Tabledetail" />
 		<mapping class="entity.Projectdetails" />
 		<mapping class="entity.PreDefinedModels" />
+		<mapping class="entity.Conditions" />
+		
+		
 	</session-factory>
 
 </hibernate-configuration>  

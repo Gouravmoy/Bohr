@@ -64,6 +64,9 @@ public class Columnsdetail implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Patterndetail patterndetail;
 
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
+	private Conditions conditions;
+
 	@ManyToOne
 	@JoinColumn(name = "tableId", nullable = false)
 	private Tabledetail tabledetail;
@@ -247,6 +250,14 @@ public class Columnsdetail implements Serializable {
 
 	public void setPredefinedModel(PreDefinedModels predefinedModel) {
 		this.predefinedModel = predefinedModel;
+	}
+
+	public Conditions getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Conditions conditions) {
+		this.conditions = conditions;
 	}
 
 }
