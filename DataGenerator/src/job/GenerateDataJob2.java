@@ -52,8 +52,7 @@ public class GenerateDataJob2 extends Job {
 		System.out.println(sortTableTask.getTabledetailListSorted());
 		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
-		startTime = System.currentTimeMillis();
-		System.out.println("GenerateColumnDataTask started");
+		dataTask_1.setProjectId(projectId);
 		dataTask_1.execute();
 		Master.INSTANCE.printTimeElapsed(startTime, "GenerateColumnDataTask");
 		System.out.println(dataTask_1.getGeneratedTableData());
@@ -100,9 +99,9 @@ public class GenerateDataJob2 extends Job {
 			@Override
 			public void run() {
 				StatusDialog.updateTableName("Completed!");
-
 			}
 		});
+		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;

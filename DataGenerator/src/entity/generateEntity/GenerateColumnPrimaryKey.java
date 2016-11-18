@@ -77,28 +77,44 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				Random r = new Random();
 				int rowCount = numberOfRows;
 				StringBuilder builder = new StringBuilder();
-				while (rowCount > 0) {
-					int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
-					builder = new StringBuilder();
+				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
+				if (pattern == null) {
+					String baseString = "";
+
 					builder.append("\"");
-					if (pattern == null) {
-						for (int i = 0; i < sizeVarchar; i++) {
-							builder.append(alphabet.charAt(r.nextInt(N)));
+					for (int i = 0; i < sizeVarchar; i++) {
+						baseString += alphabet.charAt(r.nextInt(N));
+					}
+					while (rowCount > 0) {
+						builder = new StringBuilder();
+						builder.append(baseString + "_" + rowCount);
+						rowCount--;
+						builder.append("\"");
+						builder.append("\n");
+						bufferedWriter.write(builder.toString());
+						if (rowCount % 100 == 0) {
+							bufferedWriter.flush();
 						}
-					} else {
-						String patternString = pattern.getRegexpString();
-						generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
 					}
-					builder.append("\"");
-					builder.append("\n");
-					bufferedWriter.write(builder.toString());
-					if (rowCount % 100 == 0) {
-						bufferedWriter.flush();
+					bufferedWriter.flush();
+					bufferedWriter.close();
+				} else {
+					String patternString = pattern.getRegexpString();
+					while (rowCount > 0) {
+						builder = new StringBuilder();
+						builder.append(patternString + "_" + rowCount);
+						builder.append("\"");
+						builder.append("\n");
+						bufferedWriter.write(builder.toString());
+						rowCount--;
+						if (rowCount % 100 == 0) {
+							bufferedWriter.flush();
+						}
 					}
-					rowCount--;
+					bufferedWriter.flush();
+					bufferedWriter.close();
 				}
-				bufferedWriter.flush();
-				bufferedWriter.close();
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

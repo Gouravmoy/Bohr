@@ -258,6 +258,7 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setTableCount(tableCount);
 		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.setExportPath(exportLocation.getText());
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();
