@@ -38,6 +38,12 @@ public class Conditions implements Serializable {
 	@Column(length = 50)
 	private String startWith;
 
+	@Column(columnDefinition = "tinyint default false")
+	private boolean isGenerateRandom;
+
+	@Column
+	private int sequenceNo;
+
 	@Column(length = 50)
 	private String endsWith;
 
@@ -63,6 +69,12 @@ public class Conditions implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "idproject")
 	private Projectdetails projectdetail;
+	
+	public Conditions() {
+		super();
+		this.sequenceNo=0;
+		this.sizeLimit=0;
+	}
 
 	public int getIdConditions() {
 		return idConditions;
@@ -152,6 +164,22 @@ public class Conditions implements Serializable {
 		this.projectdetail = projectdetail;
 	}
 
+	public boolean isGenerateRandom() {
+		return isGenerateRandom;
+	}
+
+	public void setGenerateRandom(boolean isGenerateRandom) {
+		this.isGenerateRandom = isGenerateRandom;
+	}
+
+	public int getSequenceNo() {
+		return sequenceNo;
+	}
+
+	public void setSequenceNo(int sequenceNo) {
+		this.sequenceNo = sequenceNo;
+	}
+
 	@Override
 	public String toString() {
 		if (this.columnsdetail.getType() == ColumnType.VARCHAR) {
@@ -162,5 +190,4 @@ public class Conditions implements Serializable {
 			return "dateLowerLimit=" + dateLowerLimit + ", dateUpperLimit=" + dateUpperLimit;
 		}
 	}
-
 }

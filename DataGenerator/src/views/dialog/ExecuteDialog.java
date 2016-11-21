@@ -153,7 +153,7 @@ public class ExecuteDialog extends Dialog {
 
 		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
 		spinnerAll.setBounds(171, 119, 60, 22);
-		spinnerAll.setMaximum(500);
+		spinnerAll.setMaximum(100000);
 		spinnerAll.setMinimum(0);
 		spinnerAll.setIncrement(10);
 		
