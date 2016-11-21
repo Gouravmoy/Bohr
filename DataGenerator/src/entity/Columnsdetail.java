@@ -35,7 +35,6 @@ public class Columnsdetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idcolumnsdetails;
 
 	@Column(length = 45)
@@ -62,8 +61,7 @@ public class Columnsdetail implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Datasamplemodel datasamplemodel;
 
-	@ManyToOne
-	@JoinColumn(name = "patternId", nullable = true)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	private Patterndetail patterndetail;
 
 	@ManyToOne
@@ -133,10 +131,6 @@ public class Columnsdetail implements Serializable {
 
 	public void setKeytype(KeyType keytype) {
 		this.keytype = keytype;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
 	}
 
 	public String getName() {

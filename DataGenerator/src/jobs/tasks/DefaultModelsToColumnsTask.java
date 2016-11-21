@@ -41,6 +41,8 @@ public class DefaultModelsToColumnsTask extends Task {
 					for (PreDefinedModels preDefinedModel : preDefinedModels) {
 						String colName = columnsdetail.getName();
 						colName = colName.replace("_", "");
+						if(columnsdetail.getConstraintsdetails1().size()>0)
+							break;
 						for (String expectedColName : preDefinedModel.getExpectedColumnName().split(",")) {
 							String tablePlusCol = tabledetail.getTableName() + "" + colName;
 							if (colName.equalsIgnoreCase(expectedColName) || colName.endsWith(expectedColName)

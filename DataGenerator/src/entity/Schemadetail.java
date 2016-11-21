@@ -34,7 +34,6 @@ public class Schemadetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	private int idschema;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -51,7 +50,7 @@ public class Schemadetail implements Serializable {
 
 
 	@ManyToOne
-	@JoinColumn(name = "db_id", nullable = false)
+	@JoinColumn(name = "db_id", nullable = true)
 	private Databasedetail databasedetail;
 
 	@OneToMany(mappedBy = "schemadetail", fetch = FetchType.EAGER)

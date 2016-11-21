@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -48,6 +49,8 @@ public class ExecuteDialog extends Dialog {
 	TableEditor editor;
 	private static String COLUMN_NAMES[] = { "Table Name", "No of Rows" };
 	Map<String, Integer> tableCount;
+	Projectdetails projectdetail;
+	private Text exportLocation;
 
 	public ExecuteDialog(Shell parentShell) {
 		super(parentShell);
@@ -73,7 +76,7 @@ public class ExecuteDialog extends Dialog {
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
+				projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
 				selectedTabledetails.addAll(tabledetails);
@@ -137,7 +140,7 @@ public class ExecuteDialog extends Dialog {
 		text.setBounds(171, 27, 323, 21);
 
 		text_1 = new Text(grpUserInput, SWT.BORDER);
-		text_1.setBounds(171, 54, 323, 59);
+		text_1.setBounds(171, 54, 323, 21);
 
 		Label lblDescription = new Label(grpUserInput, SWT.NONE);
 		lblDescription.setBounds(10, 57, 60, 15);
@@ -149,9 +152,30 @@ public class ExecuteDialog extends Dialog {
 
 		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
 		spinnerAll.setBounds(171, 119, 60, 22);
-		spinnerAll.setMaximum(500);
+		spinnerAll.setMaximum(1000);
 		spinnerAll.setMinimum(0);
 		spinnerAll.setIncrement(10);
+
+		Label lblExportLocation = new Label(grpUserInput, SWT.NONE);
+		lblExportLocation.setBounds(10, 87, 133, 15);
+		lblExportLocation.setText("Export Location");
+
+		exportLocation = new Text(grpUserInput, SWT.BORDER);
+		exportLocation.setBounds(171, 81, 242, 21);
+
+		Button btnNewButton = new Button(grpUserInput, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DirectoryDialog dialog = new DirectoryDialog(getShell());
+				dialog.setText("Open Folder");
+				dialog.setFilterPath("C:/");
+				String selected = dialog.open();
+				exportLocation.setText(selected);
+			}
+		});
+		btnNewButton.setBounds(419, 82, 75, 25);
+		btnNewButton.setText("Browse");
 
 		return container;
 	}
@@ -185,8 +209,6 @@ public class ExecuteDialog extends Dialog {
 				public void modifyText(ModifyEvent arg0) {
 					Spinner spinner = (Spinner) arg0.getSource();
 					Tabledetail tabledetail = (Tabledetail) spinner.getData();
-					System.out.println(tabledetail);
-					System.out.println(tabledetail.getTableName() + "  :  " + Integer.parseInt(spinner.getText()));
 					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
 				}
@@ -234,6 +256,9 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
 		generateDataJob2.setNoOfRows(spinnerAll.getSelection());
 		generateDataJob2.setTableCount(tableCount);
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
+		generateDataJob2.setExportPath(exportLocation.getText());
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();
