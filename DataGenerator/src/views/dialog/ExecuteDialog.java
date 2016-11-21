@@ -156,7 +156,7 @@ public class ExecuteDialog extends Dialog {
 		spinnerAll.setBounds(171, 119, 60, 22);
 		spinnerAll.setMaximum(100000);
 		spinnerAll.setMinimum(0);
-		spinnerAll.setIncrement(10);
+		spinnerAll.setIncrement(100);
 
 		Label lblExportLocation = new Label(grpUserInput, SWT.NONE);
 		lblExportLocation.setBounds(10, 87, 133, 15);

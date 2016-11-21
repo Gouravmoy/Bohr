@@ -43,26 +43,23 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 	public void execute() throws BuildException {
 		int rowCount = 1;
 		try {
+			/*
+			 * bufferedReaders = new BufferedReader(new
+			 * FileReader(generatedTableData.getTablePath())); bufferedWriter =
+			 * new BufferedWriter(new FileWriter(
+			 * generatedTableData.getTableOutPutPath() +
+			 * generatedTableData.getTableName() + ".csv")); String rowString =
+			 * null; while ((rowString = bufferedReaders.readLine()) != null) {
+			 * rowString = rowString.replace("\"", ""); rowString =
+			 * rowString.replace("\'", "");
+			 * bufferedWriter.write(rowString+"\n");
+			 * 
+			 * if (rowCount % 50 == 0) { bufferedWriter.write(rowString+"\n");
+			 * bufferedWriter.flush(); } rowCount++; } bufferedWriter.flush();
+			 * bufferedWriter.close();
+			 */
 			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
 			bufferedWriter = new BufferedWriter(new FileWriter(
-					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".csv"));
-			String rowString = null;
-			while ((rowString = bufferedReaders.readLine()) != null) {
-				rowString = rowString.replace("\"", "");
-				rowString = rowString.replace("\'", "");
-				bufferedWriter.write(rowString+"\n");
-				
-				if (rowCount % 50 == 0) {
-					bufferedWriter.write(rowString+"\n");
-					bufferedWriter.flush();
-				}
-				rowCount++;
-			}
-			bufferedWriter.flush();
-			bufferedWriter.close();
-			
-			
-			/*bufferedWriter = new BufferedWriter(new FileWriter(
 					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".sql"));
 			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 			bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
@@ -92,7 +89,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 			bufferedWriter.write(completeString + NEWLINE);
 			bufferedWriter.write(SEMICOLON + COMMIT + NEWLINE);
 			bufferedWriter.flush();
-			bufferedWriter.close();*/
+			bufferedWriter.close();
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}

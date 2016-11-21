@@ -24,7 +24,7 @@ public class RegenerateUKForFK {
 	static String tempFolder = "";
 
 	public void regenerate() {
-		tempFolder = System.getProperty("log_file_loc");
+		tempFolder = System.getProperty("log_file_loc") + "\\";
 		String[] tempFilePath = new String[ukFkColumns.size()];
 		BufferedReader reader = null;
 		ukArray = new String[ukFkColumns.size()][numberOfRows];
