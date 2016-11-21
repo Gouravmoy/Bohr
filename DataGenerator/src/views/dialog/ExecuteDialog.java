@@ -49,6 +49,7 @@ public class ExecuteDialog extends Dialog {
 	TableEditor editor;
 	private static String COLUMN_NAMES[] = { "Table Name", "No of Rows" };
 	Map<String, Integer> tableCount;
+	Projectdetails projectdetail;
 	private Text exportLocation;
 
 	public ExecuteDialog(Shell parentShell) {
@@ -75,7 +76,7 @@ public class ExecuteDialog extends Dialog {
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Projectdetails projectdetail = (Projectdetails) combo.getData(combo.getText());
+				projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
 				selectedTabledetails.clear();
 				table.removeAll();
@@ -156,14 +157,14 @@ public class ExecuteDialog extends Dialog {
 		spinnerAll.setMaximum(100000);
 		spinnerAll.setMinimum(0);
 		spinnerAll.setIncrement(10);
-		
+
 		Label lblExportLocation = new Label(grpUserInput, SWT.NONE);
 		lblExportLocation.setBounds(10, 87, 133, 15);
 		lblExportLocation.setText("Export Location");
-		
+
 		exportLocation = new Text(grpUserInput, SWT.BORDER);
 		exportLocation.setBounds(171, 81, 242, 21);
-		
+
 		Button btnNewButton = new Button(grpUserInput, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -210,8 +211,6 @@ public class ExecuteDialog extends Dialog {
 				public void modifyText(ModifyEvent arg0) {
 					Spinner spinner = (Spinner) arg0.getSource();
 					Tabledetail tabledetail = (Tabledetail) spinner.getData();
-					System.out.println(tabledetail);
-					System.out.println(tabledetail.getTableName() + "  :  " + Integer.parseInt(spinner.getText()));
 					tableCount.put(tabledetail.getTableName(), Integer.parseInt(spinner.getText()));
 
 				}
@@ -259,7 +258,9 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setSelectedTableDetails(selectedTabledetails);
 		generateDataJob2.setNoOfRows(spinnerAll.getSelection());
 		generateDataJob2.setTableCount(tableCount);
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.setExportPath(exportLocation.getText());
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();

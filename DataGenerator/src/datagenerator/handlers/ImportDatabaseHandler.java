@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import views.dialog.ImportDialog;
 
-public class ImportDatabaseHandler {
+class ImportDatabaseHandler {
 	@Execute
 	public void execute(Shell shell) {
 

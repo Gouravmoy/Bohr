@@ -34,6 +34,7 @@ public class Patterndetail implements Serializable {
 	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "columnsdetail"))
 	@Id
 	@GeneratedValue(generator = "generator")
+	@Column(name = "idpatterndetails")
 	private int idpatterndetails;
 
 	@Column(length = 100)

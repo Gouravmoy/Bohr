@@ -36,6 +36,7 @@ public class GenerateDataJob2 extends Job {
 	long startTime = 0;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	String exportPath;
+	int projectId;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -51,8 +52,7 @@ public class GenerateDataJob2 extends Job {
 		System.out.println(sortTableTask.getTabledetailListSorted());
 		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
-		startTime = System.currentTimeMillis();
-		System.out.println("GenerateColumnDataTask started");
+		dataTask_1.setProjectId(projectId);
 		dataTask_1.execute();
 		Master.INSTANCE.printTimeElapsed(startTime, "GenerateColumnDataTask");
 		System.out.println(dataTask_1.getGeneratedTableData());
@@ -91,22 +91,20 @@ public class GenerateDataJob2 extends Job {
 				file.mkdirs();
 			}
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable,
-					file.getPath());
+					generatedTable, file.getPath());
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 
+			@Override
 			public void run() {
 				StatusDialog.updateTableName("Completed!");
 			}
 		});
 		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
-
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;
-
 	}
 
 	private void regenerateRelationColumns(List<GeneratedColumn> generatedColumn, List<GeneratedTable> list) {
@@ -156,7 +154,12 @@ public class GenerateDataJob2 extends Job {
 	public void setExportPath(String exportPath) {
 		this.exportPath = exportPath;
 	}
-	
-	
 
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
 }

@@ -3,6 +3,7 @@ package views.dialog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -72,12 +73,23 @@ public class ImportDialog extends Dialog {
 	}
 
 	@Override
+	protected Point getInitialSize() {
+		return new Point(450, 300);
+	}
+
+	@Override
+	protected Point getInitialLocation(Point initialSize) {
+		// TODO Auto-generated method stub
+		return super.getInitialLocation(initialSize);
+	}
+
+	@Override
 	protected void okPressed() {
 		FirstJob firstJob = new FirstJob("My Job");
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		Databasedetail databasedetail = new Databasedetail();
 		databasedetail.setConnectionName(text.getText());
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/nagios");
+		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila_test");
 		databasedetail.setUsername("root");
 		databasedetail.setPassword("root");
 		databasedetail.setType(DBType.MYSQL);
@@ -88,9 +100,8 @@ public class ImportDialog extends Dialog {
 		}
 		firstJob.setDatabasedetail(databasedetail);
 		firstJob.setImportType(ImportType.DATABASE);
-		System.out.println(firstJob.getResult());
+		firstJob.setImportDialog(this);
 		firstJob.schedule();
-		super.okPressed();
 	}
 
 	@Override

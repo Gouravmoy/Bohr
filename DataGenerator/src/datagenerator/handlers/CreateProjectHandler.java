@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import views.dialog.NewProjectDialog;
 
-public class CreateProjectHandler {
+class CreateProjectHandler {
 	@Execute
 	public void execute(Shell shell) {
 		Dialog dialog = new NewProjectDialog(shell);

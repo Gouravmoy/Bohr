@@ -94,8 +94,9 @@ public class MainController {
 				while (e.hasMoreElements()) {
 					String key = (String) e.nextElement();
 					String value = properties.getProperty(key);
-					if(value.length()>30000)
+					if (value.length() > 30000) {
 						value = value.substring(0, 29999);
+					}
 					preDefinedModel = new PreDefinedModels();
 					preDefinedModel.setSampelValues(value);
 					preDefinedModel.setExpectedColumnName(key.replace("@", ","));

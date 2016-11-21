@@ -21,7 +21,7 @@ import jobs.tasks.generate.GenerateColumnDataTask;
 import jobs.tasks.generate.GenerateTableDataTask_1;
 import jobs.tasks.generate.GenerateTableDataWithInsertQueryTask;
 
-public class DeleteMain {
+class DeleteMain {
 
 	public static void main(String[] args) {
 		SchemaDao dao = new SchemaDaoImpl();

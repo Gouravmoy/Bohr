@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import views.dialog.ExecuteDialog;
 
-public class ExecuteMainHandler {
+class ExecuteMainHandler {
 	@Execute
 	public void execute(Shell shell) {
 

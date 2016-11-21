@@ -74,7 +74,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 				rowString = rowString + CLOSEBRACKET + COMMA + NEWLINE;
 				completeString += rowString;
 
-				if (rowCount % 50 == 0) {
+				if (rowCount % 49 == 0) {
 					completeString = completeString.substring(0, completeString.length() - 2);
 					bufferedWriter.write(completeString);
 					bufferedWriter.write(COMMIT + NEWLINE);
@@ -82,10 +82,13 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 					bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
 							+ generatedTableData.getTableName() + QUOTE + " values" + NEWLINE);
 					bufferedWriter.flush();
+					completeString = "";
 				}
 				rowCount++;
 			}
-			completeString = completeString.substring(0, completeString.length() - 2);
+			if (completeString.length() > 2) {
+				completeString = completeString.substring(0, completeString.length() - 2);
+			}
 			bufferedWriter.write(completeString + NEWLINE);
 			bufferedWriter.write(SEMICOLON + COMMIT + NEWLINE);
 			bufferedWriter.flush();
