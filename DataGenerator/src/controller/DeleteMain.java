@@ -14,6 +14,7 @@ import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
 import entity.generateEntity.RegenerateUKForFK;
 import enums.Environment;
+import enums.ExportType;
 import enums.KeyType;
 import exceptions.ReadEntityException;
 import jobs.tasks.SortTableTask;
@@ -21,7 +22,7 @@ import jobs.tasks.generate.GenerateColumnDataTask;
 import jobs.tasks.generate.GenerateTableDataTask_1;
 import jobs.tasks.generate.GenerateTableDataWithInsertQueryTask;
 
-public class DeleteMain {
+class DeleteMain {
 
 	public static void main(String[] args) {
 		SchemaDao dao = new SchemaDaoImpl();
@@ -51,7 +52,7 @@ public class DeleteMain {
 				dataTask_12.execute();
 				GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
 						generatedTable, "C:\\Users\\m1026335\\Desktop\\Test\\Rapid TDG\\Export\\"
-								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\");
+								+ new SimpleDateFormat("yyyyMMddhhmm").format(new Date()) + "\\",ExportType.EXCEL);
 				dataWithInsertQueryTask.execute();
 			}
 		} catch (ReadEntityException e) {

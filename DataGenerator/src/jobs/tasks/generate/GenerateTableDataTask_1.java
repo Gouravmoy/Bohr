@@ -49,11 +49,10 @@ public class GenerateTableDataTask_1 extends Task {
 							bufferedReaders[colDataIntCount] = new BufferedReader(
 									new FileReader(columnFilePath.get(colDataIntCount)));
 							colString = bufferedReaders[colDataIntCount].readLine();
-							if (colString.length() > 0) {
-								rowString += colString + ",";
+							if (colString == null) {
+								rowString += " " + ",";
 							} else {
-								wirteToText = false;
-								break;
+								rowString += colString + ",";
 							}
 						} else {
 							wirteToText = false;

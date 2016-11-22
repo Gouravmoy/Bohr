@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.wb.swt.SWTResourceManager;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -31,6 +32,7 @@ public class StartPage {
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
+		parent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		parent.setLayout(null);
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {

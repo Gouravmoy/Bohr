@@ -24,6 +24,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
@@ -40,24 +41,24 @@ import dao.impl.DatabaseDAOImpl;
 import dao.impl.ProjectDAOImpl;
 import entity.Changelog;
 import entity.Columnsdetail;
+import entity.Conditions;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
-import entity.Patterndetail;
 import entity.Projectdetails;
 import entity.Relationsdetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
+import enums.KeyType;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
 import service.ModelService;
-import service.PatternService;
 import service.RelationService;
 import service.impl.ModelServiceImpl;
 import service.impl.RelationServiceImpl;
+import views.dialog.ConditionsDialog;
 import views.dialog.DataModelDialog;
-import views.dialog.PatternDialog;
 import views.dialog.RelationDialog;
 import views.listners.MousePopupListner;
 import views.listners.TreeSelectionListner;
@@ -86,7 +87,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 	// Deafult Nodes
 
 	static DefaultMutableTreeNode relationsNodes = null;
-	static DefaultMutableTreeNode patternsNodes = null;
+	static DefaultMutableTreeNode conditionsNodes = null;
 	static DefaultMutableTreeNode dataModels = null;
 
 	// DAO
@@ -98,7 +99,6 @@ public class TreeView extends DefaultTreeCellRenderer {
 	// Service
 
 	public static RelationService relationService;
-	public static PatternService patternService;
 	public static ModelService modelService;
 
 	// Menu
@@ -108,8 +108,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 	JMenuItem refressAll;
 	JMenuItem edit;
 	JMenuItem createRelations;
-	JMenuItem createPatterns;
 	JMenuItem createDataModel;
+	JMenuItem createConditions;
 
 	// Logger
 	static Logger logger = MainController.getLogger(TreeView.class);
@@ -139,8 +139,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 
 		assignMenuItems();
 		popup.add(createRelations);
-		popup.add(createPatterns);
 		popup.add(createDataModel);
+		popup.add(createConditions);
 		initilizeTrees(frame);
 
 		try {
@@ -173,7 +173,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Relation to This Element");
+				} else {
+					openEditWizard(node);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node) {
@@ -188,9 +192,9 @@ public class TreeView extends DefaultTreeCellRenderer {
 			}
 		});
 
-		createPatterns = new JMenuItem("Create a Pattern");
-		createPatterns.setActionCommand("createPattern");
-		createPatterns.addActionListener(new ActionListener() {
+		createConditions = new JMenuItem("Create a Condition");
+		createConditions.setActionCommand("createCondition");
+		createConditions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JTree currentSelectedTree = null;
@@ -203,7 +207,17 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Condition to This Element");
+					return;
+				}
+				Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+				if ((columnsdetail.getKeytype() == KeyType.PK || columnsdetail.getKeytype() == KeyType.FK
+						|| columnsdetail.getKeytype() == KeyType.UK_FK)) {
+					generateError("Cannot Add Condition to Elements of Key - " + columnsdetail.getKeytype());
+				} else {
+					openEditWizard(node);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node) {
@@ -211,7 +225,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 					@Override
 					public void run() {
 						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-						Dialog dialog = new PatternDialog(composite.getShell(), columnsdetail,
+						Dialog dialog = new ConditionsDialog(composite.getShell(), columnsdetail,
 								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
 						dialog.open();
 					}
@@ -235,7 +249,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Relation to This Element");
+				} else {
+					openEditWizard(node);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node) {
@@ -276,7 +294,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		System.out.println("Inside Project");
 		for (Projectdetails projectdetail : projectdetails) {
 			relationsNodes = new DefaultMutableTreeNode("RELATIONS");
-			patternsNodes = new DefaultMutableTreeNode("PATTERNS");
+			conditionsNodes = new DefaultMutableTreeNode("CONDITIONS");
 			dataModels = new DefaultMutableTreeNode("DATA MODELS");
 			category = new DefaultMutableTreeNode(projectdetail);
 			Schemadetail schemadetail = projectdetail.getSchemadetail();
@@ -284,7 +302,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 			addTableDetails(schemaCategory, schemadetail, true, projectdetail.getIdproject());
 			category.add(schemaCategory);
 			category.add(relationsNodes);
-			category.add(patternsNodes);
+			category.add(conditionsNodes);
 			category.add(dataModels);
 			projectsTreeTop.add(category);
 			refreshProjectTree();
@@ -360,7 +378,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 				if (addRelation) {
 					getRelationsAndPatterns(columnCategory, columnsdetail, Id);
 					getModels(columnCategory, columnsdetail, Id);
-					//getPatterns(columnCategory, columnsdetail, Id);
+					// getPatterns(columnCategory, columnsdetail, Id);
 				}
 				for (Constraintsdetail constraintsdetail : columnsdetail.getConstraintsdetails1()) {
 					constraintsCategory = new DefaultMutableTreeNode(constraintsdetail);
@@ -398,8 +416,8 @@ public class TreeView extends DefaultTreeCellRenderer {
 	private static void getRelationsAndPatterns(DefaultMutableTreeNode columnCategory, Columnsdetail columnsdetail,
 			int projectId) {
 		DefaultMutableTreeNode relationCategory;
-		DefaultMutableTreeNode patternCategory;
-		Patterndetail patterndetail = null;
+		DefaultMutableTreeNode conditionCategory;
+		Conditions condition = null;
 
 		// List<Relationsdetail> relationsdetails = new ArrayList<>();
 		// relationsdetails.addAll(columnsdetail.getRelationsdetails());
@@ -407,9 +425,9 @@ public class TreeView extends DefaultTreeCellRenderer {
 		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
 				projectId);
 
-		if (columnsdetail.getPatterndetail() != null
-				&& columnsdetail.getPatterndetail().getProjectdetail().getIdproject() == projectId) {
-			patterndetail = columnsdetail.getPatterndetail();
+		if (columnsdetail.getConditions() != null
+				&& columnsdetail.getConditions().getProjectdetail().getIdproject() == projectId) {
+			condition = columnsdetail.getConditions();
 		}
 		relationCategory = new DefaultMutableTreeNode("RELATIONS");
 		if (relationsdetail != null) {
@@ -417,12 +435,13 @@ public class TreeView extends DefaultTreeCellRenderer {
 			relationsNodes.add(new DefaultMutableTreeNode(relationsdetail));
 		}
 		columnCategory.add(relationCategory);
-		patternCategory = new DefaultMutableTreeNode("PATTERNS");
-		if (patterndetail != null) {
-			patternCategory.add(new DefaultMutableTreeNode(patterndetail));
-			patternsNodes.add(new DefaultMutableTreeNode(patterndetail));
+		conditionCategory = new DefaultMutableTreeNode("CONDITIONS");
+		if (condition != null) {
+			conditionCategory.add(new DefaultMutableTreeNode(condition));
+			conditionsNodes.add(new DefaultMutableTreeNode(condition));
 		}
-		columnCategory.add(patternCategory);
+		columnCategory.add(conditionCategory);
+
 	}
 
 	private static void sortList(List<Tabledetail> tabledetails) {
@@ -470,6 +489,15 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultTreeModel model = (DefaultTreeModel) databaseTree.getModel();
 		model.reload(repoTreeTop);
 		JTreeUtil.colapse(databaseTree);
+	}
+
+	public void generateError(String msg) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageDialog.openError(composite.getShell(), "Error", msg);
+			}
+		});
 	}
 
 	private static void refreshProjectTree() {

@@ -42,7 +42,7 @@ public class FirstJob extends Job {
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor arg0) {
+	protected IStatus run(IProgressMonitor monitor) {
 		RefrehTreeTask refrehTreeTask;
 		if (importType == ImportType.EXCEL) {
 			ImportRepoExcelTask importRepoExcelTask = new ImportRepoExcelTask();

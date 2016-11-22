@@ -33,12 +33,14 @@ import dao.ProjectDao;
 import dao.impl.ProjectDAOImpl;
 import entity.Projectdetails;
 import entity.Tabledetail;
+import enums.ExportType;
 import exceptions.ReadEntityException;
 import job.GenerateDataJob2;
 
 public class ExecuteDialog extends Dialog {
 	private Text text;
 	private Text text_1;
+	Combo exportType;
 	private Spinner spinnerAll;
 	private Table table;
 	public List<Tabledetail> tabledetails;
@@ -68,16 +70,18 @@ public class ExecuteDialog extends Dialog {
 		container.setLayout(null);
 
 		Label lblProject_1 = new Label(container, SWT.NONE);
-		lblProject_1.setBounds(10, 179, 37, 15);
+		lblProject_1.setBounds(15, 194, 37, 15);
 		lblProject_1.setText("Project");
 
 		Combo combo = new Combo(container, SWT.NONE);
-		combo.setBounds(176, 176, 328, 23);
+		combo.setBounds(181, 191, 328, 23);
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				projectdetail = (Projectdetails) combo.getData(combo.getText());
 				tabledetails.clear();
+				selectedTabledetails.clear();
+				table.removeAll();
 				tabledetails.addAll(projectdetail.getSchemadetail().getTabledetails());
 				selectedTabledetails.addAll(tabledetails);
 				createTable(parent);
@@ -95,12 +99,12 @@ public class ExecuteDialog extends Dialog {
 		}
 
 		Label lblSelectTables = new Label(container, SWT.NONE);
-		lblSelectTables.setBounds(10, 208, 68, 15);
+		lblSelectTables.setBounds(15, 223, 68, 15);
 		lblSelectTables.setText("Select Tables");
 
 		table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		editor = new TableEditor(table);
-		table.setBounds(176, 205, 328, 210);
+		table.setBounds(181, 220, 328, 210);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -112,7 +116,7 @@ public class ExecuteDialog extends Dialog {
 				selectedTabledetails.addAll(tabledetails);
 			}
 		});
-		btnSelectAll.setBounds(174, 421, 75, 25);
+		btnSelectAll.setBounds(179, 447, 75, 25);
 		btnSelectAll.setText("Select All");
 
 		Button btnDeselectAll = new Button(container, SWT.NONE);
@@ -124,13 +128,13 @@ public class ExecuteDialog extends Dialog {
 				createTable(parent);
 			}
 		});
-		btnDeselectAll.setBounds(263, 421, 75, 25);
+		btnDeselectAll.setBounds(268, 447, 75, 25);
 		btnDeselectAll.setText("Deselect All");
 		// createTable(parent);
 
 		Group grpUserInput = new Group(container, SWT.NONE);
 		grpUserInput.setText("EXECUTION");
-		grpUserInput.setBounds(5, 10, 504, 152);
+		grpUserInput.setBounds(5, 10, 504, 175);
 
 		Label lblProject = new Label(grpUserInput, SWT.NONE);
 		lblProject.setBounds(10, 30, 133, 15);
@@ -147,21 +151,21 @@ public class ExecuteDialog extends Dialog {
 		lblDescription.setText("Description");
 
 		Label lblNoOfRows = new Label(grpUserInput, SWT.NONE);
-		lblNoOfRows.setBounds(10, 124, 156, 15);
+		lblNoOfRows.setBounds(10, 142, 156, 15);
 		lblNoOfRows.setText("No of Rows to Generate");
 
 		spinnerAll = new Spinner(grpUserInput, SWT.BORDER);
-		spinnerAll.setBounds(171, 119, 60, 22);
-		spinnerAll.setMaximum(1000);
+		spinnerAll.setBounds(171, 137, 60, 22);
+		spinnerAll.setMaximum(100000);
 		spinnerAll.setMinimum(0);
-		spinnerAll.setIncrement(10);
+		spinnerAll.setIncrement(100);
 
 		Label lblExportLocation = new Label(grpUserInput, SWT.NONE);
-		lblExportLocation.setBounds(10, 87, 133, 15);
+		lblExportLocation.setBounds(10, 116, 133, 15);
 		lblExportLocation.setText("Export Location");
 
 		exportLocation = new Text(grpUserInput, SWT.BORDER);
-		exportLocation.setBounds(171, 81, 242, 21);
+		exportLocation.setBounds(171, 110, 242, 21);
 
 		Button btnNewButton = new Button(grpUserInput, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -174,8 +178,18 @@ public class ExecuteDialog extends Dialog {
 				exportLocation.setText(selected);
 			}
 		});
-		btnNewButton.setBounds(419, 82, 75, 25);
+		btnNewButton.setBounds(419, 111, 75, 25);
 		btnNewButton.setText("Browse");
+
+		Label lblExportType = new Label(grpUserInput, SWT.NONE);
+		lblExportType.setBounds(10, 81, 99, 15);
+		lblExportType.setText("Export Type");
+
+		exportType = new Combo(grpUserInput, SWT.NONE);
+		for (int i = 0; i < ExportType.values().length; i++) {
+			exportType.add(ExportType.values()[i].toString());
+		}
+		exportType.setBounds(171, 81, 242, 23);
 
 		return container;
 	}
@@ -196,7 +210,8 @@ public class ExecuteDialog extends Dialog {
 			TableEditor editor = new TableEditor(table);
 			editor = new TableEditor(table);
 			Spinner spinner = new Spinner(table, SWT.NONE);
-			spinner.setIncrement(5);
+			spinner.setIncrement(50);
+			spinner.setMaximum(100000);
 			text.setText(spinner.getText());
 			editor.grabHorizontal = true;
 			editor.setEditor(spinner, items, 1);
@@ -258,6 +273,8 @@ public class ExecuteDialog extends Dialog {
 		generateDataJob2.setTableCount(tableCount);
 		generateDataJob2.setProjectId(projectdetail.getIdproject());
 		generateDataJob2.setExportPath(exportLocation.getText());
+		generateDataJob2.setProjectId(projectdetail.getIdproject());
+		generateDataJob2.setExportType(ExportType.valueOf(exportType.getText()));
 		generateDataJob2.schedule();
 		StatusDialog dialog = new StatusDialog(getParentShell(), "Generating Test Data - ");
 		dialog.open();

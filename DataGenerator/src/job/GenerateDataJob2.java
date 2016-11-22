@@ -20,6 +20,7 @@ import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
 import entity.generateEntity.RegenerateRelationCols;
 import entity.generateEntity.RegenerateUKForFK;
+import enums.ExportType;
 import enums.KeyType;
 import jobs.tasks.AddPartTask;
 import jobs.tasks.SortTableTask;
@@ -37,6 +38,7 @@ public class GenerateDataJob2 extends Job {
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	String exportPath;
 	int projectId;
+	ExportType exportType;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -52,8 +54,7 @@ public class GenerateDataJob2 extends Job {
 		System.out.println(sortTableTask.getTabledetailListSorted());
 		Master.INSTANCE.setSortedTableInLoadOrder(sortTableTask.getTabledetailListSorted());
 		GenerateColumnDataTask dataTask_1 = new GenerateColumnDataTask(sortTableTask.getTabledetailListSorted());
-		startTime = System.currentTimeMillis();
-		System.out.println("GenerateColumnDataTask started");
+		dataTask_1.setProjectId(projectId);
 		dataTask_1.execute();
 		Master.INSTANCE.printTimeElapsed(startTime, "GenerateColumnDataTask");
 		System.out.println(dataTask_1.getGeneratedTableData());
@@ -92,7 +93,7 @@ public class GenerateDataJob2 extends Job {
 				file.mkdirs();
 			}
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, file.getPath());
+					generatedTable, file.getPath(),exportType);
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -100,9 +101,9 @@ public class GenerateDataJob2 extends Job {
 			@Override
 			public void run() {
 				StatusDialog.updateTableName("Completed!");
-
 			}
 		});
+		Master.INSTANCE.setGeneratedTables(dataTask_1.getGeneratedTableData());
 		AddPartTask addPartTask = new AddPartTask("bundleclass://DataGenerator/datagenerator.parts.DisplayTablePart");
 		addPartTask.execute();
 		return Status.OK_STATUS;
@@ -163,4 +164,14 @@ public class GenerateDataJob2 extends Job {
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
+
+	public ExportType getExportType() {
+		return exportType;
+	}
+
+	public void setExportType(ExportType exportType) {
+		this.exportType = exportType;
+	}
+	
+	
 }

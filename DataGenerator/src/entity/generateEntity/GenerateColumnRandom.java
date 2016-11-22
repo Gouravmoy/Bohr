@@ -9,17 +9,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import entity.Conditions;
 import enums.PatternType;
 
 public class GenerateColumnRandom extends GeneratedColumn {
 	boolean isNullable = false;
 	boolean generateAllUnique = true;
 	BufferedWriter writer;
-	
+	int nextSeqNo = 0;
 
 	public void generateColumn() {
 		try {
@@ -100,21 +102,21 @@ public class GenerateColumnRandom extends GeneratedColumn {
 
 	private String generateRandomValue(int recordCount) {
 
-		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		final int N = alphabet.length();
+		// final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		// final int N = alphabet.length();
 		Random r = new Random();
 		StringBuilder builder = new StringBuilder();
-
 		try {
+			if (condition == null) {
+				setDefaultValues();
+			}
 			switch (columnType) {
+			case VARCHAR:
 			case CHAR:
 				while (recordCount > 0) {
 					builder = new StringBuilder();
-					int size = (int) (colLength <= 10 ? colLength : 10);
 					builder.append("\"");
-					for (int i = 0; i < size; i++) {
-						builder.append(alphabet.charAt(r.nextInt(N)));
-					}
+					builder.append(generateVarchar());
 					builder.append("\"");
 					builder.append("\n");
 					writer.write(builder.toString());
@@ -123,34 +125,24 @@ public class GenerateColumnRandom extends GeneratedColumn {
 						writer.flush();
 					}
 				}
+				nextSeqNo = 0;
 				break;
-			case VARCHAR:
-				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
-				while (recordCount > 0) {
-					builder = new StringBuilder();
-					builder.append("\"");
-					if (pattern == null) {
-						for (int i = 0; i < sizeVarchar; i++) {
-							builder.append(alphabet.charAt(r.nextInt(N)));
-						}
-					} else {
-						String patternString = pattern.getRegexpString();
-						generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar, patternString);
-					}
-					builder.append("\"");
-					builder.append("\n");
-					writer.write(builder.toString());
-					recordCount--;
-					if (recordCount % 50 == 0) {
-						writer.flush();
-					}
-				}
-				break;
+			/*
+			 * case VARCHAR: int sizeVarchar = (int) (colLength <= 10 ?
+			 * colLength : 10); builder.append("\""); if (pattern == null) { for
+			 * (int i = 0; i < sizeVarchar; i++) {
+			 * builder.append(alphabet.charAt(r.nextInt(N))); } } else { String
+			 * patternString = pattern.getRegexpString();
+			 * generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar,
+			 * patternString); }
+			 * 
+			 * builder.append("\""); break;
+			 */
 			case INTEGER:
-				int minimum = 1;
-				int maximum = 1000;
 				while (recordCount > 0) {
 					builder = new StringBuilder();
+					int minimum = (int) condition.getLowerLimit();
+					int maximum = (int) condition.getUpperLimit();
 					builder.append("" + minimum + (int) (Math.random() * maximum));
 					builder.append("\n");
 					writer.write(builder.toString());
@@ -161,10 +153,10 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				}
 				break;
 			case FLOAT:
-				float minX = 50.0f;
-				float maxX = 100.0f;
 				while (recordCount > 0) {
 					builder = new StringBuilder();
+					float minX = (float) condition.getLowerLimit();
+					float maxX = (float) condition.getUpperLimit();
 					float finalX = r.nextFloat() * (maxX - minX) + minX;
 					builder.append("" + finalX);
 					builder.append("\n");
@@ -177,9 +169,10 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				break;
 			case DECIMAL:
 				int upperBound = (int) Math.pow(10, colLength - colDecLenght);
+				upperBound = (int) (condition.getUpperLimit() <= upperBound ? condition.getUpperLimit() : upperBound);
 				while (recordCount > 0) {
 					builder = new StringBuilder();
-					String finalXDec = getRandomValue(r, 0, upperBound, colDecLenght);
+					String finalXDec = getRandomValue(r, (int) condition.getLowerLimit(), upperBound, colDecLenght);
 					builder.append("" + finalXDec);
 					builder.append("\n");
 					writer.write(builder.toString());
@@ -203,9 +196,10 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				}
 				break;
 			case DATE:
-				String startDate = "2013-02-08 00:00:00";
-				String endDate = "2016-02-08 00:58:00";
 				String finalDateFormat = "yyyy-MM-dd hh:mm:ss";
+				SimpleDateFormat dateFormat = new SimpleDateFormat(finalDateFormat);
+				String startDate = dateFormat.format(condition.getDateLowerLimit());
+				String endDate = dateFormat.format(condition.getDateUpperLimit());
 				long rangebegin = Timestamp.valueOf(startDate).getTime();
 				long rangeend = Timestamp.valueOf(endDate).getTime();
 				long diff = rangeend - rangebegin + 1;
@@ -213,7 +207,6 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					builder = new StringBuilder();
 					Timestamp rand = new Timestamp(rangebegin + (long) (Math.random() * diff));
 					Date date = new Date(rand.getTime());
-					SimpleDateFormat dateFormat = new SimpleDateFormat(finalDateFormat);
 					builder.append("\"");
 					builder.append("" + dateFormat.format(date));
 					builder.append("\"");
@@ -226,17 +219,17 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				}
 				break;
 			case YEAR:
-				String startDate1 = "1900-02-08 00:00:00";
-				String endDate1 = "2100-02-08 00:58:00";
 				String finalDateFormat1 = "yyyy";
-				long rangebegin1 = Timestamp.valueOf(startDate1).getTime();
-				long rangeend1 = Timestamp.valueOf(endDate1).getTime();
+				SimpleDateFormat dateFormat1 = new SimpleDateFormat(finalDateFormat1);
+				String startDate1 = dateFormat1.format(condition.getDateLowerLimit());
+				String endDate1 = dateFormat1.format(condition.getDateUpperLimit());
+				long rangebegin1 = Long.parseLong(startDate1);
+				long rangeend1 = Long.parseLong(endDate1);
 				long diff1 = rangeend1 - rangebegin1 + 1;
 				while (recordCount > 0) {
 					builder = new StringBuilder();
 					Timestamp rand1 = new Timestamp(rangebegin1 + (long) (Math.random() * diff1));
 					Date date1 = new Date(rand1.getTime());
-					SimpleDateFormat dateFormat1 = new SimpleDateFormat(finalDateFormat1);
 					builder.append("\"");
 					builder.append("" + dateFormat1.format(date1));
 					builder.append("\"");
@@ -252,10 +245,138 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				System.out.println("Incorrect Data Type");
 				break;
 			}
+		} catch (IllegalArgumentException err) {
+			err.printStackTrace();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
 		return builder.toString();
+
+	}
+
+	private void setDefaultValues() throws ParseException {
+		condition = new Conditions();
+		condition.setConditionDesc("DEFAULT CONDITIONS");
+		condition.setStartWith(null);
+		condition.setEndsWith(null);
+		condition.setGenerateRandom(true);
+		condition.setSequenceNo(0);
+		condition.setSizeLimit((int) (colLength <= 10 ? colLength : 10));
+		condition.setUpperLimit(100);
+		condition.setLowerLimit(0);
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date parsed = format.parse("20000101");
+		parsed = format.parse("20000101");
+		condition.setDateLowerLimit(new java.sql.Date(parsed.getTime()));
+		parsed = format.parse("21000101");
+		condition.setDateUpperLimit(new java.sql.Date(parsed.getTime()));
+	}
+
+	private String generateVarchar() {
+		int preFixLen = 0;
+		int postFixLen = 0;
+		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		final int N = alphabet.length();
+		Random r = new Random();
+		StringBuilder builder = new StringBuilder();
+		if (colName.equals("web_page")) {
+			System.out.println("Debug");
+		}
+
+		if (condition.getSizeLimit() != 0) {
+			int size = (int) (condition.getSizeLimit() <= colLength ? condition.getSizeLimit() : colLength);
+			if (condition.getSizeLimit() > 0) {
+				if (condition.getStartWith() != null)
+					preFixLen = condition.getStartWith().length();
+				if (condition.getEndsWith() != null)
+					postFixLen = condition.getEndsWith().length();
+				if (preFixLen > 0 && postFixLen > 0) {
+					if (preFixLen + postFixLen >= colLength) {
+						String returnValue = condition.getStartWith() + condition.getEndsWith();
+						return returnValue.substring(0, (int) colLength);
+					} else {
+						int noOfRandom = (int) (colLength - (preFixLen + postFixLen));
+						builder = new StringBuilder();
+						for (int i = 0; i < noOfRandom; i++) {
+							builder.append(alphabet.charAt(r.nextInt(N)));
+						}
+						return condition.getStartWith() + builder.toString() + condition.getEndsWith();
+					}
+				} else if (preFixLen > 0) {
+					builder.append(generatePreFix(size, (int) colLength, true));
+				} else if (postFixLen > 0) {
+					builder.append(generatePreFix(size, (int) colLength, false));
+				} else {
+					for (int i = 0; i < size; i++) {
+						builder.append(alphabet.charAt(r.nextInt(N)));
+					}
+				}
+			} else {
+				return "";
+			}
+		} else {
+			return "";
+		}
+		return builder.toString();
+	}
+
+	public String generatePreFix(int length, int max, boolean isPreFix) {
+		StringBuilder builder = new StringBuilder();
+		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		final int N = alphabet.length();
+		Random r = new Random();
+		String returnValue = "";
+		if (condition.isGenerateRandom()) {
+			builder = new StringBuilder();
+			for (int i = 0; i < length; i++) {
+				builder.append(alphabet.charAt(r.nextInt(N)));
+			}
+			if (isPreFix) {
+				int randomToGenerate = (int) (length - (condition.getStartWith().length()));
+				returnValue = condition.getStartWith() + builder.toString().substring(0, randomToGenerate);
+				if (returnValue.length() > max)
+					return returnValue.substring(0, max);
+				else
+					return returnValue;
+			} else {
+				int randomToGenerate = (int) (length - (condition.getEndsWith().length()));
+				returnValue = builder.toString().substring(0, randomToGenerate) + condition.getEndsWith();
+				if (returnValue.length() > max)
+					return returnValue.substring(returnValue.length() - max, returnValue.length());
+				else
+					return returnValue;
+			}
+		} else {
+			if(nextSeqNo==53){
+				System.out.println("Debug");
+			}
+			builder = new StringBuilder();
+			int size = (int) (condition.getSizeLimit() <= colLength ? condition.getSizeLimit() : colLength);
+			if (nextSeqNo == 0) {
+				nextSeqNo = condition.getSequenceNo();
+			}
+			if (isPreFix) {
+				int randomToGenerate = (int) (size
+						- (condition.getStartWith().length() + (int) (Math.log10(nextSeqNo) + 1)));
+				for (int i = 0; i < randomToGenerate; i++) {
+					builder.append(alphabet.charAt(r.nextInt(N)));
+				}
+				returnValue = condition.getStartWith() + builder.toString() + (nextSeqNo++) + "";
+			} else {
+				int randomToGenerate = (int) (size
+						- (condition.getEndsWith().length() + (int) (Math.log10(nextSeqNo) + 1)));
+				for (int i = 0; i < randomToGenerate; i++) {
+					builder.append(alphabet.charAt(r.nextInt(N)));
+				}
+				returnValue = (nextSeqNo++) + builder.toString() + condition.getEndsWith() + "";
+			}
+			if (returnValue.length() > size) {
+				int startValue = returnValue.length() - size;
+				return returnValue.substring(startValue, returnValue.length());
+			} else {
+				return returnValue;
+			}
+		}
 
 	}
 

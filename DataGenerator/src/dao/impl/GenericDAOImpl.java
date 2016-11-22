@@ -300,9 +300,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 	}
 
 	private void startOpereation() {
-		
+
 		if (Master.INSTANCE.getEnvironment() == Environment.PROD) {
-			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
+			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.prod.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.TEST) {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		} else if (Master.INSTANCE.getEnvironment() == Environment.STAGING) {
@@ -312,8 +312,10 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		}
 		String ip = System.getProperty("database_url");
 		ip = ip.trim();
-		configuration.setProperty("hibernate.connection.url",
-				"jdbc:derby://" + ip + ":1527/" + "omega_staging" + ";create=true");
+		if (Master.INSTANCE.getEnvironment() != Environment.STAGING) {
+			configuration.setProperty("hibernate.connection.url",
+					"jdbc:derby://" + ip + ":1527/" + "omega_staging" + ";create=true");
+		}
 		if (Master.INSTANCE.isClearAll())
 			configuration.setProperty("hibernate.hbm2ddl.auto", "create");
 		else
