@@ -345,6 +345,9 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					return returnValue;
 			}
 		} else {
+			if(nextSeqNo==53){
+				System.out.println("Debug");
+			}
 			builder = new StringBuilder();
 			int size = (int) (condition.getSizeLimit() <= colLength ? condition.getSizeLimit() : colLength);
 			if (nextSeqNo == 0) {
