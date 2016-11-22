@@ -158,7 +158,7 @@ public class ExecuteDialog extends Dialog {
 		spinnerAll.setBounds(171, 137, 60, 22);
 		spinnerAll.setMaximum(100000);
 		spinnerAll.setMinimum(0);
-		spinnerAll.setIncrement(10);
+		spinnerAll.setIncrement(100);
 
 		Label lblExportLocation = new Label(grpUserInput, SWT.NONE);
 		lblExportLocation.setBounds(10, 116, 133, 15);
@@ -210,7 +210,8 @@ public class ExecuteDialog extends Dialog {
 			TableEditor editor = new TableEditor(table);
 			editor = new TableEditor(table);
 			Spinner spinner = new Spinner(table, SWT.NONE);
-			spinner.setIncrement(5);
+			spinner.setIncrement(50);
+			spinner.setMaximum(100000);
 			text.setText(spinner.getText());
 			editor.grabHorizontal = true;
 			editor.setEditor(spinner, items, 1);

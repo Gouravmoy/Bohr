@@ -223,8 +223,8 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				SimpleDateFormat dateFormat1 = new SimpleDateFormat(finalDateFormat1);
 				String startDate1 = dateFormat1.format(condition.getDateLowerLimit());
 				String endDate1 = dateFormat1.format(condition.getDateUpperLimit());
-				long rangebegin1 = Timestamp.valueOf(startDate1).getTime();
-				long rangeend1 = Timestamp.valueOf(endDate1).getTime();
+				long rangebegin1 = Long.parseLong(startDate1);
+				long rangeend1 = Long.parseLong(endDate1);
 				long diff1 = rangeend1 - rangebegin1 + 1;
 				while (recordCount > 0) {
 					builder = new StringBuilder();
@@ -245,6 +245,8 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				System.out.println("Incorrect Data Type");
 				break;
 			}
+		} catch (IllegalArgumentException err) {
+			err.printStackTrace();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}

@@ -78,7 +78,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				int rowCount = numberOfRows;
 				StringBuilder builder = new StringBuilder();
 				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
-				if (pattern == null) {
+				if (condition == null) {
 					String baseString = "";
 
 					builder.append("\"");
@@ -99,7 +99,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 					bufferedWriter.flush();
 					bufferedWriter.close();
 				} else {
-					String patternString = pattern.getRegexpString();
+					String patternString = condition.getStartWith();
 					while (rowCount > 0) {
 						builder = new StringBuilder();
 						builder.append(patternString + "_" + rowCount);

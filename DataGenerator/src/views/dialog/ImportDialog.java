@@ -68,6 +68,7 @@ public class ImportDialog extends Dialog {
 
 		text_2 = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
 		return parent;
 
 	}
@@ -89,7 +90,7 @@ public class ImportDialog extends Dialog {
 		DatabaseDao databaseDao = new DatabaseDAOImpl();
 		Databasedetail databasedetail = new Databasedetail();
 		databasedetail.setConnectionName(text.getText());
-		databasedetail.setDescription("jdbc:mysql://localhost:3306/sakila_test");
+		databasedetail.setDescription("jdbc:mysql://localhost:3306/hr");
 		databasedetail.setUsername("root");
 		databasedetail.setPassword("root");
 		databasedetail.setType(DBType.MYSQL);
