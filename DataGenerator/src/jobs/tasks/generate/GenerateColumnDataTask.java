@@ -59,7 +59,7 @@ public class GenerateColumnDataTask extends Task {
 		int rowRank = 1;
 		String textFilePath;
 		for (Tabledetail tabledetail : sortedTableList) {
-			System.out.println("Generating Data for Table - "+tabledetail.getTableName());
+			System.out.println("Generating Data for Table - " + tabledetail.getTableName());
 			generatedTableList.add(tabledetail.getTableName());
 			GeneratedTable generatedTable = new GeneratedTable();
 			generatedTable.setTableName(tabledetail.getTableName());
@@ -71,9 +71,11 @@ public class GenerateColumnDataTask extends Task {
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
-				if (columnsdetail.getDatasamplemodel() != null&&columnsdetail.getConditions()==null) {
+				if (columnsdetail.getDatasamplemodel() != null
+						&& columnsdetail.getDatasamplemodel().getProjectdetail().getIdproject() == projectId
+						&& columnsdetail.getConditions() == null) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
-				} else if (columnsdetail.getPredefinedModel() != null&&columnsdetail.getConditions()==null) {
+				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions() == null) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
@@ -120,7 +122,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		//generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
@@ -140,7 +142,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		//generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setCondition(columnsdetail.getConditions());
 		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
@@ -179,7 +181,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(false);
-		//generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
@@ -230,6 +232,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(true);
+		generatedColumn.setCondition(columnsdetail.getConditions());
 		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
@@ -273,7 +276,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
-		//generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();

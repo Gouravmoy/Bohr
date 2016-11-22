@@ -198,7 +198,8 @@ public class ExecuteDialog extends Dialog {
 			TableEditor editor = new TableEditor(table);
 			editor = new TableEditor(table);
 			Spinner spinner = new Spinner(table, SWT.NONE);
-			spinner.setIncrement(5);
+			spinner.setIncrement(50);
+			spinner.setMaximum(100000);
 			text.setText(spinner.getText());
 			editor.grabHorizontal = true;
 			editor.setEditor(spinner, items, 1);
