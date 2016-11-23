@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import dao.ConditionsDao;
 import dao.impl.ConditionsDaoImpl;
 import entity.Columnsdetail;
+import entity.ConditionKey;
 import entity.Conditions;
 import entity.Projectdetails;
 import exceptions.PersistException;
@@ -268,8 +269,10 @@ public class ConditionsDialog extends Dialog {
 		Conditions conditions = new Conditions();
 		conditions.setColumnsdetail(columnsdetail);
 		conditions.setProjectdetail(project);
+		ConditionKey conditionKey = new ConditionKey(columnsdetail.getIdcolumnsdetails(), project.getIdproject());
 		conditions.setGenerateRandom(btnGenerateRandom.getSelection());
 		conditions.setSizeLimit((int) columnsdetail.getLength());
+		conditions.setConditionKey(conditionKey);
 		assignConditions(conditions);
 		try {
 			conditionsDao.saveConditions(conditions);

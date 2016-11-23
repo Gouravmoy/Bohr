@@ -29,6 +29,7 @@ import dao.DatabaseDao;
 import dao.impl.DataSampleDaoImpl;
 import dao.impl.DatabaseDAOImpl;
 import entity.Columnsdetail;
+import entity.DataSampleModelKey;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Projectdetails;
@@ -254,7 +255,6 @@ public class DataModelDialog extends Dialog {
 	protected void okPressed() {
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
 		RefrehTreeTask refrehTreeTask;
-		// datasamplemodel.setSampleModelName(text.getText());
 		StringBuilder sb = new StringBuilder();
 		for (String modelValue : modelValues) {
 			sb.append(modelValue + ",");
@@ -262,9 +262,13 @@ public class DataModelDialog extends Dialog {
 		datasamplemodel.setDatasamplemodelcol(sb.toString());
 		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
 		projectName.getData(projectName.getText());
-		datasamplemodel.setProjectdetail((Projectdetails) projectName.getData(projectName.getText()));
+		Projectdetails projectdetails = (Projectdetails) projectName.getData(projectName.getText());
+		datasamplemodel.setProjectdetail(projectdetails);
 		datasamplemodel.setColumnsdetail(columnsdetail);
+		DataSampleModelKey dataSampleModelKey = new DataSampleModelKey(columnsdetail.getIdcolumnsdetails(),
+				projectdetails.getIdproject());
 		datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
+		datasamplemodel.setConditionKey(dataSampleModelKey);
 		try {
 			dataSampleDao.saveDatasamplemodel(datasamplemodel);
 		} catch (PersistException e) {

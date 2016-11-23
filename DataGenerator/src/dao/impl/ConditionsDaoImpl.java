@@ -48,13 +48,6 @@ public class ConditionsDaoImpl extends GenericDAOImpl<Conditions, Integer> imple
 
 	@Override
 	public void update(Conditions conditions) throws EntityNotPresent {
-		try {
-			update(Conditions.class, conditions.getIdConditions(), conditions);
-		} catch (EntityNotPresent err) {
-			throw new EntityNotPresent("Could not get Update Conditions Information");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

@@ -223,26 +223,36 @@ public class TreeView extends DefaultTreeCellRenderer {
 		createDataModel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				Projectdetails projectdetails = null;
 				JTree currentSelectedTree = null;
 				DefaultMutableTreeNode node = null;
 				System.out.println("Here");
 				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				while (node.getParent() != null) {
+					System.out.println(node);
+					System.out.println(node.getFirstLeaf());
+					node = (DefaultMutableTreeNode) node.getParent();
+					if (node.getUserObject() instanceof Projectdetails) {
+						projectdetails = (Projectdetails) node.getUserObject();
+					}
+				}
 				if (selectedComponent instanceof JTree) {
 					currentSelectedTree = (JTree) selectedComponent;
 					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				openEditWizard(node, projectdetails);
 			}
 
-			private void openEditWizard(DefaultMutableTreeNode node) {
+			private void openEditWizard(DefaultMutableTreeNode node, Projectdetails projectdetails) {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail,
-								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail, projectdetails);
 						dialog.open();
 					}
 				});
@@ -405,8 +415,13 @@ public class TreeView extends DefaultTreeCellRenderer {
 		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
 				projectId);
 
-		if(columnsdetail.getConditions()!=null&&columnsdetail.getConditions().getProjectdetail().getIdproject()==projectId){
-			condition = columnsdetail.getConditions();
+		if (columnsdetail.getConditions() != null) {
+			for (Conditions conditions : columnsdetail.getConditions()) {
+				if (conditions.getProjectdetail().getIdproject() == projectId) {
+					condition = conditions;
+				}
+			}
+
 		}
 		relationCategory = new DefaultMutableTreeNode("RELATIONS");
 		if (relationsdetail != null) {
@@ -415,12 +430,12 @@ public class TreeView extends DefaultTreeCellRenderer {
 		}
 		columnCategory.add(relationCategory);
 		conditionCategory = new DefaultMutableTreeNode("CONDITIONS");
-		if(condition!=null){
+		if (condition != null) {
 			conditionCategory.add(new DefaultMutableTreeNode(condition));
 			conditionsNodes.add(new DefaultMutableTreeNode(condition));
 		}
 		columnCategory.add(conditionCategory);
-		
+
 	}
 
 	private static void sortList(List<Tabledetail> tabledetails) {

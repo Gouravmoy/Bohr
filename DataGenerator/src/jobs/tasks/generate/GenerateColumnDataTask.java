@@ -14,6 +14,7 @@ import org.apache.tools.ant.Task;
 
 import entity.Columnsdetail;
 import entity.Constraintsdetail;
+import entity.Datasamplemodel;
 import entity.Relationsdetail;
 import entity.Tabledetail;
 import entity.generateEntity.GenerateColumnPreDefined;
@@ -71,9 +72,8 @@ public class GenerateColumnDataTask extends Task {
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
-				if (columnsdetail.getDatasamplemodel() != null
-						&& columnsdetail.getDatasamplemodel().getProjectdetail().getIdproject() == projectId
-						&& columnsdetail.getConditions() == null) {
+				if (!columnsdetail.getDatasamplemodel().isEmpty() && checkProjectId(columnsdetail.getDatasamplemodel())
+						&& columnsdetail.getConditions().isEmpty()) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions() == null) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
@@ -109,6 +109,20 @@ public class GenerateColumnDataTask extends Task {
 		}
 	}
 
+	private boolean checkProjectId(List<Datasamplemodel> list) {
+		boolean returnValue = false;
+		Iterator<Datasamplemodel> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Datasamplemodel datasamplemodel = iterator.next();
+			if (datasamplemodel.getProjectdetail().getIdproject() != projectId) {
+				iterator.remove();
+			} else {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}
+
 	private void generateRelationColumnms(Columnsdetail columnsdetail, String textFilePath) {
 
 	}
@@ -122,8 +136,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -143,12 +155,12 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
-			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+			Datasamplemodel datasamplemodel = columnsdetail.getDatasamplemodel().iterator().next();
+			generatedColumn.setPreDefinedValues(datasamplemodel.getDatasamplemodelcol());
 			generatedColumn.setFileReopen(true);
-			if (!columnsdetail.getDatasamplemodel().isRepeteableIndex()) {
+			if (!datasamplemodel.isRepeteableIndex()) {
 				generatedColumn.setFileReopen(false);
 				generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
 			}
@@ -182,7 +194,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(false);
 		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -208,7 +219,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setFileReopen(b);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -232,8 +242,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(true);
-		generatedColumn.setCondition(columnsdetail.getConditions());
-		generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -276,9 +284,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();

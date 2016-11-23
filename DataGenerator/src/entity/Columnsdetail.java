@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,8 +18,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import enums.ColumnType;
 import enums.KeyType;
@@ -58,14 +61,13 @@ public class Columnsdetail implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private ColumnType type;
 
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
-	private Datasamplemodel datasamplemodel;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Datasamplemodel> datasamplemodel;
 
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
-	private Patterndetail patterndetail;
-
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
-	private Conditions conditions;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<Conditions> conditions;
 
 	@ManyToOne
 	@JoinColumn(name = "tableId", nullable = false)
@@ -152,20 +154,16 @@ public class Columnsdetail implements Serializable {
 		this.type = type;
 	}
 
-	public Datasamplemodel getDatasamplemodel() {
-		return this.datasamplemodel;
+	public List<Datasamplemodel> getDatasamplemodel() {
+		return datasamplemodel;
 	}
 
-	public void setDatasamplemodel(Datasamplemodel datasamplemodel) {
+	public void setDatasamplemodel(List<Datasamplemodel> datasamplemodel) {
 		this.datasamplemodel = datasamplemodel;
 	}
 
-	public Patterndetail getPatterndetail() {
-		return patterndetail;
-	}
-
-	public void setPatterndetail(Patterndetail patterndetail) {
-		this.patterndetail = patterndetail;
+	public void setConditions(List<Conditions> conditions) {
+		this.conditions = conditions;
 	}
 
 	public Tabledetail getTabledetail() {
@@ -252,12 +250,8 @@ public class Columnsdetail implements Serializable {
 		this.predefinedModel = predefinedModel;
 	}
 
-	public Conditions getConditions() {
+	public List<Conditions> getConditions() {
 		return conditions;
-	}
-
-	public void setConditions(Conditions conditions) {
-		this.conditions = conditions;
 	}
 
 }
