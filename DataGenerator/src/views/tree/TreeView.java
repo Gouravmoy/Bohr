@@ -139,6 +139,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		popup.add(createRelations);
 		popup.add(createDataModel);
 		popup.add(createConditions);
+		popup.add(edit);
 		initilizeTrees(frame);
 
 		try {
@@ -254,6 +255,45 @@ public class TreeView extends DefaultTreeCellRenderer {
 						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
 						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail, projectdetails);
 						dialog.open();
+					}
+				});
+			}
+		});
+
+		edit = new JMenuItem("Edit");
+		edit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node);
+
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Dialog dialog;
+						if (node.getUserObject() instanceof Datasamplemodel) {
+							Datasamplemodel datasamplemodel = (Datasamplemodel) node.getUserObject();
+							dialog = new DataModelDialog(composite.getShell(), datasamplemodel);
+							dialog.open();
+						} else if (node.getUserObject() instanceof Conditions) {
+							Conditions condition = (Conditions) node.getUserObject();
+							dialog = new ConditionsDialog(composite.getShell(), condition);
+							dialog.open();
+						}
 					}
 				});
 			}

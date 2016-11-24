@@ -13,6 +13,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import entity.Columnsdetail;
+import entity.Conditions;
 import entity.Constraintsdetail;
 import entity.Datasamplemodel;
 import entity.Relationsdetail;
@@ -72,8 +73,8 @@ public class GenerateColumnDataTask extends Task {
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
 				textFilePath = tableFolder.getPath() + "\\";
-				if (!columnsdetail.getDatasamplemodel().isEmpty() && checkProjectId(columnsdetail.getDatasamplemodel())
-						&& columnsdetail.getConditions().isEmpty()) {
+				if (!columnsdetail.getDatasamplemodel().isEmpty()
+						&& checkProjectDataSampleId(columnsdetail.getDatasamplemodel())) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions() == null) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
@@ -109,20 +110,6 @@ public class GenerateColumnDataTask extends Task {
 		}
 	}
 
-	private boolean checkProjectId(List<Datasamplemodel> list) {
-		boolean returnValue = false;
-		Iterator<Datasamplemodel> iterator = list.iterator();
-		while (iterator.hasNext()) {
-			Datasamplemodel datasamplemodel = iterator.next();
-			if (datasamplemodel.getProjectdetail().getIdproject() != projectId) {
-				iterator.remove();
-			} else {
-				returnValue = true;
-			}
-		}
-		return returnValue;
-	}
-
 	private void generateRelationColumnms(Columnsdetail columnsdetail, String textFilePath) {
 
 	}
@@ -154,7 +141,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		startTime = System.currentTimeMillis();
 		if (columnsdetail.getDatasamplemodel() != null) {
 			Datasamplemodel datasamplemodel = columnsdetail.getDatasamplemodel().iterator().next();
@@ -241,7 +227,10 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setForeignKey(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		generatedColumn.setFileReopen(true);
+		generatedColumn.setFileReopen(false);
+		if (checkPrjectCondition(columnsdetail.getConditions())) {
+			generatedColumn.setCondition(columnsdetail.getConditions().get(0));
+		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -285,6 +274,9 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
+		if (checkPrjectCondition(columnsdetail.getConditions())) {
+			generatedColumn.setCondition(columnsdetail.getConditions().get(0));
+		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -312,4 +304,31 @@ public class GenerateColumnDataTask extends Task {
 		this.projectId = projectId;
 	}
 
+	private boolean checkProjectDataSampleId(List<Datasamplemodel> list) {
+		boolean returnValue = false;
+		Iterator<Datasamplemodel> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Datasamplemodel datasamplemodel = iterator.next();
+			if (datasamplemodel.getProjectdetail().getIdproject() != projectId) {
+				iterator.remove();
+			} else {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}
+
+	private boolean checkPrjectCondition(List<Conditions> conditions) {
+		boolean returnValue = false;
+		Iterator<Conditions> iterator = conditions.iterator();
+		while (iterator.hasNext()) {
+			Conditions conditions2 = iterator.next();
+			if (conditions2.getProjectdetail().getIdproject() != projectId) {
+				iterator.remove();
+			} else {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}
 }

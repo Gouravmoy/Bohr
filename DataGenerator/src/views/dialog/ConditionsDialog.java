@@ -30,6 +30,7 @@ import views.listners.TestFeildVerifyListner;
 public class ConditionsDialog extends Dialog {
 
 	Columnsdetail columnsdetail;
+	Conditions conditions;
 
 	private Text stringStartsWith;
 	private Text stringEndsWith;
@@ -64,6 +65,14 @@ public class ConditionsDialog extends Dialog {
 		this.columnsdetail = columnsdetail;
 		conditionsDao = new ConditionsDaoImpl();
 		this.project = projectdetails;
+	}
+
+	public ConditionsDialog(Shell parentShell, Conditions conditions) {
+		super(parentShell);
+		this.conditions = conditions;
+		this.columnsdetail = conditions.getColumnsdetail();
+		conditionsDao = new ConditionsDaoImpl();
+		this.project = conditions.getProjectdetail();
 	}
 
 	@Override

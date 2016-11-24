@@ -34,6 +34,7 @@ import entity.Databasedetail;
 import entity.Datasamplemodel;
 import entity.Projectdetails;
 import enums.SampleType;
+import exceptions.EntityNotPresent;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
 import jobs.tasks.ConnectonCreateTask;
@@ -50,7 +51,7 @@ public class DataModelDialog extends Dialog {
 	private Combo modelType;
 	Columnsdetail columnsdetail;
 	Button buttonIsUnique;
-
+	Datasamplemodel datasamplemodel;
 	Projectdetails projectdetails;
 
 	List<String> modelValues;
@@ -67,6 +68,13 @@ public class DataModelDialog extends Dialog {
 		super(parentShell);
 		this.columnsdetail = sourceColumn;
 		this.projectdetails = projectdetails;
+	}
+
+	public DataModelDialog(Shell parentShell, Datasamplemodel datasamplemodel) {
+		super(parentShell);
+		this.datasamplemodel = datasamplemodel;
+		this.columnsdetail = datasamplemodel.getColumnsdetail();
+		this.projectdetails = datasamplemodel.getProjectdetail();
 	}
 
 	@Override
@@ -247,33 +255,53 @@ public class DataModelDialog extends Dialog {
 		} catch (ReadEntityException e1) {
 			showError("Error in fetching Database List" + e1.getMessage(), getShell());
 		}
+
+		if (this.datasamplemodel != null) {
+			seedList.setText(datasamplemodel.getDatasamplemodelcol());
+			buttonIsUnique.setSelection(datasamplemodel.isRepeteableIndex());
+		}
 		return parent;
 
 	}
 
 	@Override
 	protected void okPressed() {
-		Datasamplemodel datasamplemodel = new Datasamplemodel();
 		RefrehTreeTask refrehTreeTask;
-		StringBuilder sb = new StringBuilder();
-		for (String modelValue : modelValues) {
-			sb.append(modelValue + ",");
-		}
-		datasamplemodel.setDatasamplemodelcol(sb.toString());
-		datasamplemodel.setSampletype(SampleType.USER_DEFINED);
-		projectName.getData(projectName.getText());
-		Projectdetails projectdetails = (Projectdetails) projectName.getData(projectName.getText());
-		datasamplemodel.setProjectdetail(projectdetails);
-		datasamplemodel.setColumnsdetail(columnsdetail);
-		DataSampleModelKey dataSampleModelKey = new DataSampleModelKey(columnsdetail.getIdcolumnsdetails(),
-				projectdetails.getIdproject());
-		datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
-		datasamplemodel.setConditionKey(dataSampleModelKey);
-		try {
-			dataSampleDao.saveDatasamplemodel(datasamplemodel);
-		} catch (PersistException e) {
-			showError("Unable to Save", getShell());
-			e.printStackTrace();
+		if (this.datasamplemodel != null) {
+			StringBuilder sb = new StringBuilder();
+			for (String modelValue : modelValues) {
+				sb.append(modelValue + ",");
+			}
+			datasamplemodel.setDatasamplemodelcol(sb.toString());
+			datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
+			try {
+				dataSampleDao.update(datasamplemodel);
+			} catch (EntityNotPresent e) {
+				showError("Unable to Update", getShell());
+				e.printStackTrace();
+			}
+		} else {
+			Datasamplemodel datasamplemodel = new Datasamplemodel();
+			StringBuilder sb = new StringBuilder();
+			for (String modelValue : modelValues) {
+				sb.append(modelValue + ",");
+			}
+			datasamplemodel.setDatasamplemodelcol(sb.toString());
+			datasamplemodel.setSampletype(SampleType.USER_DEFINED);
+			projectName.getData(projectName.getText());
+			Projectdetails projectdetails = (Projectdetails) projectName.getData(projectName.getText());
+			datasamplemodel.setProjectdetail(projectdetails);
+			datasamplemodel.setColumnsdetail(columnsdetail);
+			DataSampleModelKey dataSampleModelKey = new DataSampleModelKey(columnsdetail.getIdcolumnsdetails(),
+					projectdetails.getIdproject());
+			datasamplemodel.setRepeteableIndex(buttonIsUnique.getSelection());
+			datasamplemodel.setConditionKey(dataSampleModelKey);
+			try {
+				dataSampleDao.saveDatasamplemodel(datasamplemodel);
+			} catch (PersistException e) {
+				showError("Unable to Save", getShell());
+				e.printStackTrace();
+			}
 		}
 		refrehTreeTask = new RefrehTreeTask();
 		refrehTreeTask.execute();

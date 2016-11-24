@@ -77,43 +77,27 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				int rowCount = numberOfRows;
 				StringBuilder builder = new StringBuilder();
 				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
+				String patternString = "";
 				if (condition == null) {
-					String baseString = "";
-
-					builder.append("\"");
 					for (int i = 0; i < sizeVarchar; i++) {
-						baseString += alphabet.charAt(r.nextInt(N));
+						patternString += alphabet.charAt(r.nextInt(N));
 					}
-					while (rowCount > 0) {
-						builder = new StringBuilder();
-						builder.append(baseString + "_" + rowCount);
-						rowCount--;
-						builder.append("\"");
-						builder.append("\n");
-						bufferedWriter.write(builder.toString());
-						if (rowCount % 100 == 0) {
-							bufferedWriter.flush();
-						}
-					}
-					bufferedWriter.flush();
-					bufferedWriter.close();
 				} else {
-					String patternString = condition.getStartWith();
-					while (rowCount > 0) {
-						builder = new StringBuilder();
-						builder.append(patternString + "_" + rowCount);
-						builder.append("\"");
-						builder.append("\n");
-						bufferedWriter.write(builder.toString());
-						rowCount--;
-						if (rowCount % 100 == 0) {
-							bufferedWriter.flush();
-						}
-					}
-					bufferedWriter.flush();
-					bufferedWriter.close();
+					patternString = condition.getStartWith();
 				}
-
+				while (rowCount > 0) {
+					builder = new StringBuilder();
+					builder.append(patternString + "_" + rowCount);
+					builder.append("\"");
+					builder.append("\n");
+					bufferedWriter.write(builder.toString());
+					rowCount--;
+					if (rowCount % 100 == 0) {
+						bufferedWriter.flush();
+					}
+				}
+				bufferedWriter.flush();
+				bufferedWriter.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -146,7 +130,6 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 
 		}
 	}
-
 
 	public int getStartValue() {
 		return startValue;

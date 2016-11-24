@@ -46,7 +46,7 @@ public class DataSampleDaoImpl extends GenericDAOImpl<Datasamplemodel, Integer> 
 	@Override
 	public void update(Datasamplemodel datasamplemodel) throws EntityNotPresent {
 		try {
-			update(datasamplemodel);
+			update(Datasamplemodel.class, 1, datasamplemodel);
 		} catch (EntityNotPresent err) {
 			throw new EntityNotPresent("Could not get Update Datasamplemodel Information");
 		} catch (Exception e) {
