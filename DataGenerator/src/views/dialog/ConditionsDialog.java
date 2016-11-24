@@ -23,6 +23,7 @@ import entity.Columnsdetail;
 import entity.ConditionKey;
 import entity.Conditions;
 import entity.Projectdetails;
+import exceptions.EntityNotPresent;
 import exceptions.PersistException;
 import jobs.tasks.RefrehTreeTask;
 import views.listners.TestFeildVerifyListner;
@@ -275,19 +276,29 @@ public class ConditionsDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		Conditions conditions = new Conditions();
-		conditions.setColumnsdetail(columnsdetail);
-		conditions.setProjectdetail(project);
-		ConditionKey conditionKey = new ConditionKey(columnsdetail.getIdcolumnsdetails(), project.getIdproject());
-		conditions.setGenerateRandom(btnGenerateRandom.getSelection());
-		conditions.setSizeLimit((int) columnsdetail.getLength());
-		conditions.setConditionKey(conditionKey);
-		assignConditions(conditions);
-		try {
-			conditionsDao.saveConditions(conditions);
-		} catch (PersistException e) {
-			showError("Condition Already Exists! Cannot Add new Condition", getShell());
-			e.printStackTrace();
+		if (this.conditions != null) {
+			assignConditions(this.conditions);
+			try {
+				conditionsDao.update(conditions);
+			} catch (EntityNotPresent e) {
+				showError("Unable to update", getShell());
+				e.printStackTrace();
+			}
+		} else {
+			Conditions conditions = new Conditions();
+			conditions.setColumnsdetail(columnsdetail);
+			conditions.setProjectdetail(project);
+			ConditionKey conditionKey = new ConditionKey(columnsdetail.getIdcolumnsdetails(), project.getIdproject());
+			conditions.setGenerateRandom(btnGenerateRandom.getSelection());
+			conditions.setSizeLimit((int) columnsdetail.getLength());
+			conditions.setConditionKey(conditionKey);
+			assignConditions(conditions);
+			try {
+				conditionsDao.saveConditions(conditions);
+			} catch (PersistException e) {
+				showError("Condition Already Exists! Cannot Add new Condition", getShell());
+				e.printStackTrace();
+			}
 		}
 		RefrehTreeTask refrehTreeTask = new RefrehTreeTask();
 		refrehTreeTask.execute();

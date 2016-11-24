@@ -194,24 +194,33 @@ public class TreeView extends DefaultTreeCellRenderer {
 			public void actionPerformed(ActionEvent event) {
 				JTree currentSelectedTree = null;
 				DefaultMutableTreeNode node = null;
-				System.out.println("Here");
+				Projectdetails projectdetails = null;
 				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				while (node.getParent() != null) {
+					System.out.println(node);
+					System.out.println(node.getFirstLeaf());
+					node = (DefaultMutableTreeNode) node.getParent();
+					if (node.getUserObject() instanceof Projectdetails) {
+						projectdetails = (Projectdetails) node.getUserObject();
+					}
+				}
 				if (selectedComponent instanceof JTree) {
 					currentSelectedTree = (JTree) selectedComponent;
 					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				openEditWizard(node, projectdetails);
 			}
 
-			private void openEditWizard(DefaultMutableTreeNode node) {
+			private void openEditWizard(DefaultMutableTreeNode node, Projectdetails projectdetails) {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-						Dialog dialog = new ConditionsDialog(composite.getShell(), columnsdetail,
-								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						Dialog dialog = new ConditionsDialog(composite.getShell(), columnsdetail, projectdetails);
 						dialog.open();
 					}
 				});
