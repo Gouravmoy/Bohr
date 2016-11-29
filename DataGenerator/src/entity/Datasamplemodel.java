@@ -3,21 +3,15 @@ package entity;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import enums.SampleType;
 
@@ -31,12 +25,16 @@ import enums.SampleType;
 public class Datasamplemodel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "columnsdetail"))
-	@Id
-	@GeneratedValue(generator = "generator")
-	
-	@Column(name = "iddatasamplemodel")
-	private int iddatasamplemodel;
+	@EmbeddedId
+	DataSampleModelKey conditionKey;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "columnId", insertable = false, updatable = false)
+	Columnsdetail columnsdetail;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "projectId", insertable = false, updatable = false)
+	Projectdetails projectdetail;
 
 	@Column(length = 30000)
 	private String datasamplemodelcol;
@@ -44,26 +42,10 @@ public class Datasamplemodel implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private SampleType sampletype;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@PrimaryKeyJoinColumn
-	private Columnsdetail columnsdetail;
-
-	@ManyToOne
-	@JoinColumn(name = "idproject")
-	private Projectdetails projectdetail;
-
 	@Column
 	boolean repeteableIndex;
 
 	public Datasamplemodel() {
-	}
-
-	public int getIddatasamplemodel() {
-		return iddatasamplemodel;
-	}
-
-	public void setIddatasamplemodel(int iddatasamplemodel) {
-		this.iddatasamplemodel = iddatasamplemodel;
 	}
 
 	public String getDatasamplemodelcol() {
@@ -109,6 +91,14 @@ public class Datasamplemodel implements Serializable {
 
 	public void setRepeteableIndex(boolean repeteableIndex) {
 		this.repeteableIndex = repeteableIndex;
+	}
+
+	public DataSampleModelKey getConditionKey() {
+		return conditionKey;
+	}
+
+	public void setConditionKey(DataSampleModelKey conditionKey) {
+		this.conditionKey = conditionKey;
 	}
 
 }

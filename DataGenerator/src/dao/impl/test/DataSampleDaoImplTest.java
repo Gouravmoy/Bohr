@@ -107,7 +107,7 @@ public class DataSampleDaoImplTest {
 	public void testUpdate_1() throws Exception {
 		DataSampleDaoImpl fixture = new DataSampleDaoImpl();
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
-		datasamplemodel.setIddatasamplemodel(1);
+	//	((Object) datasamplemodel).setIddatasamplemodel(1);
 
 		fixture.update(datasamplemodel);
 	}
@@ -123,7 +123,7 @@ public class DataSampleDaoImplTest {
 	public void testUpdate_2() throws Exception {
 		DataSampleDaoImpl fixture = new DataSampleDaoImpl();
 		Datasamplemodel datasamplemodel = new Datasamplemodel();
-		datasamplemodel.setIddatasamplemodel(1);
+		//datasamplemodel.setIddatasamplemodel(1);
 
 		fixture.update(datasamplemodel);
 	}

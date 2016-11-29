@@ -20,8 +20,10 @@ import org.eclipse.swt.widgets.Text;
 import dao.ConditionsDao;
 import dao.impl.ConditionsDaoImpl;
 import entity.Columnsdetail;
+import entity.ConditionKey;
 import entity.Conditions;
 import entity.Projectdetails;
+import exceptions.EntityNotPresent;
 import exceptions.PersistException;
 import jobs.tasks.RefrehTreeTask;
 import views.listners.TestFeildVerifyListner;
@@ -29,12 +31,13 @@ import views.listners.TestFeildVerifyListner;
 public class ConditionsDialog extends Dialog {
 
 	Columnsdetail columnsdetail;
+	Conditions conditions;
 
 	private Text stringStartsWith;
 	private Text stringEndsWith;
 	private Text numericLowLimit;
 	private Text numericUpLimit;
-	//private Text numLength;
+	// private Text numLength;
 	private DateTime dateLowerLimit;
 	private DateTime dateUpperLimit;
 
@@ -58,11 +61,22 @@ public class ConditionsDialog extends Dialog {
 	private Text stringLength;
 	private Label lblMaxLengthReplace;
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ConditionsDialog(Shell parentShell, Columnsdetail columnsdetail, Projectdetails projectdetails) {
 		super(parentShell);
 		this.columnsdetail = columnsdetail;
 		conditionsDao = new ConditionsDaoImpl();
 		this.project = projectdetails;
+	}
+
+	public ConditionsDialog(Shell parentShell, Conditions conditions) {
+		super(parentShell);
+		this.conditions = conditions;
+		this.columnsdetail = conditions.getColumnsdetail();
+		conditionsDao = new ConditionsDaoImpl();
+		this.project = conditions.getProjectdetail();
 	}
 
 	@Override
@@ -148,9 +162,11 @@ public class ConditionsDialog extends Dialog {
 		lblLength.setBounds(10, 24, 55, 15);
 		lblLength.setText("Length");
 
-		/*numLength = new Text(grpNumberConditions, SWT.BORDER);
-		numLength.setBounds(90, 24, 113, 21);
-		numLength.addVerifyListener(new TestFeildVerifyListner());*/
+		/*
+		 * numLength = new Text(grpNumberConditions, SWT.BORDER);
+		 * numLength.setBounds(90, 24, 113, 21); numLength.addVerifyListener(new
+		 * TestFeildVerifyListner());
+		 */
 
 		grpDateConditions = new Group(container, SWT.NONE);
 		grpDateConditions.setText("Date Conditions");
@@ -196,6 +212,7 @@ public class ConditionsDialog extends Dialog {
 		btnGenerateRandom = new Button(grpStringConditions, SWT.RADIO);
 		btnGenerateRandom.setText("Generate Random");
 		btnGenerateRandom.setBounds(181, 85, 135, 16);
+		btnGenerateRandom.setSelection(true);
 
 		lblStringLength = new Label(grpStringConditions, SWT.NONE);
 		lblStringLength.setBounds(10, 26, 74, 15);
@@ -266,17 +283,29 @@ public class ConditionsDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		Conditions conditions = new Conditions();
-		conditions.setColumnsdetail(columnsdetail);
-		conditions.setProjectdetail(project);
-		conditions.setGenerateRandom(btnGenerateRandom.getSelection());
-		conditions.setSizeLimit((int) columnsdetail.getLength());
-		assignConditions(conditions);
-		try {
-			conditionsDao.saveConditions(conditions);
-		} catch (PersistException e) {
-			showError("Condition Already Exists! Cannot Add new Condition", getShell());
-			e.printStackTrace();
+		if (this.conditions != null) {
+			assignConditions(this.conditions);
+			try {
+				conditionsDao.update(conditions);
+			} catch (EntityNotPresent e) {
+				showError("Unable to update", getShell());
+				e.printStackTrace();
+			}
+		} else {
+			Conditions conditions = new Conditions();
+			conditions.setColumnsdetail(columnsdetail);
+			conditions.setProjectdetail(project);
+			ConditionKey conditionKey = new ConditionKey(columnsdetail.getIdcolumnsdetails(), project.getIdproject());
+			conditions.setGenerateRandom(btnGenerateRandom.getSelection());
+			conditions.setSizeLimit((int) columnsdetail.getLength());
+			conditions.setConditionKey(conditionKey);
+			assignConditions(conditions);
+			try {
+				conditionsDao.saveConditions(conditions);
+			} catch (PersistException e) {
+				showError("Condition Already Exists! Cannot Add new Condition", getShell());
+				e.printStackTrace();
+			}
 		}
 		RefrehTreeTask refrehTreeTask = new RefrehTreeTask();
 		refrehTreeTask.execute();
@@ -294,16 +323,15 @@ public class ConditionsDialog extends Dialog {
 				conditions.setSequenceNo(
 						sequenceStartNumber != null ? Integer.parseInt(sequenceStartNumber.getText()) : 1);
 			}
-			if (stringLength.getText() != null)
+			if (stringLength.getText().length() != 0)
 				conditions.setSizeLimit(Integer.parseInt(stringLength.getText()));
+			else
+				conditions.setSizeLimit(Integer.parseInt(columnsdetail.getLength() + ""));
 			break;
 		case TINYINT:
 		case INTEGER:
 		case FLOAT:
 		case DECIMAL:
-			/*if (numLength.getText() != null)
-				conditions.setSizeLimit(Integer.parseInt(
-						numLength.getText() != null ? numLength.getText() : (columnsdetail.getLength() + "")));*/
 			conditions.setUpperLimit(Double.parseDouble(numericUpLimit.getText()));
 			conditions.setLowerLimit(Double.parseDouble(numericLowLimit.getText()));
 			break;

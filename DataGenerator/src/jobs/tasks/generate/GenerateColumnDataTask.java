@@ -13,7 +13,9 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import entity.Columnsdetail;
+import entity.Conditions;
 import entity.Constraintsdetail;
+import entity.Datasamplemodel;
 import entity.Relationsdetail;
 import entity.Tabledetail;
 import entity.generateEntity.GenerateColumnPreDefined;
@@ -70,12 +72,13 @@ public class GenerateColumnDataTask extends Task {
 			generatedTable.setSchemaName(tabledetail.getSchemadetail().getName());
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
+				List<Datasamplemodel> datasamplemodels = new ArrayList<>();
+				datasamplemodels.addAll(columnsdetail.getDatasamplemodel());
 				textFilePath = tableFolder.getPath() + "\\";
-				if (columnsdetail.getDatasamplemodel() != null
-						&& columnsdetail.getDatasamplemodel().getProjectdetail().getIdproject() == projectId
-						&& columnsdetail.getConditions() == null) {
+				if (!columnsdetail.getDatasamplemodel().isEmpty()
+						&& checkProjectDataSampleId(datasamplemodels)) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
-				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions() == null) {
+				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions().isEmpty()) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
@@ -122,8 +125,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setNullable(true);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -142,13 +143,12 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColumnType(columnsdetail.getType());
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		startTime = System.currentTimeMillis();
-		if (columnsdetail.getDatasamplemodel() != null) {
-			generatedColumn.setPreDefinedValues(columnsdetail.getDatasamplemodel().getDatasamplemodelcol());
+		if (!columnsdetail.getDatasamplemodel().isEmpty()) {
+			Datasamplemodel datasamplemodel = columnsdetail.getDatasamplemodel().iterator().next();
+			generatedColumn.setPreDefinedValues(datasamplemodel.getDatasamplemodelcol());
 			generatedColumn.setFileReopen(true);
-			if (!columnsdetail.getDatasamplemodel().isRepeteableIndex()) {
+			if (!datasamplemodel.isRepeteableIndex()) {
 				generatedColumn.setFileReopen(false);
 				generatedTable.setRowCount(generatedColumn.getPreDefinedValues().split(",").length);
 			}
@@ -182,7 +182,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(false);
 		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -208,7 +207,6 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setFileReopen(b);
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -231,9 +229,12 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setForeignKey(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		generatedColumn.setFileReopen(true);
-		generatedColumn.setCondition(columnsdetail.getConditions());
-		generatedColumn.setPattern(columnsdetail.getPatterndetail());
+		generatedColumn.setFileReopen(false);
+		List<Conditions> conditions = new ArrayList<>();
+		conditions.addAll(columnsdetail.getConditions());
+		if (checkPrjectCondition(conditions)) {
+			generatedColumn.setCondition(conditions.get(0));
+		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -276,9 +277,12 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
-		// generatedColumn.setPattern(columnsdetail.getPatterndetail());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		generatedColumn.setCondition(columnsdetail.getConditions());
+		List<Conditions> conditions = new ArrayList<>();
+		conditions.addAll(columnsdetail.getConditions());
+		if (checkPrjectCondition(conditions)) {
+			generatedColumn.setCondition(conditions.get(0));
+		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
 			Relationsdetail relationsdetail = columnsdetail.getRelationsdetails().iterator().next();
@@ -306,4 +310,31 @@ public class GenerateColumnDataTask extends Task {
 		this.projectId = projectId;
 	}
 
+	private boolean checkProjectDataSampleId(List<Datasamplemodel> list) {
+		boolean returnValue = false;
+		Iterator<Datasamplemodel> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Datasamplemodel datasamplemodel = iterator.next();
+			if (datasamplemodel.getProjectdetail().getIdproject() != projectId) {
+				iterator.remove();
+			} else {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}
+
+	private boolean checkPrjectCondition(List<Conditions> conditions) {
+		boolean returnValue = false;
+		Iterator<Conditions> iterator = conditions.iterator();
+		while (iterator.hasNext()) {
+			Conditions conditions2 = iterator.next();
+			if (conditions2.getProjectdetail().getIdproject() != projectId) {
+				iterator.remove();
+			} else {
+				returnValue = true;
+			}
+		}
+		return returnValue;
+	}
 }
