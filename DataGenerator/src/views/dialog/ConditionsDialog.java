@@ -34,7 +34,7 @@ public class ConditionsDialog extends Dialog {
 	private Text stringEndsWith;
 	private Text numericLowLimit;
 	private Text numericUpLimit;
-	private Text numLength;
+	//private Text numLength;
 	private DateTime dateLowerLimit;
 	private DateTime dateUpperLimit;
 
@@ -148,9 +148,9 @@ public class ConditionsDialog extends Dialog {
 		lblLength.setBounds(10, 24, 55, 15);
 		lblLength.setText("Length");
 
-		numLength = new Text(grpNumberConditions, SWT.BORDER);
+		/*numLength = new Text(grpNumberConditions, SWT.BORDER);
 		numLength.setBounds(90, 24, 113, 21);
-		numLength.addVerifyListener(new TestFeildVerifyListner());
+		numLength.addVerifyListener(new TestFeildVerifyListner());*/
 
 		grpDateConditions = new Group(container, SWT.NONE);
 		grpDateConditions.setText("Date Conditions");
@@ -301,8 +301,9 @@ public class ConditionsDialog extends Dialog {
 		case INTEGER:
 		case FLOAT:
 		case DECIMAL:
-			if (numLength.getText() != null)
-				conditions.setSizeLimit(Integer.parseInt(numLength.getText()));
+			/*if (numLength.getText() != null)
+				conditions.setSizeLimit(Integer.parseInt(
+						numLength.getText() != null ? numLength.getText() : (columnsdetail.getLength() + "")));*/
 			conditions.setUpperLimit(Double.parseDouble(numericUpLimit.getText()));
 			conditions.setLowerLimit(Double.parseDouble(numericLowLimit.getText()));
 			break;

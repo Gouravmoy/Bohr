@@ -127,23 +127,12 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				}
 				nextSeqNo = 0;
 				break;
-			/*
-			 * case VARCHAR: int sizeVarchar = (int) (colLength <= 10 ?
-			 * colLength : 10); builder.append("\""); if (pattern == null) { for
-			 * (int i = 0; i < sizeVarchar; i++) {
-			 * builder.append(alphabet.charAt(r.nextInt(N))); } } else { String
-			 * patternString = pattern.getRegexpString();
-			 * generateVarcharWithPattern(alphabet, N, r, builder, sizeVarchar,
-			 * patternString); }
-			 * 
-			 * builder.append("\""); break;
-			 */
 			case INTEGER:
 				while (recordCount > 0) {
 					builder = new StringBuilder();
 					int minimum = (int) condition.getLowerLimit();
 					int maximum = (int) condition.getUpperLimit();
-					builder.append("" + minimum + (int) (Math.random() * maximum));
+					builder.append("" + (minimum + (int) (Math.random() * maximum)));
 					builder.append("\n");
 					writer.write(builder.toString());
 					recordCount--;
@@ -347,7 +336,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					return returnValue;
 			}
 		} else {
-			if(nextSeqNo==53){
+			if (nextSeqNo == 53) {
 				System.out.println("Debug");
 			}
 			builder = new StringBuilder();

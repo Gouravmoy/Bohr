@@ -17,18 +17,26 @@ public class TestFeildVerifyListner implements VerifyListener {
 		// get old text and create new text by using the
 		// VerifyEvent.text
 		final String oldS = text.getText();
-		String newS = oldS.substring(0, e.start) + e.text + oldS.substring(e.end);
+		// String newS = oldS.substring(0, e.start) + e.text +
+		// oldS.substring(e.end);
+		String newS = oldS;
+		if (newS == null) {
+			e.doit = true;
+		} else if (newS.length() == 0) {
+			e.doit = true;
+		} else {
+			boolean isFloat = true;
+			try {
+				Float.parseFloat(newS);
+			} catch (NumberFormatException ex) {
+				throw new NumberFormatException();
+			}
 
-		boolean isFloat = true;
-		try {
-			Float.parseFloat(newS);
-		} catch (NumberFormatException ex) {
-			throw new NumberFormatException();
+			System.out.println(newS);
+
+			if (!isFloat)
+				e.doit = false;
 		}
 
-		System.out.println(newS);
-
-		if (!isFloat)
-			e.doit = false;
 	}
 }
