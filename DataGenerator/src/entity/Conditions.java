@@ -38,7 +38,7 @@ public class Conditions implements Serializable {
 	@Column(length = 50)
 	private String startWith;
 
-	@Column(columnDefinition = "tinyint default false")
+	@Column(columnDefinition = "boolean default false")
 	private boolean isGenerateRandom;
 
 	@Column

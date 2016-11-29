@@ -250,6 +250,7 @@ public class ConditionsDialog extends Dialog {
 				break;
 			case INTEGER:
 			case FLOAT:
+			case TINYINT:
 			case DECIMAL:
 				recursiveSetEnabled(grpNumberConditions, true);
 				break;

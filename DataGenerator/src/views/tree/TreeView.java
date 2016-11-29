@@ -212,8 +212,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 					return;
 				}
 				Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-				if ((columnsdetail.getKeytype() == KeyType.PK || columnsdetail.getKeytype() == KeyType.FK
-						|| columnsdetail.getKeytype() == KeyType.UK_FK)) {
+				if ((columnsdetail.getKeytype() == KeyType.FK || columnsdetail.getConstraintsdetails1().size() > 1)) {
 					generateError("Cannot Add Condition to Elements of Key - " + columnsdetail.getKeytype());
 				} else {
 					openEditWizard(node);
