@@ -21,5 +21,4 @@ public class MainUtil {
 			returnList.add("Column Enum Values:" + col.getEnumvalues());
 		return returnList;
 	}
-
 }

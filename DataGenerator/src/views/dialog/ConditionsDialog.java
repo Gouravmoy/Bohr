@@ -6,8 +6,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -44,9 +44,11 @@ public class ConditionsDialog extends Dialog {
 	Group grpStringConditions;
 	Group grpNumberConditions;
 	Group grpDateConditions;
+	Group grpGenerateSequence;
 
+	Button seqPostfix;
+	Button seqPreFix;
 	Button btnGenerateSequence;
-	Button btnGenerateRandom;
 
 	Label lblProjectNametxt;
 	Label lblTablenametxt;
@@ -122,25 +124,11 @@ public class ConditionsDialog extends Dialog {
 
 		grpStringConditions = new Group(container, SWT.NONE);
 		grpStringConditions.setText("String Conditions");
-		grpStringConditions.setBounds(10, 98, 438, 158);
-
-		Label lblStartsWith = new Label(grpStringConditions, SWT.NONE);
-		lblStartsWith.setBounds(10, 58, 74, 15);
-		lblStartsWith.setText("Starts With");
-
-		stringStartsWith = new Text(grpStringConditions, SWT.BORDER);
-		stringStartsWith.setBounds(90, 58, 113, 21);
-
-		Label lblNewLabel = new Label(grpStringConditions, SWT.NONE);
-		lblNewLabel.setBounds(218, 58, 69, 15);
-		lblNewLabel.setText("Ends With");
-
-		stringEndsWith = new Text(grpStringConditions, SWT.BORDER);
-		stringEndsWith.setBounds(293, 58, 135, 21);
+		grpStringConditions.setBounds(10, 98, 424, 264);
 
 		grpNumberConditions = new Group(container, SWT.NONE);
 		grpNumberConditions.setText("Numeric Conditions");
-		grpNumberConditions.setBounds(10, 262, 438, 82);
+		grpNumberConditions.setBounds(10, 380, 438, 82);
 
 		Label lblLowerLimit = new Label(grpNumberConditions, SWT.NONE);
 		lblLowerLimit.setText("Lower Limit");
@@ -170,7 +158,7 @@ public class ConditionsDialog extends Dialog {
 
 		grpDateConditions = new Group(container, SWT.NONE);
 		grpDateConditions.setText("Date Conditions");
-		grpDateConditions.setBounds(10, 350, 438, 75);
+		grpDateConditions.setBounds(10, 468, 438, 75);
 
 		Label lblStartDate = new Label(grpDateConditions, SWT.NONE);
 		lblStartDate.setText("Start Date");
@@ -186,60 +174,76 @@ public class ConditionsDialog extends Dialog {
 		setColumnDetails();
 		recursiveSetEnabled(grpStringConditions, false);
 
-		sequenceStartNumber = new Text(grpStringConditions, SWT.BORDER);
-		sequenceStartNumber.setBounds(100, 107, 76, 21);
-		sequenceStartNumber.addVerifyListener(new TestFeildVerifyListner());
-
-		Label lblSequenceStartNumber = new Label(grpStringConditions, SWT.NONE);
-		lblSequenceStartNumber.setBounds(10, 110, 85, 15);
-		lblSequenceStartNumber.setText("Sequence Start");
-
-		btnGenerateSequence = new Button(grpStringConditions, SWT.RADIO);
-		btnGenerateSequence.setBounds(10, 85, 135, 16);
-		btnGenerateSequence.setText("Generate Sequence");
-		btnGenerateSequence.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				sequenceStartNumber.setEnabled(true);
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-		});
-
-		btnGenerateRandom = new Button(grpStringConditions, SWT.RADIO);
-		btnGenerateRandom.setText("Generate Random");
-		btnGenerateRandom.setBounds(181, 85, 135, 16);
-		btnGenerateRandom.setSelection(true);
-
-		lblStringLength = new Label(grpStringConditions, SWT.NONE);
-		lblStringLength.setBounds(10, 26, 74, 15);
-		lblStringLength.setText("String Length");
-
-		stringLength = new Text(grpStringConditions, SWT.BORDER);
-		stringLength.setBounds(90, 26, 74, 21);
-		stringLength.addVerifyListener(new TestFeildVerifyListner());
-
-		lblMaxLengthReplace = new Label(grpStringConditions, SWT.NONE);
-		lblMaxLengthReplace.setBounds(170, 26, 117, 15);
-		lblMaxLengthReplace.setText("Max Length - " + this.columnsdetail.getLength());
-		btnGenerateRandom.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				sequenceStartNumber.setEnabled(false);
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-		});
-
 		recursiveSetEnabled(grpNumberConditions, false);
 		recursiveSetEnabled(grpDateConditions, false);
 		recursiveSetEnabled(grpStringConditions, false);
+
+		grpGenerateSequence = new Group(grpStringConditions, SWT.NONE);
+		grpGenerateSequence.setText("Generate Sequence");
+		grpGenerateSequence.setBounds(10, 160, 404, 82);
+
+		seqPostfix = new Button(grpGenerateSequence, SWT.RADIO);
+		seqPostfix.setBounds(10, 29, 76, 16);
+		seqPostfix.setText("Postfix");
+		seqPostfix.setSelection(true);
+
+		seqPreFix = new Button(grpGenerateSequence, SWT.RADIO);
+		seqPreFix.setBounds(100, 29, 59, 16);
+		seqPreFix.setText("Prefix");
+
+		sequenceStartNumber = new Text(grpGenerateSequence, SWT.BORDER);
+		sequenceStartNumber.setBounds(100, 51, 76, 21);
+
+		Label lblSequenceStartNumber = new Label(grpGenerateSequence, SWT.NONE);
+		lblSequenceStartNumber.setBounds(10, 54, 85, 15);
+		lblSequenceStartNumber.setText("Sequence Start");
+
+		Group grpConcatenation = new Group(grpStringConditions, SWT.NONE);
+		grpConcatenation.setText("Concatenation");
+		grpConcatenation.setBounds(10, 30, 404, 109);
+
+		lblStringLength = new Label(grpConcatenation, SWT.NONE);
+		lblStringLength.setBounds(10, 19, 74, 15);
+		lblStringLength.setText("String Length");
+
+		stringLength = new Text(grpConcatenation, SWT.BORDER);
+		stringLength.setBounds(90, 19, 74, 21);
+
+		lblMaxLengthReplace = new Label(grpConcatenation, SWT.NONE);
+		lblMaxLengthReplace.setBounds(170, 19, 117, 15);
+		lblMaxLengthReplace.setText("Max Length - " + this.columnsdetail.getLength());
+
+		Label lblStartsWith = new Label(grpConcatenation, SWT.NONE);
+		lblStartsWith.setBounds(10, 49, 74, 15);
+		lblStartsWith.setText("Starts With");
+
+		stringStartsWith = new Text(grpConcatenation, SWT.BORDER);
+		stringStartsWith.setBounds(90, 46, 135, 21);
+
+		Label lblNewLabel = new Label(grpConcatenation, SWT.NONE);
+		lblNewLabel.setBounds(10, 76, 69, 15);
+		lblNewLabel.setText("Ends With");
+
+		stringEndsWith = new Text(grpConcatenation, SWT.BORDER);
+		stringEndsWith.setBounds(90, 73, 135, 21);
+
+		btnGenerateSequence = new Button(grpConcatenation, SWT.CHECK);
+		btnGenerateSequence.setBounds(246, 78, 135, 16);
+		btnGenerateSequence.setText("Generate Sequence");
+		btnGenerateSequence.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				Button btn = (Button) event.getSource();
+				if (btn.getSelection()) {
+					recursiveSetEnabled(grpGenerateSequence, true);
+				} else {
+					recursiveSetEnabled(grpGenerateSequence, false);
+				}
+			}
+		});
+
+		stringLength.addVerifyListener(new TestFeildVerifyListner());
+		sequenceStartNumber.addVerifyListener(new TestFeildVerifyListner());
 
 		dateLowerLimit = new DateTime(grpDateConditions, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 		dateLowerLimit.setBounds(84, 34, 113, 24);
@@ -264,6 +268,7 @@ public class ConditionsDialog extends Dialog {
 			case VARCHAR:
 			case LONGTEXT:
 				recursiveSetEnabled(grpStringConditions, true);
+				recursiveSetEnabled(grpGenerateSequence, false);
 				break;
 			case INTEGER:
 			case FLOAT:
@@ -296,7 +301,7 @@ public class ConditionsDialog extends Dialog {
 			conditions.setColumnsdetail(columnsdetail);
 			conditions.setProjectdetail(project);
 			ConditionKey conditionKey = new ConditionKey(columnsdetail.getIdcolumnsdetails(), project.getIdproject());
-			conditions.setGenerateRandom(btnGenerateRandom.getSelection());
+			conditions.setGenerateRandom(seqPreFix.getSelection());
 			conditions.setSizeLimit((int) columnsdetail.getLength());
 			conditions.setConditionKey(conditionKey);
 			assignConditions(conditions);
@@ -319,10 +324,14 @@ public class ConditionsDialog extends Dialog {
 		case LONGTEXT:
 			conditions.setStartWith(stringStartsWith.getText().length() > 0 ? stringStartsWith.getText() : null);
 			conditions.setEndsWith(stringEndsWith.getText().length() > 0 ? stringEndsWith.getText() : null);
-			if (!btnGenerateRandom.getSelection()) {
-				conditions.setSequenceNo(
-						sequenceStartNumber != null ? Integer.parseInt(sequenceStartNumber.getText()) : 1);
+			if (btnGenerateSequence.getSelection()) {
+				if (seqPreFix.getSelection())
+					conditions.setSequencePreFix(true);
+				else
+					conditions.setSequencePreFix(false);
 			}
+			conditions.setSequenceNo(
+					sequenceStartNumber.getText().length() != 0 ? Integer.parseInt(sequenceStartNumber.getText()) : -1);
 			if (stringLength.getText().length() != 0)
 				conditions.setSizeLimit(Integer.parseInt(stringLength.getText()));
 			else

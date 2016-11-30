@@ -41,6 +41,9 @@ public class Conditions implements Serializable {
 	@Column(columnDefinition = "boolean default false")
 	private boolean isGenerateRandom;
 
+	@Column(columnDefinition = "boolean default false")
+	private boolean isSequencePreFix;
+
 	@Column
 	private int sequenceNo;
 
@@ -176,11 +179,21 @@ public class Conditions implements Serializable {
 	public String toString() {
 		if (this.columnsdetail.getType() == ColumnType.VARCHAR) {
 			return "startWith=" + startWith + "," + "endsWith=" + endsWith;
-		} else if (this.columnsdetail.getType() == ColumnType.INTEGER||this.columnsdetail.getType() == ColumnType.DECIMAL) {
+		} else if (this.columnsdetail.getType() == ColumnType.INTEGER
+				|| this.columnsdetail.getType() == ColumnType.DECIMAL) {
 			return "sizeLimit=" + sizeLimit + ", lowerLimit=" + lowerLimit + ", upperLimit=" + upperLimit;
-		} else if (this.columnsdetail.getType() == ColumnType.DATE){
+		} else if (this.columnsdetail.getType() == ColumnType.DATE) {
 			return "dateLowerLimit=" + dateLowerLimit + ", dateUpperLimit=" + dateUpperLimit;
 		}
 		return "";
 	}
+
+	public boolean isSequencePreFix() {
+		return isSequencePreFix;
+	}
+
+	public void setSequencePreFix(boolean isSequencePreFix) {
+		this.isSequencePreFix = isSequencePreFix;
+	}
+
 }

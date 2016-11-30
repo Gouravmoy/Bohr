@@ -21,9 +21,14 @@ public class GenerateColumnRandom extends GeneratedColumn {
 	boolean generateAllUnique = true;
 	BufferedWriter writer;
 	int nextSeqNo = 0;
+	final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	final int N = alphabet.length();
 
 	public void generateColumn() {
 		try {
+			if(colName.equals("Province")){
+				System.out.println("Here");
+			}
 			writer = new BufferedWriter(new FileWriter(new File(filePath), true));
 			BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)));
 			int recordCount = this.numberOfRows;
@@ -131,7 +136,7 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					builder = new StringBuilder();
 					int minimum = (int) condition.getLowerLimit();
 					int maximum = (int) condition.getUpperLimit();
-					builder.append("" + (minimum + (int) (Math.random() * maximum)));
+					builder.append((r.nextInt(maximum - minimum) + minimum));
 					builder.append("\n");
 					writer.write(builder.toString());
 					recordCount--;
@@ -263,11 +268,9 @@ public class GenerateColumnRandom extends GeneratedColumn {
 	private String generateVarchar() {
 		int preFixLen = 0;
 		int postFixLen = 0;
-		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		final int N = alphabet.length();
 		Random r = new Random();
 		StringBuilder builder = new StringBuilder();
-		if (colName.equals("web_page")) {
+		if (colName.equals("City")) {
 			System.out.println("Debug");
 		}
 
@@ -295,8 +298,23 @@ public class GenerateColumnRandom extends GeneratedColumn {
 				} else if (postFixLen > 0) {
 					builder.append(generatePreFix(size, (int) colLength, false));
 				} else {
-					for (int i = 0; i < size; i++) {
-						builder.append(alphabet.charAt(r.nextInt(N)));
+					if (condition.getSequenceNo() > 0) {
+						if (nextSeqNo == 0) {
+							nextSeqNo = condition.getSequenceNo();
+						}
+						int randomToGenerate = (int) (size - (int) (Math.log10(nextSeqNo) + 1));
+						for (int i = 0; i < randomToGenerate; i++) {
+							builder.append(alphabet.charAt(r.nextInt(N)));
+						}
+						if (!condition.isSequencePreFix()) {
+							return builder.toString() + (nextSeqNo++) + "";
+						} else {
+							return (nextSeqNo++) + builder.toString() + "";
+						}
+					}else{
+						for (int i = 0; i < size; i++) {
+							builder.append(alphabet.charAt(r.nextInt(N)));
+						}
 					}
 				}
 			} else {
@@ -310,11 +328,9 @@ public class GenerateColumnRandom extends GeneratedColumn {
 
 	public String generatePreFix(int length, int max, boolean isPreFix) {
 		StringBuilder builder = new StringBuilder();
-		final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		final int N = alphabet.length();
 		Random r = new Random();
 		String returnValue = "";
-		if (condition.isGenerateRandom()) {
+		if (condition.getSequenceNo() < 0) {
 			builder = new StringBuilder();
 			for (int i = 0; i < length; i++) {
 				builder.append(alphabet.charAt(r.nextInt(N)));
@@ -335,9 +351,6 @@ public class GenerateColumnRandom extends GeneratedColumn {
 					return returnValue;
 			}
 		} else {
-			if (nextSeqNo == 53) {
-				System.out.println("Debug");
-			}
 			builder = new StringBuilder();
 			int size = (int) (condition.getSizeLimit() <= colLength ? condition.getSizeLimit() : colLength);
 			if (nextSeqNo == 0) {
@@ -367,7 +380,6 @@ public class GenerateColumnRandom extends GeneratedColumn {
 		}
 
 	}
-
 
 	public static String getRandomValue(final Random random, final int lowerBound, final int upperBound,
 			final int decimalPlaces) {
