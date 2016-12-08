@@ -68,7 +68,6 @@ public class Columnsdetail implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Conditions> conditions;
-
 	@ManyToOne
 	@JoinColumn(name = "tableId", nullable = false)
 	private Tabledetail tabledetail;
@@ -152,18 +151,6 @@ public class Columnsdetail implements Serializable {
 
 	public void setType(ColumnType type) {
 		this.type = type;
-	}
-
-	public List<Datasamplemodel> getDatasamplemodel() {
-		return datasamplemodel;
-	}
-
-	public void setDatasamplemodel(List<Datasamplemodel> datasamplemodel) {
-		this.datasamplemodel = datasamplemodel;
-	}
-
-	public void setConditions(List<Conditions> conditions) {
-		this.conditions = conditions;
 	}
 
 	public Tabledetail getTabledetail() {
@@ -250,8 +237,20 @@ public class Columnsdetail implements Serializable {
 		this.predefinedModel = predefinedModel;
 	}
 
+	public List<Datasamplemodel> getDatasamplemodel() {
+		return datasamplemodel;
+	}
+
+	public void setDatasamplemodel(List<Datasamplemodel> datasamplemodel) {
+		this.datasamplemodel = datasamplemodel;
+	}
+
 	public List<Conditions> getConditions() {
 		return conditions;
+	}
+
+	public void setConditions(List<Conditions> conditions) {
+		this.conditions = conditions;
 	}
 
 }

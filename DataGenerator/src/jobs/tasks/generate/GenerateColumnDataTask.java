@@ -72,11 +72,13 @@ public class GenerateColumnDataTask extends Task {
 			generatedTable.setSchemaName(tabledetail.getSchemadetail().getName());
 			generatedColumnList = new ArrayList<>();
 			for (Columnsdetail columnsdetail : tabledetail.getColumnsdetails()) {
+				List<Datasamplemodel> datasamplemodels = new ArrayList<>();
+				datasamplemodels.addAll(columnsdetail.getDatasamplemodel());
 				textFilePath = tableFolder.getPath() + "\\";
 				if (!columnsdetail.getDatasamplemodel().isEmpty()
-						&& checkProjectDataSampleId(columnsdetail.getDatasamplemodel())) {
+						&& checkProjectDataSampleId(datasamplemodels)) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
-				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions() == null) {
+				} else if (columnsdetail.getPredefinedModel() != null && columnsdetail.getConditions().isEmpty()) {
 					generatePredefinedValues(textFilePath, columnsdetail, generatedTable);
 				} else if (columnsdetail.getType() == ColumnType.ENUM) {
 					generateEnumColumn(textFilePath, columnsdetail);
@@ -142,7 +144,7 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setColDecLenght(columnsdetail.getDecimalLength());
 		generatedColumn.setFilePath(textFilePath + columnsdetail.getName() + ".txt");
 		startTime = System.currentTimeMillis();
-		if (columnsdetail.getDatasamplemodel() != null) {
+		if (!columnsdetail.getDatasamplemodel().isEmpty()) {
 			Datasamplemodel datasamplemodel = columnsdetail.getDatasamplemodel().iterator().next();
 			generatedColumn.setPreDefinedValues(datasamplemodel.getDatasamplemodelcol());
 			generatedColumn.setFileReopen(true);
@@ -228,8 +230,10 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
 		generatedColumn.setFileReopen(false);
-		if (checkPrjectCondition(columnsdetail.getConditions())) {
-			generatedColumn.setCondition(columnsdetail.getConditions().get(0));
+		List<Conditions> conditions = new ArrayList<>();
+		conditions.addAll(columnsdetail.getConditions());
+		if (checkPrjectCondition(conditions)) {
+			generatedColumn.setCondition(conditions.get(0));
 		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {
@@ -274,8 +278,10 @@ public class GenerateColumnDataTask extends Task {
 		generatedColumn.setGenerateAllUnique(false);
 		generatedColumn.setKeyType(columnsdetail.getKeytype());
 		generatedColumn.setTabledetail(columnsdetail.getTabledetail());
-		if (checkPrjectCondition(columnsdetail.getConditions())) {
-			generatedColumn.setCondition(columnsdetail.getConditions().get(0));
+		List<Conditions> conditions = new ArrayList<>();
+		conditions.addAll(columnsdetail.getConditions());
+		if (checkPrjectCondition(conditions)) {
+			generatedColumn.setCondition(conditions.get(0));
 		}
 		List<Relationsdetail> relationsdetails = new ArrayList<>();
 		if (!columnsdetail.getRelationsdetails().isEmpty()) {

@@ -3,6 +3,7 @@ package jobs.tasks.generate;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,7 +12,9 @@ import java.util.HashMap;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
+import enums.ExportType;
 
 public class GenerateTableDataWithInsertQueryTask extends Task {
 	GeneratedTable generatedTableData;
@@ -19,6 +22,7 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 	BufferedReader bufferedReaders;
 	HashMap<Integer, String> columnFilePath = new HashMap<>();
 	HashMap<Integer, Boolean> fileReopen = new HashMap<>();
+	ExportType exportType;
 	static String AUTOCOMMIT = "SET AUTOCOMMIT=0;";
 	static String INSERT = "INSERT INTO ";
 	static String NEWLINE = "\n";
@@ -30,8 +34,10 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 	static String OPENBRACKET = "(";
 	static String CLOSEBRACKET = ")";
 
-	public GenerateTableDataWithInsertQueryTask(GeneratedTable generatedTableData, String folderPath) {
+	public GenerateTableDataWithInsertQueryTask(GeneratedTable generatedTableData, String folderPath,
+			ExportType exportType) {
 		this.generatedTableData = generatedTableData;
+		this.exportType = exportType;
 		File floder = new File(folderPath);
 		if (!floder.exists()) {
 			floder.mkdir();
@@ -41,26 +47,32 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 
 	@Override
 	public void execute() throws BuildException {
+		String exportFileName = generatedTableData.getTableOutPutPath() + generatedTableData.getTableName();
+		try {
+			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
+			if (exportType == ExportType.EXCEL) {
+				exportFileName += ".csv";
+				generateCSVTables(exportFileName);
+			} else if (exportType == ExportType.INSERT_SCRIPTS) {
+				exportFileName += ".sql";
+				generateInsertScripts(exportFileName);
+			} else if (exportType == ExportType.JSON) {
+				exportFileName += ".csv";
+				generateCSVTables(exportFileName);
+				// exportFileName += ".json";
+			}
+			bufferedReaders.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void generateInsertScripts(String exportFileName) {
 		int rowCount = 1;
 		try {
-			/*
-			 * bufferedReaders = new BufferedReader(new
-			 * FileReader(generatedTableData.getTablePath())); bufferedWriter =
-			 * new BufferedWriter(new FileWriter(
-			 * generatedTableData.getTableOutPutPath() +
-			 * generatedTableData.getTableName() + ".csv")); String rowString =
-			 * null; while ((rowString = bufferedReaders.readLine()) != null) {
-			 * rowString = rowString.replace("\"", ""); rowString =
-			 * rowString.replace("\'", "");
-			 * bufferedWriter.write(rowString+"\n");
-			 * 
-			 * if (rowCount % 50 == 0) { bufferedWriter.write(rowString+"\n");
-			 * bufferedWriter.flush(); } rowCount++; } bufferedWriter.flush();
-			 * bufferedWriter.close();
-			 */
-			bufferedReaders = new BufferedReader(new FileReader(generatedTableData.getTablePath()));
-			bufferedWriter = new BufferedWriter(new FileWriter(
-					generatedTableData.getTableOutPutPath() + generatedTableData.getTableName() + ".sql"));
+			bufferedWriter = new BufferedWriter(new FileWriter(exportFileName));
 			bufferedWriter.write(AUTOCOMMIT + NEWLINE);
 			bufferedWriter.write(INSERT + QUOTE + generatedTableData.getSchemaName() + QUOTE + DOT + QUOTE
 					+ generatedTableData.getTableName() + QUOTE + " values" + NEWLINE);
@@ -93,6 +105,32 @@ public class GenerateTableDataWithInsertQueryTask extends Task {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
+
 	}
 
+	private void generateCSVTables(String exportFileName) {
+		int rowCount = 1;
+		try {
+			bufferedWriter = new BufferedWriter(new FileWriter(exportFileName));
+			String rowString = null;
+			for (GeneratedColumn columnsdetail : generatedTableData.getGeneratedColumn()) {
+				bufferedWriter.write(columnsdetail.getColName() + ",");
+			}
+			bufferedWriter.write("\n");
+			while ((rowString = bufferedReaders.readLine()) != null) {
+				rowString = rowString.replace("\"", "");
+				rowString = rowString.replace("\'", "");
+				bufferedWriter.write(rowString + "\n");
+
+				if (rowCount % 50 == 0) {
+					bufferedWriter.flush();
+				}
+				rowCount++;
+			}
+			bufferedWriter.flush();
+			bufferedWriter.close();
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
 }

@@ -24,6 +24,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
@@ -48,6 +49,7 @@ import entity.Projectdetails;
 import entity.Relationsdetail;
 import entity.Schemadetail;
 import entity.Tabledetail;
+import enums.KeyType;
 import exceptions.DAOException;
 import exceptions.ReadEntityException;
 import exceptions.ServiceException;
@@ -172,7 +174,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Relation to This Element");
+				} else {
+					openEditWizard(node);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node) {
@@ -212,7 +218,16 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node, projectdetails);
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Condition to This Element");
+					return;
+				}
+				Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+				if ((columnsdetail.getKeytype() == KeyType.FK || columnsdetail.getConstraintsdetails1().size() > 1)) {
+					generateError("Cannot Add Condition to Elements of Key - " + columnsdetail.getKeytype());
+				} else {
+					openEditWizard(node, projectdetails);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node, Projectdetails projectdetails) {
@@ -285,8 +300,11 @@ public class TreeView extends DefaultTreeCellRenderer {
 				}
 				if (node == null)
 					return;
-				openEditWizard(node);
-
+				if (node.getUserObject() instanceof String) {
+					generateError("Cannot Add Relation to This Element");
+				} else {
+					openEditWizard(node);
+				}
 			}
 
 			private void openEditWizard(DefaultMutableTreeNode node) {
@@ -532,6 +550,15 @@ public class TreeView extends DefaultTreeCellRenderer {
 		DefaultTreeModel model = (DefaultTreeModel) databaseTree.getModel();
 		model.reload(repoTreeTop);
 		JTreeUtil.colapse(databaseTree);
+	}
+
+	public void generateError(String msg) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageDialog.openError(composite.getShell(), "Error", msg);
+			}
+		});
 	}
 
 	private static void refreshProjectTree() {

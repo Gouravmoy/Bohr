@@ -13,6 +13,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "predefinedmodels")
 @NamedQuery(name = "PreDefinedModels.findAll", query = "SELECT p FROM PreDefinedModels p")
@@ -68,5 +71,4 @@ public class PreDefinedModels implements Serializable {
 	public void setColumnsdetails(Set<Columnsdetail> columnsdetails) {
 		this.columnsdetails = columnsdetails;
 	}
-
 }

@@ -20,6 +20,7 @@ import entity.generateEntity.GeneratedColumn;
 import entity.generateEntity.GeneratedTable;
 import entity.generateEntity.RegenerateRelationCols;
 import entity.generateEntity.RegenerateUKForFK;
+import enums.ExportType;
 import enums.KeyType;
 import jobs.tasks.AddPartTask;
 import jobs.tasks.SortTableTask;
@@ -37,6 +38,7 @@ public class GenerateDataJob2 extends Job {
 	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	String exportPath;
 	int projectId;
+	ExportType exportType;
 
 	public GenerateDataJob2(String name) {
 		super(name);
@@ -91,7 +93,7 @@ public class GenerateDataJob2 extends Job {
 				file.mkdirs();
 			}
 			GenerateTableDataWithInsertQueryTask dataWithInsertQueryTask = new GenerateTableDataWithInsertQueryTask(
-					generatedTable, file.getPath());
+					generatedTable, file.getPath(),exportType);
 			dataWithInsertQueryTask.execute();
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -162,4 +164,14 @@ public class GenerateDataJob2 extends Job {
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
+
+	public ExportType getExportType() {
+		return exportType;
+	}
+
+	public void setExportType(ExportType exportType) {
+		this.exportType = exportType;
+	}
+	
+	
 }

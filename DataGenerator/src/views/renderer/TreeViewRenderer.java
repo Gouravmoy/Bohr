@@ -75,11 +75,12 @@ public class TreeViewRenderer extends DefaultTreeCellRenderer {
 					setIcon(schemaIcon);
 				} else if (o.getClass().equals(Columnsdetail.class)) {
 					setIcon(columnsIcon);
-					setIcon(constraintsIcon);
 				} else if (o.getClass().equals(Changelog.class)) {
 					setIcon(changeLogIcon);
 				} else if (o.getClass().equals(Datasamplemodel.class)) {
 					setIcon(dataSampleIcon);
+				} else if (o.getClass().equals(Constraintsdetail.class)) {
+					setIcon(constraintsIcon);
 				} else if (o.getClass().equals(Relationsdetail.class)) {
 					setIcon(relationIcon);
 				} else
