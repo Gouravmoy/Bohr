@@ -69,7 +69,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 		if (!foreignKey) {
 			FileWriter fileWriter;
 			try {
-				final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				final String alphabet = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
 				final int N = alphabet.length();
 				fileWriter = new FileWriter(filePath);
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -87,7 +87,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				}
 				while (rowCount > 0) {
 					builder = new StringBuilder();
-					builder.append(patternString + "_" + rowCount);
+					builder.append(patternString + rowCount);
 					builder.append("\"");
 					builder.append("\n");
 					bufferedWriter.write(builder.toString());

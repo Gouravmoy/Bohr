@@ -20,6 +20,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import enums.ColumnType;
 import enums.KeyType;
 
@@ -59,9 +62,11 @@ public class Columnsdetail implements Serializable {
 	private ColumnType type;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Datasamplemodel> datasamplemodel;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "columnsdetail", cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Conditions> conditions;
 
 	@ManyToOne
