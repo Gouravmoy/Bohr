@@ -310,12 +310,12 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
 		} else {
 			configuration = new AnnotationConfiguration().configure("/environment/hibernate.cfg.staging.xml");
 		}
-		String ip = System.getProperty("database_url");
+		/*String ip = System.getProperty("database_url");
 		ip = ip.trim();
 		if (Master.INSTANCE.getEnvironment() != Environment.STAGING) {
 			configuration.setProperty("hibernate.connection.url",
 					"jdbc:derby://" + ip + ":1527/" + "omega_staging" + ";create=true");
-		}
+		}*/
 		if (Master.INSTANCE.isClearAll())
 			configuration.setProperty("hibernate.hbm2ddl.auto", "create");
 		else

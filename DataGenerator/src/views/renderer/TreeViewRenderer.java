@@ -12,7 +12,6 @@ import entity.Columnsdetail;
 import entity.Constraintsdetail;
 import entity.Databasedetail;
 import entity.Datasamplemodel;
-import entity.Patterndetail;
 import entity.PreDefinedModels;
 import entity.Relationsdetail;
 import entity.Schemadetail;
@@ -42,7 +41,6 @@ public class TreeViewRenderer extends DefaultTreeCellRenderer {
 		ImageIcon changeLogIcon = new ImageIcon(TreeView.class.getResource("/resources/images/changeLog.png"));
 		ImageIcon dataSampleIcon = new ImageIcon(TreeView.class.getResource("/resources/images/sample.png"));
 		ImageIcon relationIcon = new ImageIcon(TreeView.class.getResource("/resources/images/relation.png"));
-		ImageIcon patternIcon = new ImageIcon(TreeView.class.getResource("/resources/images/pattern.png"));
 
 		if (tree.getModel().getRoot().equals(nodo)) {
 			setIcon(homeIcon);
@@ -64,8 +62,6 @@ public class TreeViewRenderer extends DefaultTreeCellRenderer {
 				setIcon(dataSampleIcon);
 			} else if (o.getClass().equals(Relationsdetail.class)) {
 				setIcon(relationIcon);
-			} else if (o.getClass().equals(Patterndetail.class)) {
-				setIcon(patternIcon);
 			} else
 				setIcon(defaultIcon);
 		} else {
@@ -79,16 +75,14 @@ public class TreeViewRenderer extends DefaultTreeCellRenderer {
 					setIcon(schemaIcon);
 				} else if (o.getClass().equals(Columnsdetail.class)) {
 					setIcon(columnsIcon);
-				} else if (o.getClass().equals(Constraintsdetail.class)) {
-					setIcon(constraintsIcon);
 				} else if (o.getClass().equals(Changelog.class)) {
 					setIcon(changeLogIcon);
 				} else if (o.getClass().equals(Datasamplemodel.class)) {
 					setIcon(dataSampleIcon);
+				} else if (o.getClass().equals(Constraintsdetail.class)) {
+					setIcon(constraintsIcon);
 				} else if (o.getClass().equals(Relationsdetail.class)) {
 					setIcon(relationIcon);
-				} else if (o.getClass().equals(Patterndetail.class)) {
-					setIcon(patternIcon);
 				} else
 					setIcon(defaultIcon);
 			}

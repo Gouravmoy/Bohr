@@ -189,6 +189,7 @@ public class ExecuteDialog extends Dialog {
 		for (int i = 0; i < ExportType.values().length; i++) {
 			exportType.add(ExportType.values()[i].toString());
 		}
+		exportType.select(1);
 		exportType.setBounds(171, 81, 242, 23);
 
 		return container;

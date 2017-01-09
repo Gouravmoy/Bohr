@@ -10,25 +10,19 @@ public class TestFeildVerifyListner implements VerifyListener {
 	}
 
 	@Override
-	public void verifyText(VerifyEvent e) {
+	public void verifyText(VerifyEvent event) {
+		// Assume we allow it
+		event.doit = true;
 
-		Text text = (Text) e.getSource();
+		String text = event.text;
+		char[] chars = text.toCharArray();
 
-		// get old text and create new text by using the
-		// VerifyEvent.text
-		final String oldS = text.getText();
-		String newS = oldS.substring(0, e.start) + e.text + oldS.substring(e.end);
-
-		boolean isFloat = true;
-		try {
-			Float.parseFloat(newS);
-		} catch (NumberFormatException ex) {
-			throw new NumberFormatException();
+		// Don't allow if text contains non-digit characters
+		for (int i = 0; i < chars.length; i++) {
+			if (!Character.isDigit(chars[i])) {
+				event.doit = false;
+				break;
+			}
 		}
-
-		System.out.println(newS);
-
-		if (!isFloat)
-			e.doit = false;
 	}
 }

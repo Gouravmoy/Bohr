@@ -23,7 +23,7 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		Master.INSTANCE.setEnvironment(Environment.STAGING);
+		Master.INSTANCE.setEnvironment(Environment.PROD);
 		Master.INSTANCE.setClearAll(false);
 		MainController.loadPredefData();
 		MainController.getLogger(Activator.class);

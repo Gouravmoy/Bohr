@@ -60,9 +60,6 @@ public class CreateConstraintTask extends Task {
 				String constaintName = resultSet.getString("CONSTRAINT_NAME");
 				String refTable = resultSet.getString("REFERENCED_TABLE_NAME");
 				String refColName = resultSet.getString("REFERENCED_COLUMN_NAME");
-				if(colName.equals("manager_staff_id")){
-					System.out.println("Here");
-				}
 				constraintsdetail.setConstraintname(resultSet.getString("CONSTRAINT_NAME"));
 				constraintsdetail.setReferenceColumnName(resultSet.getString("REFERENCED_COLUMN_NAME"));
 				if (resultSet.getString("REFERENCED_TABLE_NAME") != null) {

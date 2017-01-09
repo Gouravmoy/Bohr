@@ -141,6 +141,7 @@ public class TreeView extends DefaultTreeCellRenderer {
 		popup.add(createRelations);
 		popup.add(createDataModel);
 		popup.add(createConditions);
+		popup.add(edit);
 		initilizeTrees(frame);
 
 		try {
@@ -199,8 +200,18 @@ public class TreeView extends DefaultTreeCellRenderer {
 			public void actionPerformed(ActionEvent event) {
 				JTree currentSelectedTree = null;
 				DefaultMutableTreeNode node = null;
-				System.out.println("Here");
+				Projectdetails projectdetails = null;
 				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				while (node.getParent() != null) {
+					System.out.println(node);
+					System.out.println(node.getFirstLeaf());
+					node = (DefaultMutableTreeNode) node.getParent();
+					if (node.getUserObject() instanceof Projectdetails) {
+						projectdetails = (Projectdetails) node.getUserObject();
+					}
+				}
 				if (selectedComponent instanceof JTree) {
 					currentSelectedTree = (JTree) selectedComponent;
 					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
@@ -212,21 +223,19 @@ public class TreeView extends DefaultTreeCellRenderer {
 					return;
 				}
 				Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-				if ((columnsdetail.getKeytype() == KeyType.PK || columnsdetail.getKeytype() == KeyType.FK
-						|| columnsdetail.getKeytype() == KeyType.UK_FK)) {
+				if ((columnsdetail.getKeytype() == KeyType.FK || columnsdetail.getConstraintsdetails1().size() > 1)) {
 					generateError("Cannot Add Condition to Elements of Key - " + columnsdetail.getKeytype());
 				} else {
-					openEditWizard(node);
+					openEditWizard(node, projectdetails);
 				}
 			}
 
-			private void openEditWizard(DefaultMutableTreeNode node) {
+			private void openEditWizard(DefaultMutableTreeNode node, Projectdetails projectdetails) {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-						Dialog dialog = new ConditionsDialog(composite.getShell(), columnsdetail,
-								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
+						Dialog dialog = new ConditionsDialog(composite.getShell(), columnsdetail, projectdetails);
 						dialog.open();
 					}
 				});
@@ -239,10 +248,52 @@ public class TreeView extends DefaultTreeCellRenderer {
 		createDataModel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				Projectdetails projectdetails = null;
 				JTree currentSelectedTree = null;
 				DefaultMutableTreeNode node = null;
 				System.out.println("Here");
 				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				while (node.getParent() != null) {
+					System.out.println(node);
+					System.out.println(node.getFirstLeaf());
+					node = (DefaultMutableTreeNode) node.getParent();
+					if (node.getUserObject() instanceof Projectdetails) {
+						projectdetails = (Projectdetails) node.getUserObject();
+					}
+				}
+				if (selectedComponent instanceof JTree) {
+					currentSelectedTree = (JTree) selectedComponent;
+					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
+				}
+				if (node == null)
+					return;
+				openEditWizard(node, projectdetails);
+			}
+
+			private void openEditWizard(DefaultMutableTreeNode node, Projectdetails projectdetails) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
+						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail, projectdetails);
+						dialog.open();
+					}
+				});
+			}
+		});
+
+		edit = new JMenuItem("Edit");
+		edit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTree currentSelectedTree = null;
+				DefaultMutableTreeNode node = null;
+				Component selectedComponent = MousePopupListner.currentComponent;
+				currentSelectedTree = (JTree) selectedComponent;
+				node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
 				if (selectedComponent instanceof JTree) {
 					currentSelectedTree = (JTree) selectedComponent;
 					node = (DefaultMutableTreeNode) currentSelectedTree.getLastSelectedPathComponent();
@@ -260,10 +311,16 @@ public class TreeView extends DefaultTreeCellRenderer {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						Columnsdetail columnsdetail = (Columnsdetail) node.getUserObject();
-						Dialog dialog = new DataModelDialog(composite.getShell(), columnsdetail,
-								columnsdetail.getTabledetail().getSchemadetail().getAssociatedProjectDetail());
-						dialog.open();
+						Dialog dialog;
+						if (node.getUserObject() instanceof Datasamplemodel) {
+							Datasamplemodel datasamplemodel = (Datasamplemodel) node.getUserObject();
+							dialog = new DataModelDialog(composite.getShell(), datasamplemodel);
+							dialog.open();
+						} else if (node.getUserObject() instanceof Conditions) {
+							Conditions condition = (Conditions) node.getUserObject();
+							dialog = new ConditionsDialog(composite.getShell(), condition);
+							dialog.open();
+						}
 					}
 				});
 			}
@@ -425,9 +482,13 @@ public class TreeView extends DefaultTreeCellRenderer {
 		Relationsdetail relationsdetail = relationService.getRelationForColumnId(columnsdetail.getIdcolumnsdetails(),
 				projectId);
 
-		if (columnsdetail.getConditions() != null
-				&& columnsdetail.getConditions().getProjectdetail().getIdproject() == projectId) {
-			condition = columnsdetail.getConditions();
+		if (columnsdetail.getConditions() != null) {
+			for (Conditions conditions : columnsdetail.getConditions()) {
+				if (conditions.getProjectdetail().getIdproject() == projectId) {
+					condition = conditions;
+				}
+			}
+
 		}
 		relationCategory = new DefaultMutableTreeNode("RELATIONS");
 		if (relationsdetail != null) {

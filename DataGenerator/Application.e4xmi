@@ -20,7 +20,7 @@
           <children xsi:type="basic:PartSashContainer" xmi:id="_QqopgJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.1" containerData="30" horizontal="true">
             <children xsi:type="basic:PartSashContainer" xmi:id="_W69_IJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.5" containerData="25">
               <children xsi:type="basic:PartStack" xmi:id="_jtBVUJEJEeaUVcSqx7g-yA" elementId="datagenerator.partstack.3">
-                <children xsi:type="basic:Part" xmi:id="_8DWnAJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.properties" contributionURI="bundleclass://DataGenerator/views.util.Dummy1" label="Properties" iconURI="platform:/plugin/DataGenerator/resources/images/connect.png"/>
+                <children xsi:type="basic:Part" xmi:id="_8DWnAJEJEeaUVcSqx7g-yA" elementId="datagenerator.part.properties" contributionURI="bundleclass://DataGenerator/views.util.PropViewer" label="Properties" iconURI="platform:/plugin/DataGenerator/resources/images/connect.png"/>
               </children>
             </children>
             <children xsi:type="basic:PartSashContainer" xmi:id="_XU13sJEJEeaUVcSqx7g-yA" elementId="datagenerator.partsashcontainer.6" containerData="75">

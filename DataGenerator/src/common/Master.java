@@ -13,6 +13,7 @@ public enum Master {
 	GeneratedTable currentGeneratedTable;
 	
 	List<Tabledetail> sortedTableInLoadOrder;
+	private List<String> keyValues;;
 
 	private Environment environment;
 	public boolean clearAll;
@@ -61,6 +62,14 @@ public enum Master {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Time for " + model + " Execution - " + (endTime - startTime) / 1000);
 
+	}
+
+	public List<String> getKeyValues() {
+		return keyValues;
+	}
+
+	public void setKeyValues(List<String> keyValues) {
+		this.keyValues = keyValues;
 	}
 	
 	

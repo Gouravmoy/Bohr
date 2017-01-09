@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.Random;
 
 import enums.ColumnType;
-import enums.PatternType;
 
 public class GenerateColumnPrimaryKey extends GeneratedColumn {
 	int startValue;
@@ -70,7 +69,7 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 		if (!foreignKey) {
 			FileWriter fileWriter;
 			try {
-				final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				final String alphabet = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
 				final int N = alphabet.length();
 				fileWriter = new FileWriter(filePath);
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -78,43 +77,27 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				int rowCount = numberOfRows;
 				StringBuilder builder = new StringBuilder();
 				int sizeVarchar = (int) (colLength <= 10 ? colLength : 10);
+				String patternString = "";
 				if (condition == null) {
-					String baseString = "";
-
-					builder.append("\"");
 					for (int i = 0; i < sizeVarchar; i++) {
-						baseString += alphabet.charAt(r.nextInt(N));
+						patternString += alphabet.charAt(r.nextInt(N));
 					}
-					while (rowCount > 0) {
-						builder = new StringBuilder();
-						builder.append(baseString + "_" + rowCount);
-						rowCount--;
-						builder.append("\"");
-						builder.append("\n");
-						bufferedWriter.write(builder.toString());
-						if (rowCount % 100 == 0) {
-							bufferedWriter.flush();
-						}
-					}
-					bufferedWriter.flush();
-					bufferedWriter.close();
 				} else {
-					String patternString = condition.getStartWith();
-					while (rowCount > 0) {
-						builder = new StringBuilder();
-						builder.append(patternString + "_" + rowCount);
-						builder.append("\"");
-						builder.append("\n");
-						bufferedWriter.write(builder.toString());
-						rowCount--;
-						if (rowCount % 100 == 0) {
-							bufferedWriter.flush();
-						}
-					}
-					bufferedWriter.flush();
-					bufferedWriter.close();
+					patternString = condition.getStartWith();
 				}
-
+				while (rowCount > 0) {
+					builder = new StringBuilder();
+					builder.append(patternString + rowCount);
+					builder.append("\"");
+					builder.append("\n");
+					bufferedWriter.write(builder.toString());
+					rowCount--;
+					if (rowCount % 100 == 0) {
+						bufferedWriter.flush();
+					}
+				}
+				bufferedWriter.flush();
+				bufferedWriter.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -145,31 +128,6 @@ public class GenerateColumnPrimaryKey extends GeneratedColumn {
 				e.printStackTrace();
 			}
 
-		}
-	}
-
-	public void generateVarcharWithPattern(final String alphabet, final int N, Random r, StringBuilder builder,
-			int sizeVarchar, String patternString) {
-		if (pattern.getPatternType() == PatternType.PREFIX) {
-			builder.append(patternString);
-			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
-				builder.append(alphabet.charAt(r.nextInt(N)));
-			}
-			if (sizeVarchar < builder.length()) {
-				String truncatedValue = builder.substring(0, sizeVarchar);
-				builder.setLength(0);
-				builder.append(truncatedValue);
-			}
-		} else {
-			for (int i = 0; i < (sizeVarchar - patternString.length()); i++) {
-				builder.append(alphabet.charAt(r.nextInt(N)));
-			}
-			builder.append(patternString);
-			if (sizeVarchar < builder.length()) {
-				String truncatedValue = builder.substring(builder.length() - sizeVarchar, builder.length());
-				builder.setLength(0);
-				builder.append(truncatedValue);
-			}
 		}
 	}
 

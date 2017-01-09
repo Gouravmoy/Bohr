@@ -5,6 +5,7 @@ import java.util.List;
 import dao.ConditionsDao;
 import entity.Conditions;
 import entity.Databasedetail;
+import exceptions.DAOException;
 import exceptions.EntityNotPresent;
 import exceptions.PersistException;
 import exceptions.ReadEntityException;
@@ -49,11 +50,11 @@ public class ConditionsDaoImpl extends GenericDAOImpl<Conditions, Integer> imple
 	@Override
 	public void update(Conditions conditions) throws EntityNotPresent {
 		try {
-			update(Conditions.class, conditions.getIdConditions(), conditions);
-		} catch (EntityNotPresent err) {
-			throw new EntityNotPresent("Could not get Update Conditions Information");
-		} catch (Exception e) {
+			update(Conditions.class, 1, conditions);
+		} catch (DAOException e) {
 			e.printStackTrace();
+			throw new EntityNotPresent();
+
 		}
 	}
 

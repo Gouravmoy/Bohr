@@ -4,19 +4,13 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import enums.ColumnType;
 
@@ -27,10 +21,16 @@ public class Conditions implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "columnsdetail"))
-	@Id
-	@GeneratedValue(generator = "generator")
-	private int idConditions;
+	@EmbeddedId
+	ConditionKey conditionKey;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "columnId", insertable = false, updatable = false)
+	Columnsdetail columnsdetail;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "projectId", insertable = false, updatable = false)
+	Projectdetails projectdetail;
 
 	@Column(length = 50)
 	private String conditionDesc;
@@ -38,8 +38,11 @@ public class Conditions implements Serializable {
 	@Column(length = 50)
 	private String startWith;
 
-	@Column(columnDefinition = "tinyint default false")
+	@Column(columnDefinition = "boolean default false")
 	private boolean isGenerateRandom;
+
+	@Column(columnDefinition = "boolean default false")
+	private boolean isSequencePreFix;
 
 	@Column
 	private int sequenceNo;
@@ -62,26 +65,10 @@ public class Conditions implements Serializable {
 	@Column
 	private Date dateUpperLimit;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@PrimaryKeyJoinColumn
-	private Columnsdetail columnsdetail;
-
-	@ManyToOne
-	@JoinColumn(name = "idproject")
-	private Projectdetails projectdetail;
-	
 	public Conditions() {
 		super();
-		this.sequenceNo=0;
-		this.sizeLimit=0;
-	}
-
-	public int getIdConditions() {
-		return idConditions;
-	}
-
-	public void setIdConditions(int idConditions) {
-		this.idConditions = idConditions;
+		this.sequenceNo = 0;
+		this.sizeLimit = 0;
 	}
 
 	public String getConditionDesc() {
@@ -156,14 +143,6 @@ public class Conditions implements Serializable {
 		this.columnsdetail = columnsdetail;
 	}
 
-	public Projectdetails getProjectdetail() {
-		return projectdetail;
-	}
-
-	public void setProjectdetail(Projectdetails projectdetail) {
-		this.projectdetail = projectdetail;
-	}
-
 	public boolean isGenerateRandom() {
 		return isGenerateRandom;
 	}
@@ -180,14 +159,41 @@ public class Conditions implements Serializable {
 		this.sequenceNo = sequenceNo;
 	}
 
+	public ConditionKey getConditionKey() {
+		return conditionKey;
+	}
+
+	public void setConditionKey(ConditionKey conditionKey) {
+		this.conditionKey = conditionKey;
+	}
+
+	public Projectdetails getProjectdetail() {
+		return projectdetail;
+	}
+
+	public void setProjectdetail(Projectdetails projectdetail) {
+		this.projectdetail = projectdetail;
+	}
+
 	@Override
 	public String toString() {
 		if (this.columnsdetail.getType() == ColumnType.VARCHAR) {
 			return "startWith=" + startWith + "," + "endsWith=" + endsWith;
-		} else if (this.columnsdetail.getType() == ColumnType.INTEGER) {
+		} else if (this.columnsdetail.getType() == ColumnType.INTEGER
+				|| this.columnsdetail.getType() == ColumnType.DECIMAL) {
 			return "sizeLimit=" + sizeLimit + ", lowerLimit=" + lowerLimit + ", upperLimit=" + upperLimit;
-		} else {
+		} else if (this.columnsdetail.getType() == ColumnType.DATE) {
 			return "dateLowerLimit=" + dateLowerLimit + ", dateUpperLimit=" + dateUpperLimit;
 		}
+		return "";
 	}
+
+	public boolean isSequencePreFix() {
+		return isSequencePreFix;
+	}
+
+	public void setSequencePreFix(boolean isSequencePreFix) {
+		this.isSequencePreFix = isSequencePreFix;
+	}
+
 }
